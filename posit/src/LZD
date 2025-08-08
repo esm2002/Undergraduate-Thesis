@@ -1,0 +1,35 @@
+`timescale 1ns/1ps
+module LZD #(
+parameter in_s = 2*7 + 1, // = 2*BIAS+1
+parameter out_s = $clog2(in_s))( // = 4
+input [in_s-1:0] in,
+input vld_i,
+output [out_s-1:0] out, 
+output vld_o
+);
+
+wire [in_s:0] onehot;
+
+genvar i;
+generate
+  assign onehot[0] = in[in_s - 1];
+  for (i = 1; i < in_s; i = i + 1) begin : gen_onehot
+    assign onehot[i] = in[in_s-1-i] & ~(|in[in_s-1-:i]);
+  end
+  assign onehot[in_s] = ~(|in);
+endgenerate
+
+reg [out_s-1:0] out_tmp;
+integer j;
+always @* begin
+  out_tmp = {out_s{1'b0}};
+  for (j = 0; j <= in_s; j = j + 1) begin
+    // If onehot[j] is active, accumulate its index using bitwise OR
+    out_tmp = out_tmp | ( {out_s{onehot[j]}} & j[out_s-1:0] );
+  end
+end
+
+assign vld_o = |in & vld_i;
+assign out = out_tmp;
+
+endmodule
