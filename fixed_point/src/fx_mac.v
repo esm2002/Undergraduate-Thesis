@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 module fx_mac #(
 parameter WIDTH = 8,          // Bitwidth of inputs
-parameter K  = 2,             // # of multiplications
+parameter K  = 9,             // # of multiplications
 parameter WK = $clog2(K),     
 parameter FRACTION = 4,       // Number of fractional bits
 parameter WIDTH_A = WK + 2*WIDTH + 2)(
@@ -20,6 +20,7 @@ output vld_o
 reg acc_rdy;
 (* use_dsp = "yes" *) reg signed [WIDTH_A-1:0] acc;
 (* use_dsp = "yes" *) reg signed [WIDTH_A-1:0] acc_rc;
+reg vld_o_tmp;
 
 
 reg [4:0] vld_d;
@@ -27,12 +28,14 @@ reg [4:0] vld_d;
 //-------------------------------------------------
 // Multiplication
 //-------------------------------------------------
+wire signed [2*WIDTH-1:0] mult_tmp;
+assign mult_tmp = $signed(win)*$signed(din);
 
 always @(posedge clk, negedge rstn) begin
     if (~rstn)
         mult <= 0;
     else
-        mult <= win * din;
+        mult <= {{2'd2{|mult_tmp[2*WIDTH-1:2*WIDTH-2]}}, mult_tmp[2*WIDTH-3:0]};
 end
 
 //-------------------------------------------------
@@ -40,7 +43,7 @@ end
 //-------------------------------------------------
 
 always @(posedge clk, negedge rstn) begin
-    if (~rstn) begin
+    if ((~rstn) || (vld_d == 0)) begin
         counter <= 0;
         acc_rdy <= 0;
         acc <= 0;
@@ -70,16 +73,20 @@ wire round_up = guard_bit & (round_bit | sticky_bit);
 wire [WIDTH_A-1:0] round_val = round_up << FRACTION; //{{(WIDTH_A - 1 - FRACTION){1'b0}}, round_up, {FRACTION{1'b0}}};
 
 always @(posedge clk, negedge rstn) begin
-    if (~rstn)
+    if ((~rstn) || (vld_d == 0)) begin
+        vld_o_tmp <= 0;
         acc_rc <= 0;
+    end
     else if (acc_rdy) begin
-        if ((~acc[WIDTH_A-1])&(|acc[(WIDTH_A-1)-1 : WIDTH+FRACTION]))
+        vld_o_tmp <= 1'b1;
+        if ((~acc[WIDTH_A-1])&(|acc[(WIDTH_A-1)-1 : WIDTH+FRACTION-1]))
             acc_rc <= {{(WIDTH_A - WIDTH - FRACTION + 1){1'b0}}, {(WIDTH-1){1'b1}}, {FRACTION{1'b0}}};  //set max pos. value 
         else if (acc[WIDTH_A-1]&(~(&acc[(WIDTH_A-1)-1 : WIDTH+FRACTION-1])))
             acc_rc <= {{(WIDTH_A - WIDTH - FRACTION + 1){1'b1}}, {(WIDTH-1){1'b0}}, {FRACTION{1'b0}}};  //set min neg. value
         else
             acc_rc <= acc + round_val; //rounding
     end
+    else ;
 //    else if (acc > MAX_OVF)
 //        acc_rc <= MAX_VAL;  //set max pos. value 
 //    else if (acc < MIN_OVF) //set min neg. value 
@@ -101,9 +108,11 @@ always@(posedge clk, negedge rstn) begin
     end
 end
 
-assign vld_o = acc_rdy & vld_d[4]; // ON for 1 clock period
+assign vld_o = vld_o_tmp;//acc_rdy & vld_d[4]; // ON for 1 clock period
 
 // Shift right by FRACTION bits & Slice to maintain fixed-point scale
 assign acc_o = acc_rc[WIDTH + FRACTION -1:FRACTION];
 
 endmodule
+
+
