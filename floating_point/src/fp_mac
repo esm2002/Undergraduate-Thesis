@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
-module mac #(
+module fp_mac #(
 parameter WIDTH = 8,          // Bitwidth of inputs                      //32(FP32)
-parameter K  = 2, 
+parameter K  = 1, 
 parameter WK = $clog2(K),   
 parameter EXP = 4,        // Number of exponent bits                     //8(FP32)
 parameter MTS = 3,       // Number of mantissa bits                      //23(FP32)
@@ -61,8 +61,8 @@ reg [WIDTH_A-1:0] mts_tmp;
 (* use_dsp = "yes" *) reg [MTS+1:0] mts_r;
 reg [WIDTH-1:0] acc_rc;
 
-reg [2:0] vld_acc_d;
-reg [5:0] vld_d;
+reg vld_o_tmp;
+reg [9:0] vld_d;
 
 //-------------------------------------------------
 // Extraction & Subnormal Detection
@@ -130,12 +130,12 @@ assign mts_fxs = mts_fx << exp_fp;
 //-------------------------------------------------
 
 always @(posedge clk, negedge rstn) begin
-    if (~rstn) begin
+    if ((~rstn) || (vld_d == 0)) begin
         counter <= 0;
         acc_rdy <= 0;
         acc <= 0;
     end
-    else if (vld_acc_d[2] & counter < K) begin
+    else if (vld_d[2] & counter < K) begin
         counter <= counter + 1;
         acc_rdy <= 0;
         acc <= acc + mts_fxs; // bit configuration: WIDTH_A = 1 + (2BIAS) + (1 + 2 + 2MTS) + (2BIAS - 2) 
@@ -153,7 +153,7 @@ reg zc_tmp;
 reg zc_i;
 
 always @(posedge clk, negedge rstn) begin
-    if (~rstn) begin
+    if ((~rstn) || (vld_d == 0)) begin
         sign_r <= 0;
         acc_mag <= 0;
         acc_mag_zc <= 0;
@@ -192,7 +192,7 @@ assign round_bit = mts_tmp[WIDTH_A-1-MTS-2];
 assign sticky_bit = sticky(mts_tmp); // |acc_mag[WIDTH_A-1-(BIAS+3+zc)-MTS-3:0]
 
 always @(posedge clk, negedge rstn) begin
-    if (~rstn) begin
+    if ((~rstn) || (vld_d == 0)) begin
         exp_r <= 0;
         mts_tmp <= 0;
         
@@ -211,17 +211,20 @@ end
 //-------------------------------------------------
 
 always @(posedge clk, negedge rstn) begin
-    if (~rstn)
+    if ((~rstn) || (vld_d == 0)) begin
+        vld_o_tmp <= 0;
         acc_rc <= 0;
-    else if (acc_rdy & vld_d[4]) begin    
+    end
+    else if (acc_rdy && vld_d[9] && (~|vld_d[8:0])) begin    
+        vld_o_tmp <= 1'b1;
         if (ovf) //overflow
-            acc_rc <= {sign_r, 1'b0, {(EXP-1){1'b1}}, {MTS{1'b1}}}; //set max mag value 
+            acc_rc <= {sign_r, {{(EXP-1){1'b1}}, 1'b0}, {MTS{1'b1}}}; //set max mag value 
         else if (udf) //underflow
-            acc_rc <= {sign_r, {EXP{1'b0}}, {(MTS-1){1'b0}}, 1'b1};  //set min mag value
+            acc_rc <= {sign_r, {EXP{1'b0}}, {{(MTS-1){1'b0}}, 1'b1}};  //set min mag value
         else
             if (mts_r[MTS+1]) //consider a carry by adding round_val 
                 if (exp_r == EXP_MAX) //overflow by rounding
-                    acc_rc <= {sign_r, 1'b0, {(EXP-1){1'b1}}, {MTS{1'b1}}};
+                    acc_rc <= {sign_r, {{(EXP-1){1'b1}}, 1'b0}, {MTS{1'b1}}};
                 else
                     acc_rc <= {sign_r, exp_r + 1, mts_r[MTS:1]};
             else
@@ -232,16 +235,14 @@ end
 
 always@(posedge clk, negedge rstn) begin
 	if(~rstn) begin
-		vld_acc_d <= 0;
 		vld_d <= 0;
 	end
 	else begin
-		vld_acc_d <= {vld_acc_d[2-1:0], vld_i};
-		vld_d <= {vld_d[5-1:0], acc_rdy};
+		vld_d <= {vld_d[9-1:0], vld_i};
     end
 end
 
-assign vld_o = vld_d[5]; // ON for 1 clock period
+assign vld_o = vld_o_tmp; // ON for 1 clock period
 assign acc_o = acc_rc; //consider a carry by adding round_val 
 
 endmodule
