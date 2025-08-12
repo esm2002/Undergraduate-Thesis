@@ -77,7 +77,7 @@ always @(posedge clk, negedge rstn) begin
         vld_o_tmp <= 0;
         acc_rc <= 0;
     end
-    else if (acc_rdy) begin
+    else if (acc_rdy && vld_d[4] && (~|vld_d[3:0])) begin
         vld_o_tmp <= 1'b1;
         if ((~acc[WIDTH_A-1])&(|acc[(WIDTH_A-1)-1 : WIDTH+FRACTION-1]))
             acc_rc <= {{(WIDTH_A - WIDTH - FRACTION + 1){1'b0}}, {(WIDTH-1){1'b1}}, {FRACTION{1'b0}}};  //set max pos. value 
