@@ -144,15 +144,16 @@ class FpMacModel #(
     
         // subnormal
         if (E == Emin-1) begin
-          // m in [1,2), target fraction = m * 2^MTS >> 1
-          sub  = m * $pow(2.0, (MTS_P-1));
+          // m in [1,2)
+          sub  = m * $pow(2.0, MTS_P);
           // nearest-even
           fl   = $floor(sub);
           diff = sub - fl;
           frac_i = int'(fl);
-          if (diff >= 0.5) frac_i++;
-          if (fl >= (1<<MTS_P)) frac_i = (1<<MTS_P)-1; // clamp
-          out = {{(r < 0.0 ? 1'b1 : 1'b0)}, {EXP_P{1'b0}}, frac_i[MTS_P-1:0]};
+          if (diff > 0.5) frac_i++;
+          
+          if (fl >= (1<<(MTS_P+1))) out = {{(r < 0.0 ? 1'b1 : 1'b0)}, {{(EXP_P-1){1'b0}}, 1'b1}, {MTS_P{1'b0}}};
+          else out = {{(r < 0.0 ? 1'b1 : 1'b0)}, {EXP_P{1'b0}}, frac_i[MTS_P-1:0]};
           return out;
         end
     
@@ -162,7 +163,7 @@ class FpMacModel #(
         flN  = $floor(sigN);
         diffN= sigN - flN;
         fracN_i = int'(flN);
-        if (diffN >= 0.5) begin
+        if (diffN > 0.5) begin
           fracN_i++;
           if (flN >= (1<<MTS_P)) begin
             // carry → 1.0 -> 10.0, exponent +1
@@ -223,8 +224,8 @@ class FpMacModel #(
       acc_fp = real_to_fp(acc_real);
       fp_unpack(acc_fp,sf,ef,ff,tf);
       if (tf==FP_INF && (acc_real!=1.0/0.0 && acc_real!=-1.0/0.0)) ovf_f = 1;
-      if ( acc_real > 0.0 && acc_real < (1.0 / $pow(2.0, MTS_P))) udf_f = 1;
-      if ( acc_real < 0.0 && acc_real > (-1.0 / $pow(2.0, MTS_P))) udf_f = 1;
+      if ( acc_real > 0.0 && acc_real < (1.0 / $pow(2.0, BIAS_P-1+MTS_P))) udf_f = 1;
+      if ( acc_real < 0.0 && acc_real > (-1.0 / $pow(2.0, BIAS_P-1+MTS_P))) udf_f = 1;
     
       return acc_fp;
     endfunction
@@ -290,7 +291,7 @@ module fp_mac_tb();
   parameter int MTS        = 3;       
   parameter int BIAS       = 7;        // 2^(EXP-1)-1
   parameter int clog2_MAXMIN = 17;
-  parameter int  NumTests  = 10;
+  parameter int  NumTests  = 100;
   parameter int  Debug_test = 11;
   parameter int  unsigned RstCycle  = 10;
   parameter int  unsigned MaxCycle  = 100000;
@@ -369,13 +370,8 @@ module fp_mac_tb();
   fp_mac #(
     .WIDTH        (WIDTH),
     .K            (K),
-    .WK           (WK),
     .EXP          (EXP),
-    .MTS          (MTS),
-    .BIAS         (BIAS),
-    .clog2_MAXMIN (clog2_MAXMIN),
-    .WIDTH_A      (WIDTH_A),
-    .WZC          (WZC)
+    .MTS          (MTS)
   ) DUT (
     .clk   (clk),
     .rstn  (rstn),
