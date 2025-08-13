@@ -199,7 +199,7 @@ always @(posedge clk, negedge rstn) begin
         mts_r <= 0;
     end    
     else if (acc_rdy & vld) begin
-        exp_r <= EXP_MAX - zc; // 0 ~ 2*BIAS
+        exp_r <= EXP_MAX - zc; // 0 ~ 2*BIAS // -1 for zero
         mts_tmp <= acc_mag << (WK+BIAS+3+zc);
         
         mts_r <= {1'b0, mts_tmp[WIDTH_A-1:WIDTH_A-1-MTS]} + (guard_bit & (round_bit | sticky_bit)); // 1.f format // add rounding value
@@ -221,6 +221,8 @@ always @(posedge clk, negedge rstn) begin
             acc_rc <= {sign_r, {{(EXP-1){1'b1}}, 1'b0}, {MTS{1'b1}}}; //set max mag value 
         else if (udf) //underflow
             acc_rc <= {sign_r, {EXP{1'b0}}, {{(MTS-1){1'b0}}, 1'b1}};  //set min mag value
+        else if (zc == 2*BIAS+1) //zero
+            acc_rc <= {sign_r, {EXP{1'b0}}, {MTS{1'b0}}}; // zero
         else
             if (mts_r[MTS+1]) //consider a carry by adding round_val 
                 if (exp_r == EXP_MAX) //overflow by rounding
