@@ -181,9 +181,9 @@ module fx_mac_tb();
   fx_mac #(
     .WIDTH   (WIDTH),
     .K       (K),
-    .WK      (WK),
-    .FRACTION(FRACTION),
-    .WIDTH_A (WIDTH_A)
+    //.WK      (WK),
+    .FRACTION(FRACTION)
+    //.WIDTH_A (WIDTH_A)
   ) DUT (
     .clk   (clk),
     .rstn  (rstn),
