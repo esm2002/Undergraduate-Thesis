@@ -8,7 +8,7 @@
 //  - Rounding: nearest-ties-to-even on encode
 // ============================================================
 
-class PositMacModel #(
+class PositMacModel #( 
     parameter int WIDTH_P    = 8,
     parameter int K_P        = 1,    
     parameter int EXP_P      = 2,        
@@ -243,7 +243,7 @@ module posit_mac_tb();
   parameter int WIDTH      = 8;
   parameter int K          = 1;    
   parameter int EXP        = 2;        
-  parameter int  NumTests  = 100;
+  parameter int  NumTests  = 300;
   parameter int  Debug_test = 11;
   parameter int  unsigned RstCycle  = 11;
   parameter int  unsigned MaxCycle  = 100000;
@@ -320,15 +320,7 @@ module posit_mac_tb();
   posit_mac #(
     .WIDTH        (WIDTH),
     .K            (K),
-    .WK           (WK),
-    .REGI         (REGI),
-    .EXP          (EXP),
-    .MTS          (MTS),
-    .USEED        (USEED),
-    .BIAS         (BIAS),
-    .WIDTH_A      (WIDTH_A),
-    .WZC          (WZC),
-    .WTMP         (WTMP)
+    .EXP          (EXP)
   ) DUT (
     .clk   (clk),
     .rstn  (rstn),
