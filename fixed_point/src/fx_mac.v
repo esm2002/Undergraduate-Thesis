@@ -1,10 +1,9 @@
 `timescale 1ns/1ps
 module fx_mac #(
 parameter WIDTH = 8,          // Bitwidth of inputs
-parameter K  = 9,             // # of multiplications
-parameter WK = $clog2(K),     
-parameter FRACTION = 4,       // Number of fractional bits
-parameter WIDTH_A = WK + 2*WIDTH + 2)(
+parameter K  = 9,             // # of multiplications   
+parameter FRACTION = 4       // Number of fractional bits
+)(
 input clk,
 input rstn,
 input vld_i, 
@@ -13,6 +12,9 @@ input vld_i,
 (* IOB = "TRUE" *) output[WIDTH-1:0] acc_o,
 output vld_o
 );
+
+localparam WK = $clog2(K);
+localparam WIDTH_A = WK + 2*WIDTH + 2;
 
 (* use_dsp = "yes" *) reg signed [2*WIDTH-1:0] mult;
 
