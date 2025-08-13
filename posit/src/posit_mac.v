@@ -2,15 +2,8 @@
 module posit_mac #(
 parameter WIDTH = 8,          // Bitwidth of inputs                      
 parameter K  = 1, 
-parameter WK = $clog2(K),   
-parameter REGI = $clog2(WIDTH)+1,       // Number of regime bits
-parameter EXP = 2,       // Number of exponent bits                 
-parameter MTS = WIDTH-3-EXP,       // Maximum number of mantissa bits  
-parameter USEED = 16,    // useed = 2^(2^exp)  // max = useed^(width-2) = 16777216, min = useed^(-width+2)                
-parameter BIAS = 48,     // bias = 2^(EXP+1)*(width-2)                   
-parameter WIDTH_A = WK + 2*BIAS + 2,
-parameter WZC = $clog2(WIDTH_A),
-parameter WTMP = 3*WIDTH - EXP - 4)( // revised from '$clog2(WIDTH_A)' to '$clog2(2*BIAS+1)'
+parameter EXP = 2       // Number of exponent bits                 
+)( // revised from '$clog2(WIDTH_A)' to '$clog2(2*BIAS+1)'
 input clk,
 input rstn,
 input vld_i, 
@@ -19,6 +12,15 @@ input vld_i,
 (* IOB = "TRUE" *) output[WIDTH-1:0] acc_o,
 output  vld_o
 );
+
+localparam WK = $clog2(K);
+localparam REGI = $clog2(WIDTH)+1;      // Number of regime bits   
+localparam MTS = WIDTH-3-EXP;       // Maximum number of mantissa bits  
+localparam USEED = 2**(2**EXP);  // max = useed^(width-2) = 16777216, min = useed^(-width+2)                
+localparam BIAS = 2**(EXP+1)*(WIDTH-2);                   
+localparam WIDTH_A = WK + 2*BIAS + 2;
+localparam WZC = $clog2(WIDTH_A);
+localparam WTMP = 3*WIDTH - EXP - 4;
 
 wire sign_w;
 wire sign_d;
@@ -137,7 +139,12 @@ end
 
 
 always @(posedge clk, negedge rstn) begin
-    if ((~rstn) || (vld_d == 0)) begin
+    if (~rstn) begin
+        counter <= 0;
+        acc_rdy <= 0;
+        acc <= 0;
+    end
+    else if (vld_d == 0) begin
         counter <= 0;
         acc_rdy <= 0;
         acc <= 0;
@@ -158,7 +165,12 @@ end
 reg zc_i;
 
 always @(posedge clk, negedge rstn) begin
-    if ((~rstn) || (vld_d == 0)) begin
+    if (~rstn) begin
+        sign_q <= 0;
+        acc_mag <= 0;
+        zc_i <= 0;
+    end
+    else if (vld_d == 0) begin
         sign_q <= 0;
         acc_mag <= 0;
         zc_i <= 0;
@@ -174,12 +186,18 @@ end
 LZD #(.in_s(WIDTH_A), .out_s(WZC)) u_lzd(.in(acc_mag), .vld_i(zc_i), .out(zc), .vld_o(vld));
  
 always @(posedge clk, negedge rstn) begin
-    if ((~rstn) || (vld_d == 0)) begin
+    if (~rstn) begin
         sf_q <= 0;
         mts_tmp <= 0;
         
         mts_q <= 0;
-    end    
+    end   
+    else if (vld_d == 0) begin
+        sf_q <= 0;
+        mts_tmp <= 0;
+        
+        mts_q <= 0;
+    end 
     else if (acc_rdy & vld) begin
         sf_q <= BIAS + 1 - zc; // 1 <= zc <= 2*BIAS+1 // -BIAS <= sf_q <= BIAS
         mts_tmp <= acc_mag << zc;
@@ -195,7 +213,12 @@ end
 assign nzero = |mts_q; // 1 for non-zero (1.f format)
 
 always @(posedge clk, negedge rstn) begin
-    if ((~rstn) || (vld_d == 0)) begin
+    if (~rstn) begin
+        sign_sf <= 0;
+        regi_sf <= 0;
+        exp_sf <= 0;
+    end
+    else if (vld_d == 0) begin
         sign_sf <= 0;
         regi_sf <= 0;
         exp_sf <= 0;
@@ -212,9 +235,13 @@ assign ovf_sf = regi_sf[REGI-1]; // overflow: quire regime mag = 1xxx
 assign ovf_p = (!regi_sf[REGI-1]) && (&regi_sf[REGI-2:0]); // overflow: output posit regime mag = 0111
 
 always @(posedge clk, negedge rstn) begin
-    if ((~rstn) || (vld_d == 0)) begin
+    if (~rstn) begin
         regi_p <= 0;
         exp_p <= 0;
+    end
+    else if (vld_d == 0) begin
+        regi_p <= 0;
+        exp_p <= 0;    
     end
     else if (acc_rdy & vld) begin    
         if (ovf_sf | ovf_p) begin
@@ -234,7 +261,15 @@ end
 //-------------------------------------------------
 
 always @(posedge clk, negedge rstn) begin
-    if ((~rstn) || (vld_d == 0)) begin
+    if (~rstn) begin
+        tmp_pos <= 0;
+        tmp_neg <= 0;
+        shift_pos <= 0;
+        shift_neg <= 0;
+        
+        tmp <= 0;
+    end
+    else if (vld_d == 0) begin
         tmp_pos <= 0;
         tmp_neg <= 0;
         shift_pos <= 0;
@@ -263,12 +298,19 @@ assign round_val = (ovf_sf | ovf_p) ? 1'b0 : (guard_bit & (lsb_bit | sticky_bit)
 assign tmp_for_round = tmp[WTMP-1:WTMP-1-(WIDTH-2)];
 
 always @(posedge clk or negedge rstn) begin
-    if ((~rstn) || (vld_d == 0)) begin
+    if (~rstn) begin
         acc_o_tmp <= 0;
         
         vld_o_tmp <= 0;
         acc_o_fin <= 0;
-    end else if (acc_rdy & vld) begin
+    end
+    else if (vld_d == 0) begin
+        acc_o_tmp <= 0;
+        
+        vld_o_tmp <= 0;
+        acc_o_fin <= 0;
+    end
+    else if (acc_rdy & vld) begin
         acc_o_tmp <= tmp_for_round + round_val;
         
         if (vld_d[14] && (~|vld_d[13:0])) begin
