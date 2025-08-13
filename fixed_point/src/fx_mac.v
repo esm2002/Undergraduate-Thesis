@@ -45,7 +45,12 @@ end
 //-------------------------------------------------
 
 always @(posedge clk, negedge rstn) begin
-    if ((~rstn) || (vld_d == 0)) begin
+    if (~rstn) begin
+        counter <= 0;
+        acc_rdy <= 0;
+        acc <= 0;
+    end
+    else if (vld_d == 0) begin
         counter <= 0;
         acc_rdy <= 0;
         acc <= 0;
@@ -75,7 +80,11 @@ wire round_up = guard_bit & (round_bit | sticky_bit);
 wire [WIDTH_A-1:0] round_val = round_up << FRACTION; //{{(WIDTH_A - 1 - FRACTION){1'b0}}, round_up, {FRACTION{1'b0}}};
 
 always @(posedge clk, negedge rstn) begin
-    if ((~rstn) || (vld_d == 0)) begin
+    if (~rstn) begin
+        vld_o_tmp <= 0;
+        acc_rc <= 0;
+    end
+    else if (vld_d == 0) begin
         vld_o_tmp <= 0;
         acc_rc <= 0;
     end
