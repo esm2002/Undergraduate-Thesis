@@ -29,7 +29,7 @@ always @* begin
   end
 end
 
-assign vld_o = |in & vld_i;
+assign vld_o = vld_i;
 assign out = out_tmp;
 
 endmodule
