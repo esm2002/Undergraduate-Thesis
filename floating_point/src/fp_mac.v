@@ -1,15 +1,10 @@
 `timescale 1ns/1ps
 module fp_mac #(
 parameter WIDTH = 8,          // Bitwidth of inputs                      //32(FP32)
-parameter K  = 1, 
-parameter WK = $clog2(K),   
+parameter K  = 1,   
 parameter EXP = 4,        // Number of exponent bits                     //8(FP32)
-parameter MTS = 3,       // Number of mantissa bits                      //23(FP32)
-parameter BIAS = 7,     // bias = 2^(EXP-1) - 1                          //127(FP32)
-parameter EXP_MAX = 14,  // exp_max = 2^EXP - 2 = 2*bias                 //254(FP32)
-parameter clog2_MAXMIN = 17, // max/min = 2^(exp_max-1)*(2^(mts+1)-1)    //277(FP32)
-parameter WIDTH_A = WK + 2*clog2_MAXMIN + 2,
-parameter WZC = $clog2(2*BIAS+1))( // revised from '$clog2(WIDTH_A)' to '$clog2(2*BIAS+1)'
+parameter MTS = 3       // Number of mantissa bits                      //23(FP32)
+)( // revised from '$clog2(WIDTH_A)' to '$clog2(2*BIAS+1)'
 input clk,
 input rstn,
 input vld_i, 
@@ -18,6 +13,13 @@ input vld_i,
 (* IOB = "TRUE" *) output[WIDTH-1:0] acc_o,
 output  vld_o
 );
+
+localparam WK = $clog2(K);
+localparam BIAS = 2**(EXP-1)-1;  //127(FP32)
+localparam EXP_MAX = 2**EXP-2;  //254(FP32)
+localparam clog2_MAXMIN = EXP_MAX+MTS; // max/min = 2^(exp_max-1)*(2^(mts+1)-1)    //277(FP32)
+localparam WIDTH_A = WK + 2*clog2_MAXMIN + 2;
+localparam WZC = $clog2(2*BIAS+1);
 
 reg sign_wd;
 reg [EXP-1:0] exp_w;
@@ -51,6 +53,7 @@ wire vld;
 wire guard_bit;
 wire round_bit;
 wire sticky_bit;
+wire round_val;
 
 reg signed sign_r;
 reg [WIDTH_A-1:0] acc_mag;
@@ -130,7 +133,12 @@ assign mts_fxs = mts_fx << exp_fp;
 //-------------------------------------------------
 
 always @(posedge clk, negedge rstn) begin
-    if ((~rstn) || (vld_d == 0)) begin
+    if (~rstn) begin
+        counter <= 0;
+        acc_rdy <= 0;
+        acc <= 0;
+    end
+    else if (vld_d == 0) begin
         counter <= 0;
         acc_rdy <= 0;
         acc <= 0;
@@ -153,7 +161,14 @@ reg zc_tmp;
 reg zc_i;
 
 always @(posedge clk, negedge rstn) begin
-    if ((~rstn) || (vld_d == 0)) begin
+    if (~rstn) begin
+        sign_r <= 0;
+        acc_mag <= 0;
+        acc_mag_zc <= 0;
+        zc_tmp <= 0;
+        zc_i <= 0;
+    end
+    else if (vld_d == 0) begin
         sign_r <= 0;
         acc_mag <= 0;
         acc_mag_zc <= 0;
@@ -190,9 +205,16 @@ endfunction
 assign guard_bit = mts_tmp[WIDTH_A-1-MTS-1];
 assign round_bit = mts_tmp[WIDTH_A-1-MTS-2]; 
 assign sticky_bit = sticky(mts_tmp); // |acc_mag[WIDTH_A-1-(BIAS+3+zc)-MTS-3:0]
+assign round_val = guard_bit && (round_bit || sticky_bit);
 
 always @(posedge clk, negedge rstn) begin
-    if ((~rstn) || (vld_d == 0)) begin
+    if (~rstn) begin
+        exp_r <= 0;
+        mts_tmp <= 0;
+        
+        mts_r <= 0;
+    end
+    else if (vld_d == 0) begin
         exp_r <= 0;
         mts_tmp <= 0;
         
@@ -202,7 +224,7 @@ always @(posedge clk, negedge rstn) begin
         exp_r <= EXP_MAX - zc; // 0 ~ 2*BIAS // -1 for zero
         mts_tmp <= acc_mag << (WK+BIAS+3+zc);
         
-        mts_r <= {1'b0, mts_tmp[WIDTH_A-1:WIDTH_A-1-MTS]} + (guard_bit & (round_bit | sticky_bit)); // 1.f format // add rounding value
+        mts_r <= {1'b0, mts_tmp[WIDTH_A-1:WIDTH_A-1-MTS]} + round_val; // 1.f format // add rounding value
     end
 end
 
@@ -211,7 +233,11 @@ end
 //-------------------------------------------------
 
 always @(posedge clk, negedge rstn) begin
-    if ((~rstn) || (vld_d == 0)) begin
+    if (~rstn) begin
+        vld_o_tmp <= 0;
+        acc_rc <= 0;
+    end
+    else if (vld_d == 0) begin
         vld_o_tmp <= 0;
         acc_rc <= 0;
     end
