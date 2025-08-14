@@ -5,13 +5,13 @@ parameter K  = 1,
 parameter EXP = 4,        // Number of exponent bits                     //8(FP32)
 parameter MTS = 3       // Number of mantissa bits                      //23(FP32)
 )( // revised from '$clog2(WIDTH_A)' to '$clog2(2*BIAS+1)'
-input clk,
+input clk_i,
 input rstn,
-input vld_i, 
+(* IOB = "TRUE" *) input vld_i, 
 (* IOB = "TRUE" *) input signed [WIDTH-1:0] win, 
 (* IOB = "TRUE" *) input signed [WIDTH-1:0] din, 
 (* IOB = "TRUE" *) output[WIDTH-1:0] acc_o,
-output  vld_o
+(* IOB = "TRUE" *) output  vld_o
 );
 
 localparam WK = $clog2(K);
@@ -41,7 +41,7 @@ reg sign_fp;
 wire signed [2*MTS+2:0] mts_fx; 
 wire signed [WIDTH_A-1:0] mts_fxs;
 
-(* use_dsp = "yes" *) reg [WK:0] counter;
+reg [WK:0] counter;
 reg acc_rdy;
 (* use_dsp = "yes" *) reg signed [WIDTH_A-1:0] acc; // bit configuration: WIDTH_A = 1 + 2BIAS + (3 + 2MTS) + (2BIAS - 2)
 
@@ -56,7 +56,7 @@ wire sticky_bit;
 wire round_val;
 
 reg signed sign_r;
-reg [WIDTH_A-1:0] acc_mag;
+(* use_dsp = "yes" *) reg [WIDTH_A-1:0] acc_mag; //
 
 (* use_dsp = "yes" *) reg signed [EXP-1:0] exp_r;
 reg [WIDTH_A-1:0] mts_tmp;
@@ -71,7 +71,7 @@ reg [9:0] vld_d;
 // Extraction & Subnormal Detection
 //-------------------------------------------------
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         sign_wd <= 0;
         exp_w <= 0;
@@ -92,7 +92,7 @@ assign zero_w = |exp_w; // 0 for zero
 assign zero_d = |exp_d; // 0 for zero 
 assign zero_wd = (|exp_w) + (|exp_d);
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         sign_fp_tmp <= 0;
         exp_fp_tmp <= 0;
@@ -111,7 +111,7 @@ end
 // Multiplication & Conversion to Fixed-Point
 //-------------------------------------------------
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         sign_fp <= 0;
         exp_fp <= 0;
@@ -132,7 +132,7 @@ assign mts_fxs = mts_fx << exp_fp;
 // Accumulation
 //-------------------------------------------------
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         counter <= 0;
         acc_rdy <= 0;
@@ -160,7 +160,7 @@ reg [2*BIAS:0] acc_mag_zc;
 reg zc_tmp;
 reg zc_i;
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         sign_r <= 0;
         acc_mag <= 0;
@@ -207,7 +207,7 @@ assign round_bit = mts_tmp[WIDTH_A-1-MTS-2];
 assign sticky_bit = sticky(mts_tmp); // |acc_mag[WIDTH_A-1-(BIAS+3+zc)-MTS-3:0]
 assign round_val = guard_bit && (round_bit || sticky_bit);
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         exp_r <= 0;
         mts_tmp <= 0;
@@ -232,7 +232,7 @@ end
 // Convertion to Floating-Point: Clip & Output
 //-------------------------------------------------
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         vld_o_tmp <= 0;
         acc_rc <= 0;
@@ -261,7 +261,7 @@ always @(posedge clk, negedge rstn) begin
 end
 
 
-always@(posedge clk, negedge rstn) begin
+always@(posedge clk_i) begin
 	if(~rstn) begin
 		vld_d <= 0;
 	end
