@@ -1,39 +1,38 @@
 `timescale 1ns/1ps
 module fx_mac #(
 parameter WIDTH = 8,          // Bitwidth of inputs
-parameter K  = 9,             // # of multiplications   
+parameter K  = 1,             // # of multiplications   
 parameter FRACTION = 4       // Number of fractional bits
 )(
-input clk,
+input clk_i,
 input rstn,
-input vld_i, 
+(* IOB = "TRUE" *) input vld_i, 
 (* IOB = "TRUE" *) input signed [WIDTH-1:0] win, 
 (* IOB = "TRUE" *) input signed [WIDTH-1:0] din, 
 (* IOB = "TRUE" *) output[WIDTH-1:0] acc_o,
-output vld_o
+(* IOB = "TRUE" *) output vld_o
 );
 
 localparam WK = $clog2(K);
 localparam WIDTH_A = WK + 2*WIDTH + 2;
 
-(* use_dsp = "yes" *) reg signed [2*WIDTH-1:0] mult;
+reg signed [2*WIDTH-1:0] mult;
 
-(* use_dsp = "yes" *) reg [WK:0] counter;
+reg [WK:0] counter;
 reg acc_rdy;
 (* use_dsp = "yes" *) reg signed [WIDTH_A-1:0] acc;
 (* use_dsp = "yes" *) reg signed [WIDTH_A-1:0] acc_rc;
 reg vld_o_tmp;
-
 
 reg [4:0] vld_d;
 
 //-------------------------------------------------
 // Multiplication
 //-------------------------------------------------
-wire signed [2*WIDTH-1:0] mult_tmp;
+(* use_dsp = "yes" *) wire signed [2*WIDTH-1:0] mult_tmp;
 assign mult_tmp = $signed(win)*$signed(din);
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn)
         mult <= 0;
     else
@@ -44,7 +43,7 @@ end
 // Accumulation
 //-------------------------------------------------
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         counter <= 0;
         acc_rdy <= 0;
@@ -79,7 +78,7 @@ wire sticky_bit = |acc[FRACTION-3:0];
 wire round_up = guard_bit & (round_bit | sticky_bit);
 wire [WIDTH_A-1:0] round_val = round_up << FRACTION; //{{(WIDTH_A - 1 - FRACTION){1'b0}}, round_up, {FRACTION{1'b0}}};
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         vld_o_tmp <= 0;
         acc_rc <= 0;
@@ -110,7 +109,7 @@ end
 // Normalization & Output
 //-------------------------------------------------
 
-always@(posedge clk, negedge rstn) begin
+always@(posedge clk_i) begin
 	if(~rstn) begin
 		vld_d <= 0;
 	end
@@ -125,5 +124,3 @@ assign vld_o = vld_o_tmp;//acc_rdy & vld_d[4]; // ON for 1 clock period
 assign acc_o = acc_rc[WIDTH + FRACTION -1:FRACTION];
 
 endmodule
-
-
