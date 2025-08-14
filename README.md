@@ -37,15 +37,15 @@ Undergraduate-Thesis/
 * Max. Operating Freq. (MHz): max(1000/(T - WNS))
 * Energy-Delay-Product (J*s): Power * (L * T)^2
 
-| Fixed-Point | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs |
-|:-----:|:------:|:------:|:------:|:------:|
-| 8W4F | log10(127)=2.104 | 104.275 (MHz)<br>= 1.04275*1e8 (Hz) | 3.024*1e-16 | 19 |
+| Fixed-Point | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs |
+|:-----:|:------:|:------:|:------:|:------:|:------:|
+| 8W4F | T=10ns<br>WNS=0.410ns<br>P=0.084W<br>L=6 | log10(127)=2.104 | 104.275 (MHz)<br>= 1.04275*1e8 (Hz) | 3.024*1e-16 | 19 |
 
-| Floating-Point | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs |
-|:-----:|:------:|:------:|:------:|:------:|
-| 8W4E3F | log10(122880)=5.089 | 104.275 (MHz)<br>= 1.04275*1e8 (Hz) | 10.769*1e-16 | 228 |
+| Floating-Point | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs |
+|:-----:|:------:|:------:|:------:|:------:|:------:|
+| 8W4E3F | T=10ns<br>WNS=0.410ns<br>P=0.089W<br>L=11 | log10(122880)=5.089 | 104.275 (MHz)<br>= 1.04275*1e8 (Hz) | 10.769*1e-16 | 228 |
 
-| Posit | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs |
-|:-----:|:------:|:------:|:------:|:------:|
-| 8W2E | log10(16^12)=14.449 | 103.103 (MHz)<br>= 1.03103*1e8 (Hz) | 26.88*1e-16 | 548 |
+| Posit | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs |
+|:-----:|:------:|:------:|:------:|:------:|:------:|
+| 8W2E | T=10ns<br>WNS=0.301ns<br>P=0.105W<br>L=16 | log10(16^12)=14.449 | 103.103 (MHz)<br>= 1.03103*1e8 (Hz) | 26.88*1e-16 | 548 |
 
