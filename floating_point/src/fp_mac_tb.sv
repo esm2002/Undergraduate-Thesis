@@ -373,7 +373,7 @@ module fp_mac_tb();
     .EXP          (EXP),
     .MTS          (MTS)
   ) DUT (
-    .clk   (clk),
+    .clk_i (clk),
     .rstn  (rstn),
     .vld_i (vld_i),
     .win   (win),
