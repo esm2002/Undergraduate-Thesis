@@ -3,7 +3,7 @@
 class FxMacModel #(
     parameter int WIDTH_P    = 8,
     parameter int FRACT_P    = 4,
-    parameter int K_P        = 9,
+    parameter int K_P        = 1,
     localparam int WK_P         = $clog2(K_P),
     localparam int WIDTH_A_P    = WK_P + 2*WIDTH_P + 2
   );
@@ -110,8 +110,8 @@ module fx_mac_tb();
   // ------------------------------------------------------------
   parameter int WIDTH      = 8;        // 8-bit 
   parameter int FRACTION   = 4;        // Q(FRACTION)
-  parameter int K          = 9;        // The number of samples (K)
-  parameter int  NumTests  = 100;
+  parameter int K          = 1;        // The number of samples (K)
+  parameter int  NumTests  = 300;
   parameter int  Debug_test = 11;
   parameter int  unsigned RstCycle  = 10;
   parameter int  unsigned MaxCycle  = 100000;
@@ -185,7 +185,7 @@ module fx_mac_tb();
     .FRACTION(FRACTION)
     //.WIDTH_A (WIDTH_A)
   ) DUT (
-    .clk   (clk),
+    .clk_i (clk),
     .rstn  (rstn),
     .vld_i (vld_i),
     .win   (win),
