@@ -4,13 +4,13 @@ parameter WIDTH = 8,          // Bitwidth of inputs
 parameter K  = 1, 
 parameter EXP = 2       // Number of exponent bits                 
 )( // revised from '$clog2(WIDTH_A)' to '$clog2(2*BIAS+1)'
-input clk,
+input clk_i,
 input rstn,
-input vld_i, 
+(* IOB = "TRUE" *) input vld_i, 
 (* IOB = "TRUE" *) input signed [WIDTH-1:0] win, 
 (* IOB = "TRUE" *) input signed [WIDTH-1:0] din, 
 (* IOB = "TRUE" *) output[WIDTH-1:0] acc_o,
-output  vld_o
+(* IOB = "TRUE" *) output  vld_o
 );
 
 localparam WK = $clog2(K);
@@ -36,21 +36,21 @@ wire [1:0] vld_o_d;
 reg signed [REGI+EXP-1:0] sf_w;
 reg signed [REGI+EXP-1:0] sf_d;
 reg sign_m;
-reg [2*(MTS+1)-1:0] mts_m;
+(* use_dsp = "yes" *) reg [2*(MTS+1)-1:0] mts_m;
 wire ovf_m;
-wire signed [REGI+EXP:0] sf_m;
+(* use_dsp = "yes" *) wire signed [REGI+EXP:0] sf_m;
 wire [2*(MTS+1):0] norm_mts_m;
 
 (* use_dsp = "yes" *) reg [REGI+EXP+1:0] sf_bias;
-reg signed [2*(MTS+1):0] mts_ms;
+(* use_dsp = "yes" *) reg signed [2*(MTS+1):0] mts_ms;
 reg [WIDTH_A-1:0] mts_fx;
 
-(* use_dsp = "yes" *) reg [WK:0] counter;
+reg [WK:0] counter;
 reg acc_rdy;
 (* use_dsp = "yes" *) reg signed [WIDTH_A-1:0] acc; // bit configuration: WIDTH_A = BIAS + 2 + BIAS
 
 reg signed sign_q;
-reg [WIDTH_A-1:0] acc_mag;
+(* use_dsp = "yes" *) reg [WIDTH_A-1:0] acc_mag;
 wire [WZC-1:0] zc;
 wire vld;
 
@@ -60,7 +60,7 @@ reg [WIDTH_A-1:0] mts_tmp;
 reg [2*(MTS+1)-1:0] mts_q;
 wire nzero;
 reg sign_sf;
-reg [REGI-1:0] regi_sf;
+(* use_dsp = "yes" *) reg [REGI-1:0] regi_sf;
 reg [EXP-1:0] exp_sf;
 wire ovf_sf;
 wire ovf_p;
@@ -90,10 +90,10 @@ reg [14:0] vld_d;
 // Decode & Gather Scale Factors
 //-------------------------------------------------
 
-decoder #(.in_s(WIDTH), .exp_s(EXP)) u_decode_w(.clk(clk), .rstn(rstn), .in(win), .vld_i(vld_i), .sign(sign_w), .regi(regi_w), .exp(exp_w), .mts(mts_w), .vld_o(vld_o_w));
-decoder #(.in_s(WIDTH), .exp_s(EXP)) u_decode_d(.clk(clk), .rstn(rstn), .in(din), .vld_i(vld_i), .sign(sign_d), .regi(regi_d), .exp(exp_d), .mts(mts_d), .vld_o(vld_o_d));
+decoder #(.in_s(WIDTH), .exp_s(EXP)) u_decode_w(.clk(clk_i), .rstn(rstn), .in(win), .vld_i(vld_i), .sign(sign_w), .regi(regi_w), .exp(exp_w), .mts(mts_w), .vld_o(vld_o_w));
+decoder #(.in_s(WIDTH), .exp_s(EXP)) u_decode_d(.clk(clk_i), .rstn(rstn), .in(din), .vld_i(vld_i), .sign(sign_d), .regi(regi_d), .exp(exp_d), .mts(mts_d), .vld_o(vld_o_d));
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         sf_w <= 0;
         sf_d <= 0;
@@ -116,7 +116,7 @@ assign ovf_m = mts_m[2*(MTS+1)-1]; // 1 for overflow
 assign sf_m = sf_w + sf_d + $signed(ovf_m);
 assign norm_mts_m = ovf_m ? (mts_m >> ovf_m) : {mts_m, 1'b0}; // always msb bit = 0
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         sf_bias <= 0;
         mts_ms <= 0;
@@ -138,7 +138,7 @@ end
 //-------------------------------------------------
 
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         counter <= 0;
         acc_rdy <= 0;
@@ -164,7 +164,7 @@ end
 
 reg zc_i;
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         sign_q <= 0;
         acc_mag <= 0;
@@ -185,7 +185,7 @@ end
 
 LZD #(.in_s(WIDTH_A), .out_s(WZC)) u_lzd(.in(acc_mag), .vld_i(zc_i), .out(zc), .vld_o(vld));
  
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         sf_q <= 0;
         mts_tmp <= 0;
@@ -212,7 +212,7 @@ end
 
 assign nzero = |mts_q; // 1 for non-zero (1.f format)
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         sign_sf <= 0;
         regi_sf <= 0;
@@ -234,7 +234,7 @@ end
 assign ovf_sf = regi_sf[REGI-1]; // overflow: quire regime mag = 1xxx
 assign ovf_p = (!regi_sf[REGI-1]) && (&regi_sf[REGI-2:0]); // overflow: output posit regime mag = 0111
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         regi_p <= 0;
         exp_p <= 0;
@@ -260,7 +260,7 @@ end
 // Convertion to Posit: Encode & Round
 //-------------------------------------------------
 
-always @(posedge clk, negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         tmp_pos <= 0;
         tmp_neg <= 0;
@@ -297,7 +297,7 @@ assign sticky_bit = |tmp[WTMP-1-(WIDTH):0];
 assign round_val = (ovf_sf | ovf_p) ? 1'b0 : (guard_bit & (lsb_bit | sticky_bit));
 assign tmp_for_round = tmp[WTMP-1:WTMP-1-(WIDTH-2)];
 
-always @(posedge clk or negedge rstn) begin
+always @(posedge clk_i) begin
     if (~rstn) begin
         acc_o_tmp <= 0;
         
@@ -326,7 +326,7 @@ end
  
 //////////////////////////////////////// 
 
-always@(posedge clk, negedge rstn) begin
+always@(posedge clk_i) begin
 	if(~rstn) begin
 		vld_d <= 0;
 	end
