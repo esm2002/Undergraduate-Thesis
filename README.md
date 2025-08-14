@@ -21,18 +21,18 @@ Undergraduate-Thesis/
 ```
 
 ## 2. Experimental Results (Basys-3 FPGA) (# of multiplication = 1)
-* T (ns) = target clock period, WNS (ns) = worst negative slack, L (cycle) = latency
+* T (ns) = target clock period, WNS (ns) = worst negative slack, L (cycle) = latency,
   W = total bits, E = exponential part bits, F = fraction part bits
 * Dynamic Range: log10​(max/min)
   * Fixed-Point:
     max = (2^(W−1)−1)/2^F​, min = 1/2^F
   * Floating-Point:
-    bias = 2^(E-1)-1, expmax = 2*bias
-    max = 2^(expmax-bias) * (2-2^(-F))
+    bias = 2^(E-1)-1, expmax = 2*bias,
+    max = 2^(expmax-bias) * (2-2^(-F)),
     min = 2^(1-bias) * 2^(-F)
   * Posit:
-    useed = 2^(2^E)
-    max = useed^(W-2)
+    useed = 2^(2^E),
+    max = useed^(W-2),
     min = useed^(-W+2)
 * Max. Operating Freq. (MHz): max(1000/(T - WNS))
 * Energy-Delay-Product (J*s): Power * (L * T)^2
