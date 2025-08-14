@@ -322,7 +322,7 @@ module posit_mac_tb();
     .K            (K),
     .EXP          (EXP)
   ) DUT (
-    .clk   (clk),
+    .clk_i (clk),
     .rstn  (rstn),
     .vld_i (vld_i),
     .win   (win),
