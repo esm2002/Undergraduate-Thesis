@@ -3,7 +3,7 @@
 class FxMacModel #(
     parameter int WIDTH_P    = 8,
     parameter int FRACT_P    = 4,
-    parameter int K_P        = 1,
+    parameter int K_P        = 9,
     localparam int WK_P         = $clog2(K_P),
     localparam int WIDTH_A_P    = WK_P + 2*WIDTH_P + 2
   );
@@ -43,8 +43,8 @@ class FxMacModel #(
                  output bit signed [WIDTH_A_P-1:0] acc_shft);
       acc_wide = 0;
       for (int i=0; i<K_P; i++) begin
-        automatic bit [2*WIDTH_P-1:0] prod = $signed(w[i]) * $signed(d[i]);
-        acc_wide += $signed({{(WIDTH_A_P-2*WIDTH_P){|prod[2*WIDTH_P-1:2*WIDTH_P-2]}}, prod});
+        bit signed [2*WIDTH_P-1:0] prod = $signed(w[i]) * $signed(d[i]);
+        acc_wide += prod; //$signed({{(WIDTH_A_P-2*WIDTH_P){|prod[2*WIDTH_P-1:2*WIDTH_P-2]}}, prod});
       end
       
       guard_bit  = (FRACT_P >= 1) ? acc_wide[FRACT_P-1] : 1'b0;
@@ -110,8 +110,8 @@ module fx_mac_tb();
   // ------------------------------------------------------------
   parameter int WIDTH      = 8;        // 8-bit 
   parameter int FRACTION   = 4;        // Q(FRACTION)
-  parameter int K          = 1;        // The number of samples (K)
-  parameter int  NumTests  = 300;
+  parameter int K          = 9;        // The number of samples (K)
+  parameter int  NumTests  = 100;
   parameter int  Debug_test = 11;
   parameter int  unsigned RstCycle  = 10;
   parameter int  unsigned MaxCycle  = 100000;
@@ -162,6 +162,7 @@ module fx_mac_tb();
   initial begin
     rstn = 1'b0;
     repeat (RstCycle) @(posedge clk);
+    @(negedge clk); 
     rstn = 1'b1;
   end
 
@@ -224,13 +225,22 @@ module fx_mac_tb();
   // Scoreboard & Assertion (comparison at vld_o timing)
   // ------------------------------------------------------------
   int pass_cnt, fail_cnt;
+  
+  property p_no_xz_inputs;
+    @(posedge clk) disable iff (!rstn)
+      !$isunknown({vld_i, win, din});
+  endproperty
+  a_no_xz_inputs: assert property (p_no_xz_inputs)
+    else $error("[%0t] X/Z detected on inputs: VLD_I=%0d, WIN=%0d, DIN=%0d",
+                 $time, vld_i, win, din);
 
   property p_no_xz_outputs;
     @(posedge clk) disable iff (!rstn)
       !$isunknown({vld_o, acc_o});
   endproperty
   a_no_xz_outputs: assert property (p_no_xz_outputs)
-    else $error("[%0t] X/Z detected on outputs", $time);
+    else $error("[%0t] X/Z detected on outputs: VLD_O=%0d, ACC_O=%0d", 
+                $time, vld_o, acc_o);
 
   bit signed [WIDTH_A-1:0] maxv;
   bit signed [WIDTH_A-1:0] minv;
@@ -329,9 +339,9 @@ module fx_mac_tb();
   // ------------------------------------------------------------
 
   initial begin : MAIN
-//    $fsdbDumpfile("fx_mac.fsdb");
-//    $fsdbDumpvars("+all", "+parameter");
-//    $fsdbDumpMDA(1);
+    $fsdbDumpfile("fx_mac.fsdb");
+    $fsdbDumpvars("+all", "+parameter");
+    $fsdbDumpMDA(1);
 
     @(posedge rstn);
     RESET;
