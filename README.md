@@ -7,20 +7,22 @@ Undergraduate-Thesis/
 ├── README.md                 
 ├── fixed_point/                    
 │   ├── src/                   
-│   ├── constraints/
+│   ├── reports_FPGA/
 │   └── reports/           
 ├── floating_point/                       
 │   ├── src/
-│   ├── constraints/
+│   ├── reports_FPGA/
 │   └── reports/           
 ├── posit/                      
 │   ├── src/
-│   ├── constraints/
+│   ├── reports_FPGA/
 │   └── reports/  
-└── references.txt/                      
+└── 8bit_FPGA_CONSTR.xdc/                      
 ```
 
-## 2. Experimental Results (Basys-3 FPGA) (# of multiplication = 1)
+## 2. Experimental Results (ASIC) (# of multiplication = 9)
+
+## 3. Experimental Results (Basys-3 FPGA) (# of multiplication = 1)
 * T (ns) = target clock period, WNS (ns) = worst negative slack, L (cycle) = latency,
   W = total bits, E = exponential part bits, F = fraction part bits
 * Dynamic Range: log10​(max/min)
