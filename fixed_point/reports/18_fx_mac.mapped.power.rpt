@@ -1,0 +1,77 @@
+Information: Propagating switching activity (high effort zero delay simulation). (PWR-6)
+Warning: Design has unannotated primary inputs. (PWR-414)
+Warning: Design has unannotated sequential cell outputs. (PWR-415)
+ 
+****************************************
+Report : power
+        -hier
+        -analysis_effort high
+        -verbose
+Design : fx_mac
+Scenario(s): mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C
+Version: V-2023.12-SP5-3
+Date   : Sat Aug 16 15:41:31 2025
+****************************************
+
+
+Library(s) Used:
+
+    C28SOI_SC_8_PR_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/PR/C28SOI_SC_8_PR_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C.db)
+    C28SOI_SC_8_CLK_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/CLK/C28SOI_SC_8_CLK_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm.db)
+    C28SOI_SC_8_CORE_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/CORE/C28SOI_SC_8_CORE_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm.db)
+    C28SOI_SC_8_CORESPL_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/CORESPL/C28SOI_SC_8_CORESPL_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm.db)
+
+
+Global Operating Voltage = 0.9  
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000pf
+    Time Units = 1ns
+    Dynamic Power Units = 1mW    (derived from V,C,T units)
+    Leakage Power Units = 1uW
+
+
+--------------------------------------------------------------------------------
+                                       Switch   Int      Leak     Total
+Hierarchy                              Power    Power    Power    Power    %
+--------------------------------------------------------------------------------
+fx_mac                                 8.77e-03 2.15e-02    2.632 3.29e-02 100.0
+Information: Propagating switching activity (high effort zero delay simulation). (PWR-6)
+Warning: Design has unannotated primary inputs. (PWR-414)
+Warning: Design has unannotated sequential cell outputs. (PWR-415)
+ 
+****************************************
+Report : power
+        -hier
+        -analysis_effort high
+        -verbose
+Design : fx_mac
+Scenario(s): mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C
+Version: V-2023.12-SP5-3
+Date   : Sat Aug 16 15:41:31 2025
+****************************************
+
+
+Library(s) Used:
+
+    C28SOI_SC_8_PR_LR_ff28_1.10V_0.00V_1.10V_0.00V_m40C (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/PR/C28SOI_SC_8_PR_LR_ff28_1.10V_0.00V_1.10V_0.00V_m40C.db)
+    C28SOI_SC_8_CLK_LR_ff28_1.10V_0.00V_1.10V_0.00V_m40C_sadhm (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/CLK/C28SOI_SC_8_CLK_LR_ff28_1.10V_0.00V_1.10V_0.00V_m40C_sadhm.db)
+    C28SOI_SC_8_CORE_LR_ff28_1.10V_0.00V_1.10V_0.00V_m40C_sadhm (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/CORE/C28SOI_SC_8_CORE_LR_ff28_1.10V_0.00V_1.10V_0.00V_m40C_sadhm.db)
+    C28SOI_SC_8_CORESPL_LR_ff28_1.10V_0.00V_1.10V_0.00V_m40C_sadhm (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/CORESPL/C28SOI_SC_8_CORESPL_LR_ff28_1.10V_0.00V_1.10V_0.00V_m40C_sadhm.db)
+
+
+Global Operating Voltage = 1.1  
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000pf
+    Time Units = 1ns
+    Dynamic Power Units = 1mW    (derived from V,C,T units)
+    Leakage Power Units = 1uW
+
+
+--------------------------------------------------------------------------------
+                                       Switch   Int      Leak     Total
+Hierarchy                              Power    Power    Power    Power    %
+--------------------------------------------------------------------------------
+fx_mac                                 1.29e-02 3.32e-02 3.93e-02 4.61e-02 100.0
+1

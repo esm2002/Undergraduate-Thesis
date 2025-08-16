@@ -1,0 +1,67 @@
+ 
+****************************************
+Report : resources
+Design : fx_mac
+Version: V-2023.12-SP5-3
+Date   : Sat Aug 16 15:41:30 2025
+****************************************
+
+
+Resource Report for this hierarchy in file
+        /home/intern9//example/rtl/fx/fx_mac.v
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_1        | DW01_inc       | width=8    | add_34 (fx_mac.v:34)       |
+| add_x_3        | DW01_inc       | width=8    | add_35 (fx_mac.v:35)       |
+| lt_x_6         | DW_cmp         | width=5    | lt_62 (fx_mac.v:62)        |
+| add_x_7        | DW01_inc       | width=5    | add_63 (fx_mac.v:63)       |
+| add_x_8        | DW01_add       | width=22   | add_65 (fx_mac.v:65)       |
+| add_x_14       | DW01_add       | width=12   | add_103 (fx_mac.v:103)     |
+| DP_OP_28J1_122_7206             |            |                            |
+|                | DP_OP_28J1_122_7206 |       |                            |
+=============================================================================
+
+Datapath Report for DP_OP_28J1_122_7206
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_28J1_122_7206  | mult_38 (fx_mac.v:38) sub_add_44 (fx_mac.v:44)      |
+|                      | add_44_ni (fx_mac.v:44)                             |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 8     |                                          |
+| I2    | PI   | Unsigned | 8     |                                          |
+| O1    | PO   | Unsigned | 16    | I1 * I2 (fx_mac.v:38)                    |
+| O2    | PO   | Signed   | 16    | -O1 + $unsigned(16'b0000000000000000) (fx_mac.v:44) |
+==============================================================================
+
+
+Datapath Extraction Report
+
+Information: Operator associated with resources 'add_34 (fx_mac.v:34)' in design 'fx_mac' breaks the datapath extraction because there is leakage due to truncation on its fanout to operator of resources 'C431 (fx_mac.v:34)'.  (HDL-120)
+
+Information: Operator associated with resources 'add_35 (fx_mac.v:35)' in design 'fx_mac' breaks the datapath extraction because there is leakage due to truncation on its fanout to operator of resources 'C432 (fx_mac.v:35)'.  (HDL-120)
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| add_x_1            | DW01_inc         | apparch (area)     |                |
+| add_x_3            | DW01_inc         | apparch (area)     |                |
+| lt_x_6             | DW_cmp           | apparch (area)     |                |
+| add_x_7            | DW01_inc         | apparch (area)     |                |
+| add_x_8            | DW01_add         | apparch (area)     |                |
+| add_x_14           | DW01_add         | apparch (area)     |                |
+| DP_OP_28J1_122_7206                   |                    |                |
+|                    | DP_OP_28J1_122_7206 | str (area)      |                |
+|                    |                  | mult_arch: and     |                |
+===============================================================================
+
+1

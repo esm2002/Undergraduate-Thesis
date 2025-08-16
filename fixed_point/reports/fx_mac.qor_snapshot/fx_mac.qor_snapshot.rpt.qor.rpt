@@ -1,0 +1,163 @@
+ 
+****************************************
+Report : qor
+Design : fx_mac
+Scenario(s): mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C
+Version: V-2023.12-SP5-3
+Date   : Sat Aug 16 15:41:30 2025
+****************************************
+
+
+  Scenario 'mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C'
+  Timing Path Group 'CLK'
+  -----------------------------------
+  Levels of Logic:             29.000
+  Critical Path Length:         1.574
+  Critical Path Slack:          8.101
+  Critical Path Clk Period:    10.000
+  Total Negative Slack:         0.000
+  No. of Violating Paths:       0.000
+  Worst Hold Violation:        -0.138
+  Total Hold Violation:        -3.160
+  No. of Hold Violations:      42.000
+  -----------------------------------
+
+  Scenario 'mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C'
+  Timing Path Group 'REGIN'
+  -----------------------------------
+  Levels of Logic:             22.000
+  Critical Path Length:         1.376
+  Critical Path Slack:          8.252
+  Critical Path Clk Period:    10.000
+  Total Negative Slack:         0.000
+  No. of Violating Paths:       0.000
+  Worst Hold Violation:        -0.206
+  Total Hold Violation:       -12.085
+  No. of Hold Violations:      72.000
+  -----------------------------------
+
+  Scenario 'mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C'
+  Timing Path Group 'REGOUT'
+  -----------------------------------
+  Levels of Logic:              0.000
+  Critical Path Length:         0.120
+  Critical Path Slack:          9.530
+  Critical Path Clk Period:    10.000
+  Total Negative Slack:         0.000
+  No. of Violating Paths:       0.000
+  Worst Hold Violation:        -0.038
+  Total Hold Violation:        -0.329
+  No. of Hold Violations:       9.000
+  -----------------------------------
+
+
+  Scenario 'mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C'
+  Timing Path Group 'CLK'
+  -----------------------------------
+  Levels of Logic:             29.000
+  Critical Path Length:         0.932
+  Critical Path Slack:          8.755
+  Critical Path Clk Period:    10.000
+  Total Negative Slack:         0.000
+  No. of Violating Paths:       0.000
+  Worst Hold Violation:        -0.162
+  Total Hold Violation:        -5.279
+  No. of Hold Violations:      43.000
+  -----------------------------------
+
+  Scenario 'mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C'
+  Timing Path Group 'REGIN'
+  -----------------------------------
+  Levels of Logic:             22.000
+  Critical Path Length:         0.801
+  Critical Path Slack:          8.835
+  Critical Path Clk Period:    10.000
+  Total Negative Slack:         0.000
+  No. of Violating Paths:       0.000
+  Worst Hold Violation:        -0.182
+  Total Hold Violation:       -10.671
+  No. of Hold Violations:      74.000
+  -----------------------------------
+
+  Scenario 'mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C'
+  Timing Path Group 'REGOUT'
+  -----------------------------------
+  Levels of Logic:              0.000
+  Critical Path Length:         0.072
+  Critical Path Slack:          9.578
+  Critical Path Clk Period:    10.000
+  Total Negative Slack:         0.000
+  No. of Violating Paths:       0.000
+  Worst Hold Violation:        -0.084
+  Total Hold Violation:        -0.748
+  No. of Hold Violations:       9.000
+  -----------------------------------
+
+
+  Cell Count
+  -----------------------------------
+  Hierarchical Cell Count:          3
+  Hierarchical Port Count:         12
+  Leaf Cell Count:                422
+  Buf/Inv Cell Count:              39
+  Buf Cell Count:                   0
+  Inv Cell Count:                  39
+  CT Buf/Inv Cell Count:            0
+  Combinational Cell Count:       362
+  Sequential Cell Count:           60
+  Macro Count:                      0
+  -----------------------------------
+
+
+  Area
+  -----------------------------------
+  Combinational Area:         245.453
+  Noncombinational Area:      135.130
+  Buf/Inv Area:                 8.486
+  Total Buffer Area:            0.000
+  Total Inverter Area:          8.486
+  Macro/Black Box Area:         0.000
+  Net Area:                     0.000
+  Net XLength        :       1169.462
+  Net YLength        :       1383.460
+  -----------------------------------
+  Cell Area:                  380.582
+  Design Area:                380.582
+  Net Length        :        2552.922
+
+
+  Design Rules
+  -----------------------------------
+  Total Number of Nets:           486
+  Nets With Violations:             0
+  Max Trans Violations:             0
+  Max Cap Violations:               0
+  -----------------------------------
+
+
+  Hostname: mustang
+
+  Compile CPU Statistics
+  -----------------------------------------
+  Resource Sharing:                   0.198
+  Logic Optimization:                 1.871
+  Mapping Optimization:               6.119
+  -----------------------------------------
+  Overall Compile Time:              40.398
+  Overall Compile Wall Clock Time:   37.921
+
+  --------------------------------------------------------------------
+
+  Scenario: mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C   WNS: 0.000  TNS: 0.000  Number of Violating Paths: 0
+  Scenario: mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C   WNS: 0.000  TNS: 0.000  Number of Violating Paths: 0
+  Design  WNS: 0.000  TNS: 0.000  Number of Violating Paths: 0
+
+
+  Scenario: mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C  (Hold)  WNS: 0.206  TNS: 15.574  Number of Violating Paths: 123
+  Scenario: mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C  (Hold)  WNS: 0.182  TNS: 16.698  Number of Violating Paths: 126
+  Design (Hold)  WNS: 0.206  TNS: 18.742  Number of Violating Paths: 126
+
+  --------------------------------------------------------------------
+
+
+1

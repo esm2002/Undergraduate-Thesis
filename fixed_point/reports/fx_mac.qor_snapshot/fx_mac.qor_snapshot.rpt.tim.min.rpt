@@ -1,0 +1,245 @@
+ 
+****************************************
+Report : timing
+        -path full_clock
+        -delay min
+        -physical
+        -derate
+        -input_pins
+        -nets
+        -max_paths 1
+        -transition_time
+        -crosstalk_delta
+        -capacitance
+Design : fx_mac
+Scenario(s): mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C
+Version: V-2023.12-SP5-3
+Date   : Sat Aug 16 15:41:30 2025
+****************************************
+
+ * Some/all delay information is back-annotated.
+Wire Load Model Mode: Inactive.
+
+  Startpoint: vld_d_reg_3_
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: vld_d_reg_4_
+            (rising edge-triggered flip-flop clocked by CLK)
+  Scenario: mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C
+  Path Group: CLK
+  Path Type: min
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout       Cap     DTran     Trans     Delta     Derate      Incr       Path      Location / Load        Attributes     Voltage
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.000      0.000                                            
+  vld_d_reg_3_/CP (C8T28SOI_LR_DFPRQX4_P0)                         0.000     0.100     0.000      0.964     0.000      0.000 r    (15.41,20.58)          i              0.900
+  vld_d_reg_3_/Q (C8T28SOI_LR_DFPRQX4_P0)                                    0.019                0.964     0.113      0.113 f    (17.45,20.52)                         0.900
+  vld_d[3] (net)                                2        0.002                                    0.964     0.000      0.113 f    [0.00,0.00]                           
+  vld_d_reg_4_/D (C8T28SOI_LR_DFPRQX4_P0)                          0.000     0.019     0.000      0.964     0.000 *    0.113 f    (17.38,17.90)                         0.900
+  data arrival time                                                                                                    0.113                                            
+
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.200      0.200                                            
+  vld_d_reg_4_/CP (C8T28SOI_LR_DFPRQX4_P0)                                                                  0.000      0.200 r                                          
+  library hold time                                                                                         0.051      0.251                                            
+  data required time                                                                                                   0.251                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  data required time                                                                                                   0.251                                            
+  data arrival time                                                                                                   -0.113                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  slack (VIOLATED)                                                                                                    -0.138                                            
+
+
+  Startpoint: vld_i (input port clocked by CLK)
+  Endpoint: vld_d_reg_0_
+            (rising edge-triggered flip-flop clocked by CLK)
+  Scenario: mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C
+  Path Group: REGIN
+  Path Type: min
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout       Cap     DTran     Trans     Delta     Derate      Incr       Path      Location / Load        Attributes     Voltage
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.000      0.000                                            
+  input external delay                                                                                      0.050      0.050 f                                          
+  vld_i (in)                                                                 0.000                0.964     0.000      0.050 f    (15.05,24.77)                         
+  vld_i (net)                                   1        0.001                                    0.964     0.000      0.050 f    [0.00,0.00]                           
+  vld_d_reg_0_/D (C8T28SOI_LR_DFPRQX4_P0)                          0.000     0.000     0.000      0.964     0.000 *    0.050 f    (13.31,22.09)                         0.900
+  data arrival time                                                                                                    0.050                                            
+
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.200      0.200                                            
+  vld_d_reg_0_/CP (C8T28SOI_LR_DFPRQX4_P0)                                                                  0.000      0.200 r                                          
+  library hold time                                                                                         0.057      0.257                                            
+  data required time                                                                                                   0.257                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  data required time                                                                                                   0.257                                            
+  data arrival time                                                                                                   -0.050                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  slack (VIOLATED)                                                                                                    -0.206                                            
+
+
+  Startpoint: acc_rc_reg_8_
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: acc_o[4] (output port clocked by CLK)
+  Scenario: mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C
+  Path Group: REGOUT
+  Path Type: min
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout       Cap     DTran     Trans     Delta     Derate      Incr       Path      Location / Load        Attributes     Voltage
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.000      0.000                                            
+  acc_rc_reg_8_/CP (C8T28SOI_LR_DFPRQX4_P0)                        0.000     0.100     0.000      0.964     0.000      0.000 r    (22.10,12.20)                         0.900
+  acc_rc_reg_8_/Q (C8T28SOI_LR_DFPRQX4_P0)                                   0.034                0.964     0.112      0.112 r    (24.15,12.15)                         0.900
+  acc_o[4] (net)                                1        0.002                                    0.964     0.000      0.112 r    [0.00,0.00]                           
+  acc_o[4] (out)                                                   0.000     0.034     0.000      0.964     0.000 *    0.112 r    (24.18,12.25)                         
+  data arrival time                                                                                                    0.112                                            
+
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.200      0.200                                            
+  output external delay                                                                                    -0.050      0.150                                            
+  data required time                                                                                                   0.150                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  data required time                                                                                                   0.150                                            
+  data arrival time                                                                                                   -0.112                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  slack (VIOLATED)                                                                                                    -0.038                                            
+
+
+  Startpoint: vld_d_reg_3_
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: vld_d_reg_4_
+            (rising edge-triggered flip-flop clocked by CLK)
+  Scenario: mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C
+  Path Group: CLK
+  Path Type: min
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout       Cap     DTran     Trans     Delta     Derate      Incr       Path      Location / Load        Attributes     Voltage
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.000      0.000                                            
+  vld_d_reg_3_/CP (C8T28SOI_LR_DFPRQX4_P0)                         0.000     0.100     0.000                0.000      0.000 r    (15.41,20.58)          i              1.100
+  vld_d_reg_3_/Q (C8T28SOI_LR_DFPRQX4_P0)                                    0.011                          0.068      0.068 f    (17.45,20.52)                         1.100
+  vld_d[3] (net)                                2        0.002                                              0.000      0.068 f    [0.00,0.00]                           
+  vld_d_reg_4_/D (C8T28SOI_LR_DFPRQX4_P0)                          0.000     0.011     0.000                0.000 *    0.068 f    (17.38,17.90)                         1.100
+  data arrival time                                                                                                    0.068                                            
+
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.200      0.200                                            
+  vld_d_reg_4_/CP (C8T28SOI_LR_DFPRQX4_P0)                                                                  0.000      0.200 r                                          
+  library hold time                                                                                         0.029      0.229                                            
+  data required time                                                                                                   0.229                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  data required time                                                                                                   0.229                                            
+  data arrival time                                                                                                   -0.068                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  slack (VIOLATED)                                                                                                    -0.162                                            
+
+
+  Startpoint: vld_i (input port clocked by CLK)
+  Endpoint: vld_d_reg_0_
+            (rising edge-triggered flip-flop clocked by CLK)
+  Scenario: mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C
+  Path Group: REGIN
+  Path Type: min
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout       Cap     DTran     Trans     Delta     Derate      Incr       Path      Location / Load        Attributes     Voltage
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.000      0.000                                            
+  input external delay                                                                                      0.050      0.050 f                                          
+  vld_i (in)                                                                 0.000                          0.000      0.050 f    (15.05,24.77)                         
+  vld_i (net)                                   1        0.001                                              0.000      0.050 f    [0.00,0.00]                           
+  vld_d_reg_0_/D (C8T28SOI_LR_DFPRQX4_P0)                          0.000     0.000     0.000                0.000 *    0.050 f    (13.31,22.09)                         1.100
+  data arrival time                                                                                                    0.050                                            
+
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.200      0.200                                            
+  vld_d_reg_0_/CP (C8T28SOI_LR_DFPRQX4_P0)                                                                  0.000      0.200 r                                          
+  library hold time                                                                                         0.033      0.233                                            
+  data required time                                                                                                   0.233                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  data required time                                                                                                   0.233                                            
+  data arrival time                                                                                                   -0.050                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  slack (VIOLATED)                                                                                                    -0.182                                            
+
+
+  Startpoint: acc_rc_reg_8_
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: acc_o[4] (output port clocked by CLK)
+  Scenario: mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C
+  Path Group: REGOUT
+  Path Type: min
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout       Cap     DTran     Trans     Delta     Derate      Incr       Path      Location / Load        Attributes     Voltage
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.000      0.000                                            
+  acc_rc_reg_8_/CP (C8T28SOI_LR_DFPRQX4_P0)                        0.000     0.100     0.000                0.000      0.000 r    (22.10,12.20)                         1.100
+  acc_rc_reg_8_/Q (C8T28SOI_LR_DFPRQX4_P0)                                   0.019                          0.066      0.066 r    (24.15,12.15)                         1.100
+  acc_o[4] (net)                                1        0.002                                              0.000      0.066 r    [0.00,0.00]                           
+  acc_o[4] (out)                                                   0.000     0.019     0.000                0.000 *    0.066 r    (24.18,12.25)                         
+  data arrival time                                                                                                    0.066                                            
+
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.200      0.200                                            
+  output external delay                                                                                    -0.050      0.150                                            
+  data required time                                                                                                   0.150                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  data required time                                                                                                   0.150                                            
+  data arrival time                                                                                                   -0.066                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  slack (VIOLATED)                                                                                                    -0.084                                            
+
+
+1
