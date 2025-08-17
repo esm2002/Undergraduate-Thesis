@@ -10,7 +10,7 @@
 
 class FpMacModel #(
     parameter int WIDTH_P    = 8,
-    parameter int K_P        = 1,   
+    parameter int K_P        = 9,   
     parameter int EXP_P      = 4,     
     parameter int MTS_P      = 3,       
     parameter int BIAS_P     = 7,  // 2^(EXP-1)-1   
@@ -152,7 +152,7 @@ class FpMacModel #(
           frac_i = int'(fl);
           if (diff > 0.5) frac_i++;
           
-          if (fl >= (1<<(MTS_P+1))) out = {{(r < 0.0 ? 1'b1 : 1'b0)}, {{(EXP_P-1){1'b0}}, 1'b1}, {MTS_P{1'b0}}};
+          if (fracN_i >= (1<<MTS_P)) out = {{(r < 0.0 ? 1'b1 : 1'b0)}, {{(EXP_P-1){1'b0}}, 1'b1}, {MTS_P{1'b0}}};
           else out = {{(r < 0.0 ? 1'b1 : 1'b0)}, {EXP_P{1'b0}}, frac_i[MTS_P-1:0]};
           return out;
         end
@@ -165,7 +165,7 @@ class FpMacModel #(
         fracN_i = int'(flN);
         if (diffN > 0.5) begin
           fracN_i++;
-          if (flN >= (1<<MTS_P)) begin
+          if (fracN_i >= (1<<MTS_P)) begin
             // carry → 1.0 -> 10.0, exponent +1
             fracN_i = 0;
             E++;
@@ -239,12 +239,18 @@ class FpMacModel #(
     bit signed [WIDTH_P-1:0] g;
 
     function void make_random();
-      bit           sgn  = $urandom_range(0,1);
-      int unsigned  expu = $urandom_range(0, (1<<EXP_P)-2);
-      int unsigned  frcu = $urandom_range(0, (1<<MTS_P)-1); 
+//      bit           sgn  = $urandom_range(0,1);
+//      int unsigned  expu = $urandom_range(0, (1<<EXP_P)-2);
+//      int unsigned  frcu = $urandom_range(0, (1<<MTS_P)-1); 
       foreach (win[i]) begin 
-        win[i] = {sgn, expu[EXP_P-1:0], frcu[MTS_P-1:0]};
-        din[i] = {sgn, expu[EXP_P-1:0], frcu[MTS_P-1:0]};
+        bit           sgn1  = $urandom_range(0,1);
+        int unsigned  expu1 = $urandom_range(0, (1<<EXP_P)-2);
+        int unsigned  frcu1 = $urandom_range(0, (1<<MTS_P)-1); 
+        bit           sgn2  = $urandom_range(0,1);
+        int unsigned  expu2 = $urandom_range(0, (1<<EXP_P)-2);
+        int unsigned  frcu2 = $urandom_range(0, (1<<MTS_P)-1); 
+        win[i] = {sgn1, expu1[EXP_P-1:0], frcu1[MTS_P-1:0]};
+        din[i] = {sgn2, expu2[EXP_P-1:0], frcu2[MTS_P-1:0]};
       end
       g = golden_mac(win, din, acc_r, ovf_r, udf_r, inv_r);
       kind_q.push_back(CK_RANDOM);
@@ -254,19 +260,25 @@ class FpMacModel #(
     endfunction
 
     function void make_corner(int kind_id);
-      bit           sgn  = $urandom_range(0,1);
-      int unsigned  expu = $urandom_range(0, (1<<EXP_P)-2);
-      int unsigned  frcu = $urandom_range(0, (1<<MTS_P)-1); 
+//      bit           sgn  = $urandom_range(0,1);
+//      int unsigned  expu = $urandom_range(0, (1<<EXP_P)-2);
+//      int unsigned  frcu = $urandom_range(0, (1<<MTS_P)-1); 
       foreach (win[i]) begin
+        bit           sgn1  = $urandom_range(0,1);
+        int unsigned  expu1 = $urandom_range(0, (1<<EXP_P)-2);
+        int unsigned  frcu1 = $urandom_range(0, (1<<MTS_P)-1); 
+        bit           sgn2  = $urandom_range(0,1);
+        int unsigned  expu2 = $urandom_range(0, (1<<EXP_P)-2);
+        int unsigned  frcu2 = $urandom_range(0, (1<<MTS_P)-1); 
         case (kind_id)
           CK_ZERO   : begin win[i]=0;            din[i]=0;            end
           CK_OVF    : begin 
-                        win[i]={sgn, {{(EXP_P-1){1'b1}}, 1'b0}, {MTS_P{1'b1}}};
-                        din[i]={sgn, {{(EXP_P-1){1'b1}}, 1'b0}, {MTS_P{1'b1}}};
+                        win[i]={sgn1, {{(EXP_P-1){1'b1}}, 1'b0}, {MTS_P{1'b1}}};
+                        din[i]={sgn2, {{(EXP_P-1){1'b1}}, 1'b0}, {MTS_P{1'b1}}};
                       end
           CK_UDF    : begin 
-                        win[i]={sgn, {EXP_P{1'b0}}, frcu[MTS_P-1:0]};         
-                        din[i]={sgn, {EXP_P{1'b0}}, frcu[MTS_P-1:0]};      
+                        win[i]={sgn1, {EXP_P{1'b0}}, frcu1[MTS_P-1:0]};         
+                        din[i]={sgn2, {EXP_P{1'b0}}, frcu2[MTS_P-1:0]};      
                       end
           default   : begin win[i]=0;            din[i]=0;            end
         endcase
@@ -286,7 +298,7 @@ module fp_mac_tb();
   // Parameters & Corner ID
   // ------------------------------------------------------------
   parameter int WIDTH      = 8;        // 8-bit 
-  parameter int K          = 1;        // The number of samples (K)
+  parameter int K          = 9;        // The number of samples (K)
   parameter int EXP        = 4;     
   parameter int MTS        = 3;       
   parameter int BIAS       = 7;        // 2^(EXP-1)-1
@@ -504,9 +516,9 @@ module fp_mac_tb();
   // ------------------------------------------------------------
 
   initial begin : MAIN
-//    $fsdbDumpfile("fx_mac.fsdb");
-//    $fsdbDumpvars("+all", "+parameter");
-//    $fsdbDumpMDA(1);
+    $fsdbDumpfile("fx_mac.fsdb");
+    $fsdbDumpvars("+all", "+parameter");
+    $fsdbDumpMDA(1);
 
     @(posedge rstn);
     RESET;
@@ -522,7 +534,7 @@ module fp_mac_tb();
 
     // report results
     $display("======================================================");
-    $display(" fx_mac TB Result: PASS=%0d, FAIL=%0d", pass_cnt, fail_cnt);
+    $display(" fp_mac TB Result: PASS=%0d, FAIL=%0d", pass_cnt, fail_cnt);
     $display(" Corner coverage counts:");
     $display("   ZERO   : %0d", cov_cnt[CK_ZERO  ]);
     $display("   OVF    : %0d", cov_cnt[CK_OVF   ]);
