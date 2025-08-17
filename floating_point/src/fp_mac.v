@@ -1,17 +1,17 @@
 `timescale 1ns/1ps
 module fp_mac #(
 parameter WIDTH = 8,          // Bitwidth of inputs                      //32(FP32)
-parameter K  = 1,   
+parameter K  = 9,   
 parameter EXP = 4,        // Number of exponent bits                     //8(FP32)
 parameter MTS = 3       // Number of mantissa bits                      //23(FP32)
 )( // revised from '$clog2(WIDTH_A)' to '$clog2(2*BIAS+1)'
 input clk_i,
 input rstn,
-(* IOB = "TRUE" *) input vld_i, 
-(* IOB = "TRUE" *) input signed [WIDTH-1:0] win, 
-(* IOB = "TRUE" *) input signed [WIDTH-1:0] din, 
-(* IOB = "TRUE" *) output[WIDTH-1:0] acc_o,
-(* IOB = "TRUE" *) output  vld_o
+input vld_i, 
+input [WIDTH-1:0] win, 
+input [WIDTH-1:0] din, 
+output[WIDTH-1:0] acc_o,
+output  vld_o
 );
 
 localparam WK = $clog2(K);
@@ -19,7 +19,8 @@ localparam BIAS = 2**(EXP-1)-1;  //127(FP32)
 localparam EXP_MAX = 2**EXP-2;  //254(FP32)
 localparam clog2_MAXMIN = EXP_MAX+MTS; // max/min = 2^(exp_max-1)*(2^(mts+1)-1)    //277(FP32)
 localparam WIDTH_A = WK + 2*clog2_MAXMIN + 2;
-localparam WZC = $clog2(2*BIAS+1);
+localparam ZC = 2*BIAS+1;
+localparam WZC = $clog2(ZC);
 
 reg sign_wd;
 reg [EXP-1:0] exp_w;
@@ -47,15 +48,16 @@ reg acc_rdy;
 
 wire ovf; //overflow flag
 wire udf; //underflow flag
-wire [WZC-1:0] zc;
-wire vld;
+wire zero; //zero flag
+wire [WZC:0] zc;
+//wire vld;
 
 wire guard_bit;
 wire round_bit;
 wire sticky_bit;
 wire round_val;
 
-reg signed sign_r;
+reg sign_r;
 (* use_dsp = "yes" *) reg [WIDTH_A-1:0] acc_mag; //
 
 (* use_dsp = "yes" *) reg signed [EXP-1:0] exp_r;
@@ -71,7 +73,7 @@ reg [9:0] vld_d;
 // Extraction & Subnormal Detection
 //-------------------------------------------------
 
-always @(posedge clk_i) begin
+always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         sign_wd <= 0;
         exp_w <= 0;
@@ -92,7 +94,7 @@ assign zero_w = |exp_w; // 0 for zero
 assign zero_d = |exp_d; // 0 for zero 
 assign zero_wd = (|exp_w) + (|exp_d);
 
-always @(posedge clk_i) begin
+always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         sign_fp_tmp <= 0;
         exp_fp_tmp <= 0;
@@ -111,7 +113,7 @@ end
 // Multiplication & Conversion to Fixed-Point
 //-------------------------------------------------
 
-always @(posedge clk_i) begin
+always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         sign_fp <= 0;
         exp_fp <= 0;
@@ -125,14 +127,14 @@ always @(posedge clk_i) begin
 end     // (2)biased_ex1 =0, biased_ex2!=0 : exp_fp =     0      + biased_ex2 + ~zero_1 +    0    + 1 - 3 = ex2 + BIAS - 1
         // (3)biased_ex1 =0, biased_ex2 =0 : exp_fp =     0      +      0     + ~zero_1 + ~zero_2 + 1 - 3 = 0
 
-assign mts_fx = sign_fp ? ~({1'b0, mts_fp}) + 1 : {1'b0, mts_fp};
+assign mts_fx = sign_fp ? $signed(~({1'b0, mts_fp})+1) : $signed({1'b0, mts_fp});
 assign mts_fxs = mts_fx << exp_fp;
 
 //-------------------------------------------------
 // Accumulation
 //-------------------------------------------------
 
-always @(posedge clk_i) begin
+always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         counter <= 0;
         acc_rdy <= 0;
@@ -157,10 +159,13 @@ end
 //-------------------------------------------------
 
 reg [2*BIAS:0] acc_mag_zc;
+wire [2*BIAS:0] acc_mag_oh;
 reg zc_tmp;
 reg zc_i;
 
-always @(posedge clk_i) begin
+wire [WIDTH_A-1:0] acc_u = $unsigned(acc);
+
+always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         sign_r <= 0;
         acc_mag <= 0;
@@ -176,10 +181,10 @@ always @(posedge clk_i) begin
         zc_i <= 0;
     end
     else if (acc_rdy) begin
-        sign_r <= acc[WIDTH_A-1];
-        if (acc[WIDTH_A-1]) acc_mag <= ~(acc) + 1;
-        else acc_mag <= acc;
-        acc_mag_zc <= acc_mag[(WIDTH_A-WK-BIAS-4)-:2*BIAS+1];
+        sign_r <= acc_u[WIDTH_A-1];
+        if (acc[WIDTH_A-1]) acc_mag <= ~(acc_u) + 1;
+        else acc_mag <= acc_u;
+        acc_mag_zc <= acc_mag[(WIDTH_A-WK-BIAS-4)-:ZC];
         zc_tmp <= 1'b1;
         zc_i <= zc_tmp;
     end
@@ -187,11 +192,15 @@ end
 
 assign ovf = |acc_mag[(WIDTH_A-2)-:WK+BIAS+2];
 assign udf = (~|acc_mag[(WIDTH_A-2)-:WK+3*BIAS+3]) & |acc_mag[2*MTS+BIAS-3:0];
+assign zero = (acc_mag == {WIDTH_A{1'b0}});
 
 // don't count zeros in overflow region: (BIAS+3) bits from MSB
 // use essential part of acc_mag in zero counting: [BIAS] ~ [0].[-1] ~ [-BIAS] 
 // 0 <= zc <= 2*BIAS
-LZD #(.in_s(2*BIAS+1), .out_s(WZC)) u_lzd(.in(acc_mag_zc), .vld_i(zc_i), .out(zc), .vld_o(vld));
+//LZD #(.in_s(2*BIAS+1), .out_s(WZC+1)) u_lzd(.in(acc_mag_zc), .vld_i(zc_i), .out(zc), .vld_o(vld));
+
+// Instance of DW_lzd
+DW_lzd #(ZC) U_LZD1 ( .a(acc_mag_zc), .dec(acc_mag_oh), .enc(zc) );
  
 function sticky(input [WIDTH_A-1:0] mts_tmp);
     integer i;
@@ -207,7 +216,7 @@ assign round_bit = mts_tmp[WIDTH_A-1-MTS-2];
 assign sticky_bit = sticky(mts_tmp); // |acc_mag[WIDTH_A-1-(BIAS+3+zc)-MTS-3:0]
 assign round_val = guard_bit && (round_bit || sticky_bit);
 
-always @(posedge clk_i) begin
+always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         exp_r <= 0;
         mts_tmp <= 0;
@@ -220,9 +229,9 @@ always @(posedge clk_i) begin
         
         mts_r <= 0;
     end    
-    else if (acc_rdy & vld) begin
-        exp_r <= EXP_MAX - zc; // 0 ~ 2*BIAS // -1 for zero
-        mts_tmp <= acc_mag << (WK+BIAS+3+zc);
+    else if (acc_rdy & zc_i) begin //(acc_rdy & vld)
+        exp_r <= (zc == $unsigned(ZC)) ? 0 : $signed(EXP_MAX-zc); // 0 ~ 2*BIAS // 0 for ovf/udf/zero
+        mts_tmp <= acc_mag << ($unsigned(WK)+$unsigned(BIAS)+2'd3+zc);
         
         mts_r <= {1'b0, mts_tmp[WIDTH_A-1:WIDTH_A-1-MTS]} + round_val; // 1.f format // add rounding value
     end
@@ -232,7 +241,9 @@ end
 // Convertion to Floating-Point: Clip & Output
 //-------------------------------------------------
 
-always @(posedge clk_i) begin
+wire [EXP-1:0] exp_r1 = mts_r[MTS+1] ? $unsigned(exp_r+1) : $unsigned(exp_r);
+
+always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         vld_o_tmp <= 0;
         acc_rc <= 0;
@@ -247,21 +258,21 @@ always @(posedge clk_i) begin
             acc_rc <= {sign_r, {{(EXP-1){1'b1}}, 1'b0}, {MTS{1'b1}}}; //set max mag value 
         else if (udf) //underflow
             acc_rc <= {sign_r, {EXP{1'b0}}, {{(MTS-1){1'b0}}, 1'b1}};  //set min mag value
-        else if (zc == 2*BIAS+1) //zero
+        else if (zero) //zero
             acc_rc <= {sign_r, {EXP{1'b0}}, {MTS{1'b0}}}; // zero
         else
             if (mts_r[MTS+1]) //consider a carry by adding round_val 
-                if (exp_r == EXP_MAX) //overflow by rounding
+                if (exp_r1 == EXP_MAX+1) //overflow by rounding
                     acc_rc <= {sign_r, {{(EXP-1){1'b1}}, 1'b0}, {MTS{1'b1}}};
                 else
-                    acc_rc <= {sign_r, exp_r + 1, mts_r[MTS:1]};
+                    acc_rc <= {sign_r, exp_r1, mts_r[MTS:1]};
             else
-                acc_rc <= {sign_r, exp_r, mts_r[MTS-1:0]};
+                acc_rc <= {sign_r, exp_r1, mts_r[MTS-1:0]};
     end
 end
 
 
-always@(posedge clk_i) begin
+always@(posedge clk_i or negedge rstn) begin
 	if(~rstn) begin
 		vld_d <= 0;
 	end
