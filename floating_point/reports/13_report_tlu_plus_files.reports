@@ -1,0 +1,14 @@
+ 
+****************************************
+Report : tlu_plus_files
+Design : fp_mac
+Scenario(s): mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C
+Version: V-2023.12-SP5-3
+Date   : Sun Aug 17 15:48:54 2025
+****************************************
+
+  Max TLU+ file: /tool/PDK/samsung/LN28FDS_202408/TECH/LN28FDS_ICC_TECH_TLUP_S00_V2.7.3.6/6U1x_2U2x_2T8x_LB/cmos028fdsoi_6U1x_2U2x_2T8x_LB_SigRCmax.tlup
+  Min TLU+ file: /tool/PDK/samsung/LN28FDS_202408/TECH/LN28FDS_ICC_TECH_TLUP_S00_V2.7.3.6/6U1x_2U2x_2T8x_LB/cmos028fdsoi_6U1x_2U2x_2T8x_LB_SigRCmin.tlup
+  Tech2ITF mapping file: /tool/PDK/samsung/LN28FDS_202408/TECH/LN28FDS_ICC_TECH_TLUP_S00_V2.7.3.6/6U1x_2U2x_2T8x_LB/mapfile
+
+1

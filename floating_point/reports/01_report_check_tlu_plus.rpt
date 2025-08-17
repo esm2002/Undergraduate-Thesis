@@ -1,0 +1,17 @@
+
+Sanity check for TLU+ vs MW-Tech files:
+ mapping_file: /tool/PDK/samsung/LN28FDS_202408/TECH/LN28FDS_ICC_TECH_TLUP_S00_V2.7.3.6/6U1x_2U2x_2T8x_LB/mapfile
+ number of unique tlu+ files in mcmm mode: 2
+  /tool/PDK/samsung/LN28FDS_202408/TECH/LN28FDS_ICC_TECH_TLUP_S00_V2.7.3.6/6U1x_2U2x_2T8x_LB/cmos028fdsoi_6U1x_2U2x_2T8x_LB_SigRCmax.tlup
+  /tool/PDK/samsung/LN28FDS_202408/TECH/LN28FDS_ICC_TECH_TLUP_S00_V2.7.3.6/6U1x_2U2x_2T8x_LB/cmos028fdsoi_6U1x_2U2x_2T8x_LB_SigRCmin.tlup
+
+--------- Sanity Check on TLUPlus Files -------------
+Info: Found HALF_NODE_SCALE_FACTOR 0.900000 in TLUPlus files.
+1. Checking the conducting layer names in ITF and mapping file ... 
+[ Passed! ]
+2. Checking the via layer names in ITF and mapping file ... 
+[ Passed! ]
+3. Checking the consistency of Min Width and Min Spacing between MW-tech and ITF ... 
+[ Passed! ]
+----------------- Check Ends ------------------
+1

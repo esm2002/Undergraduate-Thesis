@@ -1,0 +1,557 @@
+ 
+****************************************
+Report : timing
+        -path full_clock
+        -delay max
+        -physical
+        -derate
+        -input_pins
+        -nets
+        -max_paths 1
+        -transition_time
+        -crosstalk_delta
+        -capacitance
+Design : fp_mac
+Scenario(s): mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C
+Version: V-2023.12-SP5-3
+Date   : Sun Aug 17 15:48:54 2025
+****************************************
+
+ * Some/all delay information is back-annotated.
+Wire Load Model Mode: Inactive.
+
+  Startpoint: mts_fp_reg_0_
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: acc_reg_39_
+            (rising edge-triggered flip-flop clocked by CLK)
+  Scenario: mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C
+  Path Group: CLK
+  Path Type: max
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout       Cap     DTran     Trans     Delta     Derate      Incr       Path      Location / Load        Attributes     Voltage
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.200      0.200                                            
+  mts_fp_reg_0_/CP (C8T28SOI_LR_DFPRQX4_P0)                        0.000     0.100     0.000                0.000      0.200 r    (21.52,15.63)          i              0.900
+  mts_fp_reg_0_/Q (C8T28SOI_LR_DFPRQX4_P0)                                   0.032                          0.127      0.327 f    (23.57,15.57)                         0.900
+  mts_fp[0] (net)                               5        0.004                                              0.000      0.327 f    [0.00,0.00]                           
+  U795/B (C8T28SOI_LR_NOR3X3_P0)                                   0.000     0.032     0.000                0.000 *    0.327 f    (23.45,16.68)                         0.900
+  U795/Z (C8T28SOI_LR_NOR3X3_P0)                                             0.136                          0.097      0.424 r    (23.66,16.59)                         0.900
+  n1102 (net)                                   2        0.003                                              0.000      0.424 r    [0.00,0.00]                           
+  U867/A (C8T28SOI_LR_CNNOR2AX9_P16)                               0.000     0.136     0.000                0.000 *    0.424 r    (24.10,17.28)                         0.900
+  U867/Z (C8T28SOI_LR_CNNOR2AX9_P16)                                         0.035                          0.066      0.490 r    (25.16,17.24)                         0.900
+  n1109 (net)                                   2        0.002                                              0.000      0.490 r    [0.00,0.00]                           
+  U877/B (C8T28SOI_LR_CNNAND2AX9_P16)                              0.000     0.035     0.000                0.000 *    0.490 r    (21.80,16.66)                         0.900
+  U877/Z (C8T28SOI_LR_CNNAND2AX9_P16)                                        0.022                          0.078      0.568 f    (22.01,16.76)                         0.900
+  n1176 (net)                                   2        0.002                                              0.000      0.568 f    [0.00,0.00]                           
+  U878/A (C8T28SOI_LR_AND2X5_P0)                                   0.000     0.022     0.000                0.000 *    0.568 f    (20.99,17.24)                         0.900
+  U878/Z (C8T28SOI_LR_AND2X5_P0)                                             0.014                          0.040      0.608 f    (21.23,17.17)                         0.900
+  n1110 (net)                                   1        0.001                                              0.000      0.608 f    [0.00,0.00]                           
+  U879/B (C8T28SOI_LRS_XNOR2X3_P0)                                 0.000     0.014     0.000                0.000 *    0.608 f    (21.15,19.11)                         0.900
+  U879/Z (C8T28SOI_LRS_XNOR2X3_P0)                                           0.027                          0.040      0.647 f    (21.45,19.16)                         0.900
+  n1178 (net)                                   2        0.001                                              0.000      0.647 f    [0.00,0.00]                           
+  U880/A (C8T28SOI_LR_AOI22ABX3_P0)                                0.000     0.027     0.000                0.000 *    0.647 f    (22.21,20.20)                         0.900
+  U880/Z (C8T28SOI_LR_AOI22ABX3_P0)                                          0.039                          0.066      0.713 f    (21.76,20.17)                         0.900
+  n1231 (net)                                   3        0.002                                              0.000      0.713 f    [0.00,0.00]                           
+  U881/C (C8T28SOI_LR_AOI22X2_P0)                                  0.000     0.039     0.000                0.000 *    0.713 f    (22.24,22.76)                         0.900
+  U881/Z (C8T28SOI_LR_AOI22X2_P0)                                            0.073                          0.060      0.774 r    (22.41,22.79)                         0.900
+  n1191 (net)                                   2        0.001                                              0.000      0.774 r    [0.00,0.00]                           
+  U882/C (C8T28SOI_LR_OAI22CDX2_P0)                                0.000     0.073     0.000                0.000 *    0.774 r    (22.78,25.24)                         0.900
+  U882/Z (C8T28SOI_LR_OAI22CDX2_P0)                                          0.122                          0.058      0.832 r    (23.19,25.25)                         0.900
+  n1540 (net)                                   4        0.002                                              0.000      0.832 r    [0.00,0.00]                           
+  U883/B (C8T28SOI_LR_NAND2X4_P0)                                  0.000     0.122     0.000                0.000 *    0.832 r    (25.93,27.54)                         0.900
+  U883/Z (C8T28SOI_LR_NAND2X4_P0)                                            0.053                          0.042      0.874 f    (26.00,27.69)                         0.900
+  n1214 (net)                                   2        0.002                                              0.000      0.874 f    [0.00,0.00]                           
+  U1116/B (C8T28SOI_LR_PAOI2X4_P0)                                 0.000     0.053     0.000                0.000 *    0.874 f    (27.71,27.37)                         0.900
+  U1116/Z (C8T28SOI_LR_PAOI2X4_P0)                                           0.138                          0.107      0.981 r    (27.48,27.28)                         0.900
+  n1281 (net)                                   3        0.003                                              0.000      0.981 r    [0.00,0.00]                           
+  U1117/P (C8T28SOI_LR_PAOI2X4_P0)                                 0.000     0.138     0.000                0.000 *    0.981 r    (29.57,26.72)                         0.900
+  U1117/Z (C8T28SOI_LR_PAOI2X4_P0)                                           0.069                          0.055      1.036 f    (29.33,26.79)                         0.900
+  n1286 (net)                                   3        0.003                                              0.000      1.036 f    [0.00,0.00]                           
+  U1118/A (C8T28SOI_LR_CNIVX4_P16)                                 0.000     0.069     0.000                0.000 *    1.036 f    (30.49,27.83)                         0.900
+  U1118/Z (C8T28SOI_LR_CNIVX4_P16)                                           0.029                          0.044      1.080 r    (30.62,27.82)                         0.900
+  n1216 (net)                                   1        0.001                                              0.000      1.080 r    [0.00,0.00]                           
+  U1119/P (C8T28SOI_LR_PAOI2X4_P0)                                 0.000     0.029     0.000                0.000 *    1.080 r    (30.17,28.13)                         0.900
+  U1119/Z (C8T28SOI_LR_PAOI2X4_P0)                                           0.043                          0.030      1.110 f    (29.93,28.20)                         0.900
+  intadd_1_B_0_ (net)                           1        0.002                                              0.000      1.110 f    [0.00,0.00]                           
+  intadd_1_U5/B0 (C8T28SOI_LR_FA1X4_P0)                            0.000     0.043     0.000                0.000 *    1.110 f    (29.14,28.09)          mo             0.900
+  intadd_1_U5/CO (C8T28SOI_LR_FA1X4_P0)                                      0.028                          0.079      1.190 f    (27.92,28.13)          mo             0.900
+  intadd_1_n4 (net)                             1        0.002                                              0.000      1.190 f    [0.00,0.00]                           
+  intadd_1_U4/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.028     0.000                0.000 *    1.190 f    (27.88,29.55)          mo             0.900
+  intadd_1_U4/CO (C8T28SOI_LR_FA1X4_P0)                                      0.028                          0.066      1.255 f    (26.94,29.47)          mo             0.900
+  intadd_1_n3 (net)                             1        0.002                                              0.000      1.255 f    [0.00,0.00]                           
+  intadd_1_U3/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.028     0.000                0.000 *    1.255 f    (26.13,30.00)          mo             0.900
+  intadd_1_U3/CO (C8T28SOI_LR_FA1X4_P0)                                      0.028                          0.066      1.321 f    (25.19,29.92)          mo             0.900
+  intadd_1_n2 (net)                             1        0.002                                              0.000      1.321 f    [0.00,0.00]                           
+  intadd_1_U2/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.028     0.000                0.000 *    1.321 f    (24.22,30.52)          mo             0.900
+  intadd_1_U2/CO (C8T28SOI_LR_FA1X4_P0)                                      0.019                          0.056      1.378 f    (23.29,30.44)          mo             0.900
+  intadd_1_n1 (net)                             1        0.001                                              0.000      1.378 f    [0.00,0.00]                           
+  U1007/A (C8T28SOI_LR_CNBFX4_P16)                                 0.000     0.019     0.000                0.000 *    1.378 f    (23.54,31.52)                         0.900
+  U1007/Z (C8T28SOI_LR_CNBFX4_P16)                                           0.043                          0.067      1.444 f    (23.80,31.47)                         0.900
+  n1289 (net)                                   2        0.004                                              0.000      1.444 f    [0.00,0.00]                           
+  U1202/A0 (C8T28SOI_LR_FA1X4_P0)                                  0.000     0.043     0.000                0.000 *    1.444 f    (25.96,32.59)                         0.900
+  U1202/CO (C8T28SOI_LR_FA1X4_P0)                                            0.028                          0.079      1.523 f    (24.91,32.57)                         0.900
+  intadd_3_n3 (net)                             1        0.002                                              0.000      1.523 f    [0.00,0.00]                           
+  intadd_3_U3/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.028     0.000                0.000 *    1.523 f    (23.72,33.39)          mo             0.900
+  intadd_3_U3/CO (C8T28SOI_LR_FA1X4_P0)                                      0.028                          0.066      1.589 f    (22.79,33.31)          mo             0.900
+  intadd_3_n2 (net)                             1        0.002                                              0.000      1.589 f    [0.00,0.00]                           
+  intadd_3_U2/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.028     0.000                0.000 *    1.589 f    (22.08,32.49)          mo             0.900
+  intadd_3_U2/CO (C8T28SOI_LR_FA1X4_P0)                                      0.018                          0.056      1.645 f    (21.14,32.41)          mo             0.900
+  intadd_3_n1 (net)                             1        0.000                                              0.000      1.645 f    [0.00,0.00]                           
+  U1021/A (C8T28SOI_LR_CNBFX4_P16)                                 0.000     0.018     0.000                0.000 *    1.645 f    (21.30,33.04)                         0.900
+  U1021/Z (C8T28SOI_LR_CNBFX4_P16)                                           0.015                          0.046      1.691 f    (21.55,32.98)                         0.900
+  n1192 (net)                                   1        0.001                                              0.000      1.691 f    [0.00,0.00]                           
+  U1022/A (C8T28SOI_LR_CNIVX4_P16)                                 0.000     0.015     0.000                0.000 *    1.691 f    (21.95,33.46)                         0.900
+  U1022/Z (C8T28SOI_LR_CNIVX4_P16)                                           0.037                          0.033      1.724 r    (22.07,33.44)                         0.900
+  n1204 (net)                                   2        0.001                                              0.000      1.724 r    [0.00,0.00]                           
+  U1105/P (C8T28SOI_LR_PAOI2X4_P0)                                 0.000     0.037     0.000                0.000 *    1.724 r    (22.56,34.65)                         0.900
+  U1105/Z (C8T28SOI_LR_PAOI2X4_P0)                                           0.047                          0.033      1.757 f    (22.31,34.72)                         0.900
+  intadd_0_B_0_ (net)                           1        0.002                                              0.000      1.757 f    [0.00,0.00]                           
+  intadd_0_U24/B0 (C8T28SOI_LR_FA1X4_P0)                           0.000     0.047     0.000                0.000 *    1.757 f    (21.46,34.18)          mo             0.900
+  intadd_0_U24/CO (C8T28SOI_LR_FA1X4_P0)                                     0.029                          0.081      1.839 f    (20.25,34.21)          mo             0.900
+  intadd_0_n23 (net)                            1        0.002                                              0.000      1.839 f    [0.00,0.00]                           
+  intadd_0_U23/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.029     0.000                0.000 *    1.839 f    (19.89,32.75)          mo             0.900
+  intadd_0_U23/CO (C8T28SOI_LR_FA1X4_P0)                                     0.028                          0.066      1.905 f    (18.95,32.67)          mo             0.900
+  intadd_0_n22 (net)                            1        0.002                                              0.000      1.905 f    [0.00,0.00]                           
+  intadd_0_U22/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.028     0.000                0.000 *    1.905 f    (18.87,33.99)          mo             0.900
+  intadd_0_U22/CO (C8T28SOI_LR_FA1X4_P0)                                     0.028                          0.066      1.971 f    (17.94,33.91)          mo             0.900
+  intadd_0_n21 (net)                            1        0.002                                              0.000      1.971 f    [0.00,0.00]                           
+  intadd_0_U21/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.028     0.000                0.000 *    1.971 f    (17.28,32.81)          mo             0.900
+  intadd_0_U21/CO (C8T28SOI_LR_FA1X4_P0)                                     0.028                          0.066      2.037 f    (16.34,32.73)          mo             0.900
+  intadd_0_n20 (net)                            1        0.002                                              0.000      2.037 f    [0.00,0.00]                           
+  intadd_0_U20/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.028     0.000                0.000 *    2.037 f    (15.00,32.44)          mo             0.900
+  intadd_0_U20/CO (C8T28SOI_LR_FA1X4_P0)                                     0.028                          0.066      2.103 f    (14.06,32.36)          mo             0.900
+  intadd_0_n19 (net)                            1        0.002                                              0.000      2.103 f    [0.00,0.00]                           
+  intadd_0_U19/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.028     0.000                0.000 *    2.103 f    (13.97,31.06)          mo             0.900
+  intadd_0_U19/CO (C8T28SOI_LR_FA1X4_P0)                                     0.028                          0.066      2.169 f    (13.04,30.98)          mo             0.900
+  intadd_0_n18 (net)                            1        0.002                                              0.000      2.169 f    [0.00,0.00]                           
+  intadd_0_U18/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.028     0.000                0.000 *    2.169 f    (13.63,29.67)          mo             0.900
+  intadd_0_U18/CO (C8T28SOI_LR_FA1X4_P0)                                     0.028                          0.066      2.235 f    (12.69,29.59)          mo             0.900
+  intadd_0_n17 (net)                            1        0.002                                              0.000      2.235 f    [0.00,0.00]                           
+  intadd_0_U17/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.028     0.000                0.000 *    2.235 f    (12.91,28.32)          mo             0.900
+  intadd_0_U17/CO (C8T28SOI_LR_FA1X4_P0)                                     0.028                          0.066      2.301 f    (11.97,28.24)          mo             0.900
+  intadd_0_n16 (net)                            1        0.002                                              0.000      2.301 f    [0.00,0.00]                           
+  intadd_0_U16/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.028     0.000                0.000 *    2.301 f    (10.78,28.22)          mo             0.900
+  intadd_0_U16/CO (C8T28SOI_LR_FA1X4_P0)                                     0.028                          0.066      2.367 f    ( 9.85,28.14)          mo             0.900
+  intadd_0_n15 (net)                            1        0.002                                              0.000      2.367 f    [0.00,0.00]                           
+  intadd_0_U15/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.028     0.000                0.000 *    2.367 f    ( 9.91,26.90)          mo             0.900
+  intadd_0_U15/CO (C8T28SOI_LR_FA1X4_P0)                                     0.028                          0.066      2.433 f    ( 8.97,26.82)          mo             0.900
+  intadd_0_n14 (net)                            1        0.002                                              0.000      2.433 f    [0.00,0.00]                           
+  intadd_0_U14/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.028     0.000                0.000 *    2.433 f    ( 8.53,28.26)          mo             0.900
+  intadd_0_U14/CO (C8T28SOI_LR_FA1X4_P0)                                     0.028                          0.066      2.499 f    ( 7.59,28.18)          mo             0.900
+  intadd_0_n13 (net)                            1        0.002                                              0.000      2.499 f    [0.00,0.00]                           
+  intadd_0_U13/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.028     0.000                0.000 *    2.499 f    ( 7.59,27.07)          mo             0.900
+  intadd_0_U13/CO (C8T28SOI_LR_FA1X4_P0)                                     0.028                          0.066      2.564 f    ( 6.65,26.99)          mo             0.900
+  intadd_0_n12 (net)                            1        0.002                                              0.000      2.564 f    [0.00,0.00]                           
+  intadd_0_U12/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.028     0.000                0.000 *    2.565 f    ( 6.85,25.66)          mo             0.900
+  intadd_0_U12/CO (C8T28SOI_LR_FA1X4_P0)                                     0.029                          0.067      2.632 f    ( 5.91,25.58)          mo             0.900
+  intadd_0_n11 (net)                            1        0.002                                              0.000      2.632 f    [0.00,0.00]                           
+  intadd_0_U11/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.029     0.000                0.000 *    2.632 f    ( 8.79,25.02)          mo             0.900
+  intadd_0_U11/CO (C8T28SOI_LR_FA1X4_P0)                                     0.029                          0.067      2.699 f    ( 7.85,24.94)          mo             0.900
+  intadd_0_n10 (net)                            1        0.002                                              0.000      2.699 f    [0.00,0.00]                           
+  intadd_0_U10/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.029     0.000                0.000 *    2.699 f    ( 9.39,23.42)          mo             0.900
+  intadd_0_U10/CO (C8T28SOI_LR_FA1X4_P0)                                     0.029                          0.067      2.767 f    ( 8.46,23.34)          mo             0.900
+  intadd_0_n9 (net)                             1        0.002                                              0.000      2.767 f    [0.00,0.00]                           
+  intadd_0_U9/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.029     0.000                0.000 *    2.767 f    ( 9.80,21.81)          mo             0.900
+  intadd_0_U9/CO (C8T28SOI_LR_FA1X4_P0)                                      0.029                          0.068      2.834 f    ( 8.87,21.73)          mo             0.900
+  intadd_0_n8 (net)                             1        0.002                                              0.000      2.834 f    [0.00,0.00]                           
+  intadd_0_U8/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.029     0.000                0.000 *    2.834 f    (11.76,21.16)          mo             0.900
+  intadd_0_U8/CO (C8T28SOI_LR_FA1X4_P0)                                      0.030                          0.068      2.902 f    (10.83,21.08)          mo             0.900
+  intadd_0_n7 (net)                             1        0.002                                              0.000      2.902 f    [0.00,0.00]                           
+  intadd_0_U7/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.030     0.000                0.000 *    2.902 f    (12.33,18.56)          mo             0.900
+  intadd_0_U7/CO (C8T28SOI_LR_FA1X4_P0)                                      0.032                          0.070      2.972 f    (11.40,18.48)          mo             0.900
+  intadd_0_n6 (net)                             1        0.002                                              0.000      2.972 f    [0.00,0.00]                           
+  intadd_0_U6/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.032     0.000                0.000 *    2.972 f    (13.60,13.38)          mo             0.900
+  intadd_0_U6/CO (C8T28SOI_LR_FA1X4_P0)                                      0.029                          0.068      3.041 f    (12.66,13.30)          mo             0.900
+  intadd_0_n5 (net)                             1        0.002                                              0.000      3.041 f    [0.00,0.00]                           
+  intadd_0_U5/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.029     0.000                0.000 *    3.041 f    (12.76,10.74)          mo             0.900
+  intadd_0_U5/CO (C8T28SOI_LR_FA1X4_P0)                                      0.028                          0.067      3.107 f    (11.82,10.66)          mo             0.900
+  intadd_0_n4 (net)                             1        0.002                                              0.000      3.107 f    [0.00,0.00]                           
+  intadd_0_U4/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.028     0.000                0.000 *    3.107 f    (12.51, 9.09)          mo             0.900
+  intadd_0_U4/CO (C8T28SOI_LR_FA1X4_P0)                                      0.028                          0.066      3.174 f    (11.58, 9.01)          mo             0.900
+  intadd_0_n3 (net)                             1        0.002                                              0.000      3.174 f    [0.00,0.00]                           
+  intadd_0_U3/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.028     0.000                0.000 *    3.174 f    (11.22, 7.74)          mo             0.900
+  intadd_0_U3/CO (C8T28SOI_LR_FA1X4_P0)                                      0.028                          0.066      3.240 f    (10.28, 7.66)          mo             0.900
+  intadd_0_n2 (net)                             1        0.002                                              0.000      3.240 f    [0.00,0.00]                           
+  intadd_0_U2/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.028     0.000                0.000 *    3.240 f    ( 9.10, 7.02)          mo             0.900
+  intadd_0_U2/CO (C8T28SOI_LR_FA1X4_P0)                                      0.019                          0.057      3.296 f    ( 8.16, 6.94)          mo             0.900
+  intadd_0_n1 (net)                             1        0.001                                              0.000      3.296 f    [0.00,0.00]                           
+  U1100/A (C8T28SOI_LR_CNBFX4_P16)                                 0.000     0.019     0.000                0.000 *    3.296 f    ( 6.99, 7.54)                         0.900
+  U1100/Z (C8T28SOI_LR_CNBFX4_P16)                                           0.015                          0.047      3.344 f    ( 7.24, 7.49)                         0.900
+  n1202 (net)                                   1        0.001                                              0.000      3.344 f    [0.00,0.00]                           
+  U1103/A (C8T28SOI_LR_CNXOR2X9_P16)                               0.000     0.015     0.000                0.000 *    3.344 f    ( 6.84, 8.03)                         0.900
+  U1103/Z (C8T28SOI_LR_CNXOR2X9_P16)                                         0.025                          0.080      3.423 f    ( 7.06, 8.06)                         0.900
+  n1203 (net)                                   1        0.001                                              0.000      3.423 f    [0.00,0.00]                           
+  U1104/B (C8T28SOI_LR_CNNOR2X8_P16)                               0.000     0.025     0.000                0.000 *    3.423 f    ( 7.14, 8.09)                         0.900
+  U1104/Z (C8T28SOI_LR_CNNOR2X8_P16)                                         0.027                          0.026      3.450 r    ( 6.89, 8.16)                         0.900
+  n151 (net)                                    1        0.000                                              0.000      3.450 r    [0.00,0.00]                           
+  acc_reg_39_/D (C8T28SOI_LR_DFPRQX4_P0)                           0.000     0.027     0.000                0.000 *    3.450 r    ( 7.21, 8.22)                         0.900
+  data arrival time                                                                                                    3.450                                            
+
+  clock CLK (rise edge)                                                                                    10.000     10.000                                            
+  clock network delay (ideal)                                                                               0.000     10.000                                            
+  clock uncertainty                                                                                        -0.100      9.900                                            
+  acc_reg_39_/CP (C8T28SOI_LR_DFPRQX4_P0)                                                                   0.000      9.900 r                                          
+  library setup time                                                                                       -0.022      9.878                                            
+  data required time                                                                                                   9.878                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  data required time                                                                                                   9.878                                            
+  data arrival time                                                                                                   -3.450                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                                          6.428                                            
+
+
+  Startpoint: rstn (input port clocked by CLK)
+  Endpoint: acc_mag_zc_reg_7_
+            (rising-edge recovery check against clock CLK)
+  Scenario: mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C
+  Path Group: REGIN
+  Path Type: max
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout       Cap     DTran     Trans     Delta     Derate      Incr       Path      Location / Load        Attributes     Voltage
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.200      0.200                                            
+  input external delay                                                                                      0.050      0.250 r                                          
+  rstn (in)                                                                  0.009                          0.009      0.259 r    (26.65,38.38)                         
+  rstn (net)                                    8        0.016                                              0.000      0.259 r    [0.01,0.02]                           
+  U614/A (C8T28SOI_LR_CNBFX28_P16)                                 0.000     0.009     0.000                0.000 *    0.259 r    (25.53,35.19)                         0.900
+  U614/Z (C8T28SOI_LR_CNBFX28_P16)                                           0.110                          0.087      0.346 r    (26.18,35.16)                         0.900
+  n1575 (net)                                  30        0.032                                              0.000      0.346 r    [0.01,0.03]                           
+  acc_mag_zc_reg_7_/RN (C8T28SOI_LR_DFPRQX4_P0)                    0.000     0.110     0.000                0.003 *    0.349 r    (37.47,15.82)                         0.900
+  data arrival time                                                                                                    0.349                                            
+
+  clock CLK (rise edge)                                                                                    10.000     10.000                                            
+  clock network delay (ideal)                                                                               0.000     10.000                                            
+  clock uncertainty                                                                                        -0.100      9.900                                            
+  acc_mag_zc_reg_7_/CP (C8T28SOI_LR_DFPRQX4_P0)                                                             0.000      9.900 r                                          
+  library recovery time                                                                                    -0.015      9.885                                            
+  data required time                                                                                                   9.885                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  data required time                                                                                                   9.885                                            
+  data arrival time                                                                                                   -0.349                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                                          9.536                                            
+
+
+  Startpoint: acc_rc_reg_2_
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: acc_o[2] (output port clocked by CLK)
+  Scenario: mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C
+  Path Group: REGOUT
+  Path Type: max
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout       Cap     DTran     Trans     Delta     Derate      Incr       Path      Location / Load        Attributes     Voltage
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.200      0.200                                            
+  acc_rc_reg_2_/CP (C8T28SOI_LR_DFPRQX4_P0)                        0.000     0.100     0.000                0.000      0.200 r    (16.12,31.33)                         0.900
+  acc_rc_reg_2_/Q (C8T28SOI_LR_DFPRQX4_P0)                                   0.049                          0.125      0.325 r    (18.17,31.27)                         0.900
+  acc_o[2] (net)                                1        0.003                                              0.000      0.325 r    [0.00,0.00]                           
+  acc_o[2] (out)                                                   0.000     0.049     0.000                0.000 *    0.325 r    (12.05,38.38)                         
+  data arrival time                                                                                                    0.325                                            
+
+  clock CLK (rise edge)                                                                                    10.000     10.000                                            
+  clock network delay (ideal)                                                                               0.000     10.000                                            
+  clock uncertainty                                                                                        -0.100      9.900                                            
+  output external delay                                                                                    -0.050      9.850                                            
+  data required time                                                                                                   9.850                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  data required time                                                                                                   9.850                                            
+  data arrival time                                                                                                   -0.325                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                                          9.525                                            
+
+
+  Startpoint: mts_fp_reg_0_
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: acc_reg_39_
+            (rising edge-triggered flip-flop clocked by CLK)
+  Scenario: mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C
+  Path Group: CLK
+  Path Type: max
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout       Cap     DTran     Trans     Delta     Derate      Incr       Path      Location / Load        Attributes     Voltage
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.200      0.200                                            
+  mts_fp_reg_0_/CP (C8T28SOI_LR_DFPRQX4_P0)                        0.000     0.100     0.000      1.036     0.000      0.200 r    (21.52,15.63)          i              1.100
+  mts_fp_reg_0_/Q (C8T28SOI_LR_DFPRQX4_P0)                                   0.019                1.036     0.077      0.277 f    (23.57,15.57)                         1.100
+  mts_fp[0] (net)                               5        0.004                                    1.036     0.000      0.277 f    [0.00,0.00]                           
+  U795/B (C8T28SOI_LR_NOR3X3_P0)                                   0.000     0.019     0.000      1.036     0.000 *    0.277 f    (23.45,16.68)                         1.100
+  U795/Z (C8T28SOI_LR_NOR3X3_P0)                                             0.077                1.036     0.058      0.334 r    (23.66,16.59)                         1.100
+  n1102 (net)                                   2        0.003                                    1.036     0.000      0.334 r    [0.00,0.00]                           
+  U867/A (C8T28SOI_LR_CNNOR2AX9_P16)                               0.000     0.077     0.000      1.036     0.000 *    0.334 r    (24.10,17.28)                         1.100
+  U867/Z (C8T28SOI_LR_CNNOR2AX9_P16)                                         0.020                1.036     0.038      0.372 r    (25.16,17.24)                         1.100
+  n1109 (net)                                   2        0.003                                    1.036     0.000      0.372 r    [0.00,0.00]                           
+  U877/B (C8T28SOI_LR_CNNAND2AX9_P16)                              0.000     0.020     0.000      1.036     0.000 *    0.372 r    (21.80,16.66)                         1.100
+  U877/Z (C8T28SOI_LR_CNNAND2AX9_P16)                                        0.012                1.036     0.045      0.417 f    (22.01,16.76)                         1.100
+  n1176 (net)                                   2        0.002                                    1.036     0.000      0.417 f    [0.00,0.00]                           
+  U878/A (C8T28SOI_LR_AND2X5_P0)                                   0.000     0.012     0.000      1.036     0.000 *    0.417 f    (20.99,17.24)                         1.100
+  U878/Z (C8T28SOI_LR_AND2X5_P0)                                             0.008                1.036     0.023      0.440 f    (21.23,17.17)                         1.100
+  n1110 (net)                                   1        0.001                                    1.036     0.000      0.440 f    [0.00,0.00]                           
+  U879/B (C8T28SOI_LRS_XNOR2X3_P0)                                 0.000     0.008     0.000      1.036     0.000 *    0.440 f    (21.15,19.11)                         1.100
+  U879/Z (C8T28SOI_LRS_XNOR2X3_P0)                                           0.016                1.036     0.024      0.464 f    (21.45,19.16)                         1.100
+  n1178 (net)                                   2        0.001                                    1.036     0.000      0.464 f    [0.00,0.00]                           
+  U880/A (C8T28SOI_LR_AOI22ABX3_P0)                                0.000     0.016     0.000      1.036     0.000 *    0.464 f    (22.21,20.20)                         1.100
+  U880/Z (C8T28SOI_LR_AOI22ABX3_P0)                                          0.022                1.036     0.038      0.502 f    (21.76,20.17)                         1.100
+  n1231 (net)                                   3        0.002                                    1.036     0.000      0.502 f    [0.00,0.00]                           
+  U881/C (C8T28SOI_LR_AOI22X2_P0)                                  0.000     0.022     0.000      1.036     0.000 *    0.502 f    (22.24,22.76)                         1.100
+  U881/Z (C8T28SOI_LR_AOI22X2_P0)                                            0.041                1.036     0.035      0.537 r    (22.41,22.79)                         1.100
+  n1191 (net)                                   2        0.001                                    1.036     0.000      0.537 r    [0.00,0.00]                           
+  U882/C (C8T28SOI_LR_OAI22CDX2_P0)                                0.000     0.041     0.000      1.036     0.000 *    0.537 r    (22.78,25.24)                         1.100
+  U882/Z (C8T28SOI_LR_OAI22CDX2_P0)                                          0.068                1.036     0.035      0.572 r    (23.19,25.25)                         1.100
+  n1540 (net)                                   4        0.003                                    1.036     0.000      0.572 r    [0.00,0.00]                           
+  U883/B (C8T28SOI_LR_NAND2X4_P0)                                  0.000     0.068     0.000      1.036     0.000 *    0.573 r    (25.93,27.54)                         1.100
+  U883/Z (C8T28SOI_LR_NAND2X4_P0)                                            0.029                1.036     0.025      0.597 f    (26.00,27.69)                         1.100
+  n1214 (net)                                   2        0.002                                    1.036     0.000      0.597 f    [0.00,0.00]                           
+  U1116/B (C8T28SOI_LR_PAOI2X4_P0)                                 0.000     0.029     0.000      1.036     0.000 *    0.597 f    (27.71,27.37)                         1.100
+  U1116/Z (C8T28SOI_LR_PAOI2X4_P0)                                           0.078                1.036     0.062      0.660 r    (27.48,27.28)                         1.100
+  n1281 (net)                                   3        0.003                                    1.036     0.000      0.660 r    [0.00,0.00]                           
+  U1117/P (C8T28SOI_LR_PAOI2X4_P0)                                 0.000     0.078     0.000      1.036     0.000 *    0.660 r    (29.57,26.72)                         1.100
+  U1117/Z (C8T28SOI_LR_PAOI2X4_P0)                                           0.038                1.036     0.033      0.693 f    (29.33,26.79)                         1.100
+  n1286 (net)                                   3        0.003                                    1.036     0.000      0.693 f    [0.00,0.00]                           
+  U1118/A (C8T28SOI_LR_CNIVX4_P16)                                 0.000     0.038     0.000      1.036     0.000 *    0.693 f    (30.49,27.83)                         1.100
+  U1118/Z (C8T28SOI_LR_CNIVX4_P16)                                           0.016                1.036     0.025      0.718 r    (30.62,27.82)                         1.100
+  n1216 (net)                                   1        0.001                                    1.036     0.000      0.718 r    [0.00,0.00]                           
+  U1119/P (C8T28SOI_LR_PAOI2X4_P0)                                 0.000     0.016     0.000      1.036     0.000 *    0.718 r    (30.17,28.13)                         1.100
+  U1119/Z (C8T28SOI_LR_PAOI2X4_P0)                                           0.024                1.036     0.018      0.735 f    (29.93,28.20)                         1.100
+  intadd_1_B_0_ (net)                           1        0.002                                    1.036     0.000      0.735 f    [0.00,0.00]                           
+  intadd_1_U5/B0 (C8T28SOI_LR_FA1X4_P0)                            0.000     0.024     0.000      1.036     0.000 *    0.735 f    (29.14,28.09)          mo             1.100
+  intadd_1_U5/CO (C8T28SOI_LR_FA1X4_P0)                                      0.016                1.036     0.046      0.781 f    (27.92,28.13)          mo             1.100
+  intadd_1_n4 (net)                             1        0.002                                    1.036     0.000      0.781 f    [0.00,0.00]                           
+  intadd_1_U4/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.016     0.000      1.036     0.000 *    0.781 f    (27.88,29.55)          mo             1.100
+  intadd_1_U4/CO (C8T28SOI_LR_FA1X4_P0)                                      0.016                1.036     0.039      0.820 f    (26.94,29.47)          mo             1.100
+  intadd_1_n3 (net)                             1        0.002                                    1.036     0.000      0.820 f    [0.00,0.00]                           
+  intadd_1_U3/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.016     0.000      1.036     0.000 *    0.820 f    (26.13,30.00)          mo             1.100
+  intadd_1_U3/CO (C8T28SOI_LR_FA1X4_P0)                                      0.016                1.036     0.039      0.859 f    (25.19,29.92)          mo             1.100
+  intadd_1_n2 (net)                             1        0.002                                    1.036     0.000      0.859 f    [0.00,0.00]                           
+  intadd_1_U2/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.016     0.000      1.036     0.000 *    0.859 f    (24.22,30.52)          mo             1.100
+  intadd_1_U2/CO (C8T28SOI_LR_FA1X4_P0)                                      0.010                1.036     0.033      0.892 f    (23.29,30.44)          mo             1.100
+  intadd_1_n1 (net)                             1        0.001                                    1.036     0.000      0.892 f    [0.00,0.00]                           
+  U1007/A (C8T28SOI_LR_CNBFX4_P16)                                 0.000     0.010     0.000      1.036     0.000 *    0.892 f    (23.54,31.52)                         1.100
+  U1007/Z (C8T28SOI_LR_CNBFX4_P16)                                           0.024                1.036     0.039      0.931 f    (23.80,31.47)                         1.100
+  n1289 (net)                                   2        0.004                                    1.036     0.000      0.931 f    [0.00,0.00]                           
+  U1202/A0 (C8T28SOI_LR_FA1X4_P0)                                  0.000     0.024     0.000      1.036     0.000 *    0.931 f    (25.96,32.59)                         1.100
+  U1202/CO (C8T28SOI_LR_FA1X4_P0)                                            0.016                1.036     0.046      0.977 f    (24.91,32.57)                         1.100
+  intadd_3_n3 (net)                             1        0.002                                    1.036     0.000      0.977 f    [0.00,0.00]                           
+  intadd_3_U3/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.016     0.000      1.036     0.000 *    0.977 f    (23.72,33.39)          mo             1.100
+  intadd_3_U3/CO (C8T28SOI_LR_FA1X4_P0)                                      0.016                1.036     0.039      1.015 f    (22.79,33.31)          mo             1.100
+  intadd_3_n2 (net)                             1        0.002                                    1.036     0.000      1.015 f    [0.00,0.00]                           
+  intadd_3_U2/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.016     0.000      1.036     0.000 *    1.015 f    (22.08,32.49)          mo             1.100
+  intadd_3_U2/CO (C8T28SOI_LR_FA1X4_P0)                                      0.010                1.036     0.033      1.049 f    (21.14,32.41)          mo             1.100
+  intadd_3_n1 (net)                             1        0.001                                    1.036     0.000      1.049 f    [0.00,0.00]                           
+  U1021/A (C8T28SOI_LR_CNBFX4_P16)                                 0.000     0.010     0.000      1.036     0.000 *    1.049 f    (21.30,33.04)                         1.100
+  U1021/Z (C8T28SOI_LR_CNBFX4_P16)                                           0.008                1.036     0.027      1.075 f    (21.55,32.98)                         1.100
+  n1192 (net)                                   1        0.001                                    1.036     0.000      1.075 f    [0.00,0.00]                           
+  U1022/A (C8T28SOI_LR_CNIVX4_P16)                                 0.000     0.008     0.000      1.036     0.000 *    1.075 f    (21.95,33.46)                         1.100
+  U1022/Z (C8T28SOI_LR_CNIVX4_P16)                                           0.021                1.036     0.019      1.095 r    (22.07,33.44)                         1.100
+  n1204 (net)                                   2        0.002                                    1.036     0.000      1.095 r    [0.00,0.00]                           
+  U1105/P (C8T28SOI_LR_PAOI2X4_P0)                                 0.000     0.021     0.000      1.036     0.000 *    1.095 r    (22.56,34.65)                         1.100
+  U1105/Z (C8T28SOI_LR_PAOI2X4_P0)                                           0.027                1.036     0.020      1.114 f    (22.31,34.72)                         1.100
+  intadd_0_B_0_ (net)                           1        0.002                                    1.036     0.000      1.114 f    [0.00,0.00]                           
+  intadd_0_U24/B0 (C8T28SOI_LR_FA1X4_P0)                           0.000     0.027     0.000      1.036     0.000 *    1.114 f    (21.46,34.18)          mo             1.100
+  intadd_0_U24/CO (C8T28SOI_LR_FA1X4_P0)                                     0.016                1.036     0.047      1.162 f    (20.25,34.21)          mo             1.100
+  intadd_0_n23 (net)                            1        0.002                                    1.036     0.000      1.162 f    [0.00,0.00]                           
+  intadd_0_U23/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.016     0.000      1.036     0.000 *    1.162 f    (19.89,32.75)          mo             1.100
+  intadd_0_U23/CO (C8T28SOI_LR_FA1X4_P0)                                     0.016                1.036     0.039      1.200 f    (18.95,32.67)          mo             1.100
+  intadd_0_n22 (net)                            1        0.002                                    1.036     0.000      1.200 f    [0.00,0.00]                           
+  intadd_0_U22/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.016     0.000      1.036     0.000 *    1.200 f    (18.87,33.99)          mo             1.100
+  intadd_0_U22/CO (C8T28SOI_LR_FA1X4_P0)                                     0.016                1.036     0.039      1.239 f    (17.94,33.91)          mo             1.100
+  intadd_0_n21 (net)                            1        0.002                                    1.036     0.000      1.239 f    [0.00,0.00]                           
+  intadd_0_U21/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.016     0.000      1.036     0.000 *    1.239 f    (17.28,32.81)          mo             1.100
+  intadd_0_U21/CO (C8T28SOI_LR_FA1X4_P0)                                     0.016                1.036     0.039      1.278 f    (16.34,32.73)          mo             1.100
+  intadd_0_n20 (net)                            1        0.002                                    1.036     0.000      1.278 f    [0.00,0.00]                           
+  intadd_0_U20/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.016     0.000      1.036     0.000 *    1.278 f    (15.00,32.44)          mo             1.100
+  intadd_0_U20/CO (C8T28SOI_LR_FA1X4_P0)                                     0.016                1.036     0.039      1.317 f    (14.06,32.36)          mo             1.100
+  intadd_0_n19 (net)                            1        0.002                                    1.036     0.000      1.317 f    [0.00,0.00]                           
+  intadd_0_U19/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.016     0.000      1.036     0.000 *    1.317 f    (13.97,31.06)          mo             1.100
+  intadd_0_U19/CO (C8T28SOI_LR_FA1X4_P0)                                     0.016                1.036     0.039      1.356 f    (13.04,30.98)          mo             1.100
+  intadd_0_n18 (net)                            1        0.002                                    1.036     0.000      1.356 f    [0.00,0.00]                           
+  intadd_0_U18/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.016     0.000      1.036     0.000 *    1.356 f    (13.63,29.67)          mo             1.100
+  intadd_0_U18/CO (C8T28SOI_LR_FA1X4_P0)                                     0.016                1.036     0.039      1.394 f    (12.69,29.59)          mo             1.100
+  intadd_0_n17 (net)                            1        0.002                                    1.036     0.000      1.394 f    [0.00,0.00]                           
+  intadd_0_U17/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.016     0.000      1.036     0.000 *    1.394 f    (12.91,28.32)          mo             1.100
+  intadd_0_U17/CO (C8T28SOI_LR_FA1X4_P0)                                     0.016                1.036     0.039      1.433 f    (11.97,28.24)          mo             1.100
+  intadd_0_n16 (net)                            1        0.002                                    1.036     0.000      1.433 f    [0.00,0.00]                           
+  intadd_0_U16/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.016     0.000      1.036     0.000 *    1.433 f    (10.78,28.22)          mo             1.100
+  intadd_0_U16/CO (C8T28SOI_LR_FA1X4_P0)                                     0.016                1.036     0.039      1.471 f    ( 9.85,28.14)          mo             1.100
+  intadd_0_n15 (net)                            1        0.002                                    1.036     0.000      1.471 f    [0.00,0.00]                           
+  intadd_0_U15/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.016     0.000      1.036     0.000 *    1.471 f    ( 9.91,26.90)          mo             1.100
+  intadd_0_U15/CO (C8T28SOI_LR_FA1X4_P0)                                     0.016                1.036     0.039      1.510 f    ( 8.97,26.82)          mo             1.100
+  intadd_0_n14 (net)                            1        0.002                                    1.036     0.000      1.510 f    [0.00,0.00]                           
+  intadd_0_U14/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.016     0.000      1.036     0.000 *    1.510 f    ( 8.53,28.26)          mo             1.100
+  intadd_0_U14/CO (C8T28SOI_LR_FA1X4_P0)                                     0.015                1.036     0.039      1.549 f    ( 7.59,28.18)          mo             1.100
+  intadd_0_n13 (net)                            1        0.002                                    1.036     0.000      1.549 f    [0.00,0.00]                           
+  intadd_0_U13/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.015     0.000      1.036     0.000 *    1.549 f    ( 7.59,27.07)          mo             1.100
+  intadd_0_U13/CO (C8T28SOI_LR_FA1X4_P0)                                     0.016                1.036     0.039      1.588 f    ( 6.65,26.99)          mo             1.100
+  intadd_0_n12 (net)                            1        0.002                                    1.036     0.000      1.588 f    [0.00,0.00]                           
+  intadd_0_U12/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.016     0.000      1.036     0.000 *    1.588 f    ( 6.85,25.66)          mo             1.100
+  intadd_0_U12/CO (C8T28SOI_LR_FA1X4_P0)                                     0.016                1.036     0.039      1.627 f    ( 5.91,25.58)          mo             1.100
+  intadd_0_n11 (net)                            1        0.002                                    1.036     0.000      1.627 f    [0.00,0.00]                           
+  intadd_0_U11/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.016     0.000      1.036     0.000 *    1.627 f    ( 8.79,25.02)          mo             1.100
+  intadd_0_U11/CO (C8T28SOI_LR_FA1X4_P0)                                     0.016                1.036     0.039      1.666 f    ( 7.85,24.94)          mo             1.100
+  intadd_0_n10 (net)                            1        0.002                                    1.036     0.000      1.666 f    [0.00,0.00]                           
+  intadd_0_U10/CI (C8T28SOI_LR_FA1X4_P0)                           0.000     0.016     0.000      1.036     0.000 *    1.666 f    ( 9.39,23.42)          mo             1.100
+  intadd_0_U10/CO (C8T28SOI_LR_FA1X4_P0)                                     0.016                1.036     0.039      1.706 f    ( 8.46,23.34)          mo             1.100
+  intadd_0_n9 (net)                             1        0.002                                    1.036     0.000      1.706 f    [0.00,0.00]                           
+  intadd_0_U9/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.016     0.000      1.036     0.000 *    1.706 f    ( 9.80,21.81)          mo             1.100
+  intadd_0_U9/CO (C8T28SOI_LR_FA1X4_P0)                                      0.016                1.036     0.039      1.745 f    ( 8.87,21.73)          mo             1.100
+  intadd_0_n8 (net)                             1        0.002                                    1.036     0.000      1.745 f    [0.00,0.00]                           
+  intadd_0_U8/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.016     0.000      1.036     0.000 *    1.745 f    (11.76,21.16)          mo             1.100
+  intadd_0_U8/CO (C8T28SOI_LR_FA1X4_P0)                                      0.017                1.036     0.040      1.785 f    (10.83,21.08)          mo             1.100
+  intadd_0_n7 (net)                             1        0.002                                    1.036     0.000      1.785 f    [0.00,0.00]                           
+  intadd_0_U7/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.017     0.000      1.036     0.000 *    1.785 f    (12.33,18.56)          mo             1.100
+  intadd_0_U7/CO (C8T28SOI_LR_FA1X4_P0)                                      0.018                1.036     0.041      1.826 f    (11.40,18.48)          mo             1.100
+  intadd_0_n6 (net)                             1        0.002                                    1.036     0.000      1.826 f    [0.00,0.00]                           
+  intadd_0_U6/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.018     0.000      1.036     0.000 *    1.826 f    (13.60,13.38)          mo             1.100
+  intadd_0_U6/CO (C8T28SOI_LR_FA1X4_P0)                                      0.016                1.036     0.040      1.866 f    (12.66,13.30)          mo             1.100
+  intadd_0_n5 (net)                             1        0.002                                    1.036     0.000      1.866 f    [0.00,0.00]                           
+  intadd_0_U5/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.016     0.000      1.036     0.000 *    1.866 f    (12.76,10.74)          mo             1.100
+  intadd_0_U5/CO (C8T28SOI_LR_FA1X4_P0)                                      0.016                1.036     0.039      1.905 f    (11.82,10.66)          mo             1.100
+  intadd_0_n4 (net)                             1        0.002                                    1.036     0.000      1.905 f    [0.00,0.00]                           
+  intadd_0_U4/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.016     0.000      1.036     0.000 *    1.905 f    (12.51, 9.09)          mo             1.100
+  intadd_0_U4/CO (C8T28SOI_LR_FA1X4_P0)                                      0.016                1.036     0.039      1.944 f    (11.58, 9.01)          mo             1.100
+  intadd_0_n3 (net)                             1        0.002                                    1.036     0.000      1.944 f    [0.00,0.00]                           
+  intadd_0_U3/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.016     0.000      1.036     0.000 *    1.944 f    (11.22, 7.74)          mo             1.100
+  intadd_0_U3/CO (C8T28SOI_LR_FA1X4_P0)                                      0.016                1.036     0.039      1.983 f    (10.28, 7.66)          mo             1.100
+  intadd_0_n2 (net)                             1        0.002                                    1.036     0.000      1.983 f    [0.00,0.00]                           
+  intadd_0_U2/CI (C8T28SOI_LR_FA1X4_P0)                            0.000     0.016     0.000      1.036     0.000 *    1.983 f    ( 9.10, 7.02)          mo             1.100
+  intadd_0_U2/CO (C8T28SOI_LR_FA1X4_P0)                                      0.010                1.036     0.034      2.016 f    ( 8.16, 6.94)          mo             1.100
+  intadd_0_n1 (net)                             1        0.001                                    1.036     0.000      2.016 f    [0.00,0.00]                           
+  U1100/A (C8T28SOI_LR_CNBFX4_P16)                                 0.000     0.010     0.000      1.036     0.000 *    2.016 f    ( 6.99, 7.54)                         1.100
+  U1100/Z (C8T28SOI_LR_CNBFX4_P16)                                           0.008                1.036     0.027      2.043 f    ( 7.24, 7.49)                         1.100
+  n1202 (net)                                   1        0.001                                    1.036     0.000      2.043 f    [0.00,0.00]                           
+  U1103/A (C8T28SOI_LR_CNXOR2X9_P16)                               0.000     0.008     0.000      1.036     0.000 *    2.043 f    ( 6.84, 8.03)                         1.100
+  U1103/Z (C8T28SOI_LR_CNXOR2X9_P16)                                         0.013                1.036     0.047      2.090 f    ( 7.06, 8.06)                         1.100
+  n1203 (net)                                   1        0.001                                    1.036     0.000      2.090 f    [0.00,0.00]                           
+  U1104/B (C8T28SOI_LR_CNNOR2X8_P16)                               0.000     0.013     0.000      1.036     0.000 *    2.090 f    ( 7.14, 8.09)                         1.100
+  U1104/Z (C8T28SOI_LR_CNNOR2X8_P16)                                         0.014                1.036     0.015      2.105 r    ( 6.89, 8.16)                         1.100
+  n151 (net)                                    1        0.001                                    1.036     0.000      2.105 r    [0.00,0.00]                           
+  acc_reg_39_/D (C8T28SOI_LR_DFPRQX4_P0)                           0.000     0.014     0.000      1.036     0.000 *    2.105 r    ( 7.21, 8.22)                         1.100
+  data arrival time                                                                                                    2.105                                            
+
+  clock CLK (rise edge)                                                                                    10.000     10.000                                            
+  clock network delay (ideal)                                                                               0.000     10.000                                            
+  clock uncertainty                                                                                        -0.100      9.900                                            
+  acc_reg_39_/CP (C8T28SOI_LR_DFPRQX4_P0)                                                                   0.000      9.900 r                                          
+  library setup time                                                                                       -0.012      9.888                                            
+  data required time                                                                                                   9.888                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  data required time                                                                                                   9.888                                            
+  data arrival time                                                                                                   -2.105                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                                          7.783                                            
+
+
+  Startpoint: rstn (input port clocked by CLK)
+  Endpoint: acc_mag_zc_reg_7_
+            (rising-edge recovery check against clock CLK)
+  Scenario: mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C
+  Path Group: REGIN
+  Path Type: max
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout       Cap     DTran     Trans     Delta     Derate      Incr       Path      Location / Load        Attributes     Voltage
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.200      0.200                                            
+  input external delay                                                                                      0.050      0.250 r                                          
+  rstn (in)                                                                  0.009                1.036     0.010      0.260 r    (26.65,38.38)                         
+  rstn (net)                                    8        0.017                                    1.036     0.000      0.260 r    [0.01,0.02]                           
+  U614/A (C8T28SOI_LR_CNBFX28_P16)                                 0.000     0.009     0.000      1.036     0.000 *    0.260 r    (25.53,35.19)                         1.100
+  U614/Z (C8T28SOI_LR_CNBFX28_P16)                                           0.062                1.036     0.054      0.314 r    (26.18,35.16)                         1.100
+  n1575 (net)                                  30        0.033                                    1.036     0.000      0.314 r    [0.01,0.03]                           
+  acc_mag_zc_reg_7_/RN (C8T28SOI_LR_DFPRQX4_P0)                    0.000     0.062     0.000      1.036     0.002 *    0.316 r    (37.47,15.82)                         1.100
+  data arrival time                                                                                                    0.316                                            
+
+  clock CLK (rise edge)                                                                                    10.000     10.000                                            
+  clock network delay (ideal)                                                                               0.000     10.000                                            
+  clock uncertainty                                                                                        -0.100      9.900                                            
+  acc_mag_zc_reg_7_/CP (C8T28SOI_LR_DFPRQX4_P0)                                                             0.000      9.900 r                                          
+  library recovery time                                                                                    -0.007      9.893                                            
+  data required time                                                                                                   9.893                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  data required time                                                                                                   9.893                                            
+  data arrival time                                                                                                   -0.316                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                                          9.577                                            
+
+
+  Startpoint: acc_rc_reg_2_
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: acc_o[2] (output port clocked by CLK)
+  Scenario: mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C
+  Path Group: REGOUT
+  Path Type: max
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                                       Fanout       Cap     DTran     Trans     Delta     Derate      Incr       Path      Location / Load        Attributes     Voltage
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  clock CLK (rise edge)                                                                                     0.000      0.000                                            
+  clock network delay (ideal)                                                                               0.200      0.200                                            
+  acc_rc_reg_2_/CP (C8T28SOI_LR_DFPRQX4_P0)                        0.000     0.100     0.000      1.036     0.000      0.200 r    (16.12,31.33)                         1.100
+  acc_rc_reg_2_/Q (C8T28SOI_LR_DFPRQX4_P0)                                   0.027                1.036     0.074      0.274 r    (18.17,31.27)                         1.100
+  acc_o[2] (net)                                1        0.003                                    1.036     0.000      0.274 r    [0.00,0.00]                           
+  acc_o[2] (out)                                                   0.000     0.027     0.000      1.036     0.000 *    0.274 r    (12.05,38.38)                         
+  data arrival time                                                                                                    0.274                                            
+
+  clock CLK (rise edge)                                                                                    10.000     10.000                                            
+  clock network delay (ideal)                                                                               0.000     10.000                                            
+  clock uncertainty                                                                                        -0.100      9.900                                            
+  output external delay                                                                                    -0.050      9.850                                            
+  data required time                                                                                                   9.850                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  data required time                                                                                                   9.850                                            
+  data arrival time                                                                                                   -0.274                                            
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  slack (MET)                                                                                                          9.576                                            
+
+
+1

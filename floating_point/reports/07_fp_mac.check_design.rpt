@@ -1,0 +1,34 @@
+ 
+****************************************
+check_design summary:
+Version:     V-2023.12-SP5-3
+Date:        Sun Aug 17 15:40:56 2025
+****************************************
+
+                   Name                                            Total
+--------------------------------------------------------------------------------
+Nets                                                               20
+    Unloaded nets (LINT-2)                                         20
+--------------------------------------------------------------------------------
+
+Warning: In design 'fp_mac', net 'net59' driven by pin 'C1411/Z' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'net58' driven by pin 'C1374/Z' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'net57' driven by pin 'C1371/Z' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'net56' driven by pin 'C1274/Z' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'net55' driven by pin 'C1263/Z' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'acc_mag_oh[0]' driven by pin 'U_LZD1/dec_0' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'acc_mag_oh[1]' driven by pin 'U_LZD1/dec_1' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'acc_mag_oh[2]' driven by pin 'U_LZD1/dec_2' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'acc_mag_oh[3]' driven by pin 'U_LZD1/dec_3' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'acc_mag_oh[4]' driven by pin 'U_LZD1/dec_4' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'acc_mag_oh[5]' driven by pin 'U_LZD1/dec_5' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'acc_mag_oh[6]' driven by pin 'U_LZD1/dec_6' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'acc_mag_oh[7]' driven by pin 'U_LZD1/dec_7' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'acc_mag_oh[8]' driven by pin 'U_LZD1/dec_8' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'acc_mag_oh[9]' driven by pin 'U_LZD1/dec_9' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'acc_mag_oh[10]' driven by pin 'U_LZD1/dec_10' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'acc_mag_oh[11]' driven by pin 'U_LZD1/dec_11' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'acc_mag_oh[12]' driven by pin 'U_LZD1/dec_12' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'acc_mag_oh[13]' driven by pin 'U_LZD1/dec_13' has no loads. (LINT-2)
+Warning: In design 'fp_mac', net 'acc_mag_oh[14]' driven by pin 'U_LZD1/dec_14' has no loads. (LINT-2)
+1

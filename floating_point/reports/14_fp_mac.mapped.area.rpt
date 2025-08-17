@@ -1,0 +1,63 @@
+ 
+****************************************
+Report : area
+Design : fp_mac
+Version: V-2023.12-SP5-3
+Date   : Sun Aug 17 15:48:54 2025
+****************************************
+
+Library(s) Used:
+
+    C28SOI_SC_8_PR_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/PR/C28SOI_SC_8_PR_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C.db)
+    C28SOI_SC_8_CLK_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/CLK/C28SOI_SC_8_CLK_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm.db)
+    C28SOI_SC_8_CORESPL_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/CORESPL/C28SOI_SC_8_CORESPL_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm.db)
+    C28SOI_SC_8_CORE_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/CORE/C28SOI_SC_8_CORE_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm.db)
+
+Number of ports:                           48
+Number of nets:                          1109
+Number of cells:                         1036
+Number of combinational cells:            826
+Number of sequential cells:               205
+Number of macros/black boxes:               0
+Number of buf/inv:                        114
+Number of references:                      58
+
+Combinational area:                528.876814
+Buf/Inv area:                       32.966400
+Noncombinational area:             465.120010
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (No wire load specified)
+
+Total cell area:                   993.996824
+Total area:                 undefined
+
+Core Area:                      1472
+Aspect Ratio:                 1.0013
+Utilization Ratio:            0.6749
+
+
+The above information was reported from the logical library. The following are from the physical library:
+
+  Total moveable cell area: 994.0
+  Total fixed cell area: 0.0
+  Total physical cell area: 994.0
+ Core area: 0.000, 0.000, 38.352, 38.400
+
+Hierarchical area distribution
+------------------------------
+
+                                  Global cell area          Local cell area
+                                  ------------------  --------------------------- 
+Hierarchical cell                 Absolute   Percent  Combi-    Noncombi-  Black-
+                                  Total      Total    national  national   boxes   Design
+--------------------------------  ---------  -------  --------  ---------  ------  -----------------------------
+fp_mac                             993.9968    100.0  528.8768   456.9600  0.0000  fp_mac
+clk_gate_counter_reg                 1.6320      0.2    0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_fp_mac_4
+clk_gate_mts_r_reg_1                 1.6320      0.2    0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_fp_mac_8
+clk_gate_mts_w_tmp_reg               1.6320      0.2    0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_fp_mac_0
+clk_gate_vld_o_tmp_reg               1.6320      0.2    0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_fp_mac_7
+clk_gate_zc_tmp_reg                  1.6320      0.2    0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_fp_mac_6
+--------------------------------  ---------  -------  --------  ---------  ------  -----------------------------
+Total                                                 528.8768   465.1200  0.0000
+
+1

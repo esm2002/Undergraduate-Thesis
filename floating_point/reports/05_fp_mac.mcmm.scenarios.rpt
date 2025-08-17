@@ -1,0 +1,62 @@
+ 
+****************************************
+Report : scenarios
+Design : fp_mac
+Scenario(s): mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C
+Version: V-2023.12-SP5-3
+Date   : Sun Aug 17 15:40:54 2025
+****************************************
+
+All scenarios (Total=2): mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C
+All Active scenarios (Total=2): mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C
+Current scenario     : mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C
+
+Scenario #0: mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C is active.
+Scenario options: Setup Leakage_power Dynamic_power
+Cts_corner: none
+Has timing derate: Yes
+
+Library(s) Used:
+ gtech (File: /tool/Program/synopsys/syn/V-2023.12-SP5-3/libraries/syn/gtech.db)
+
+Operating condition(s) Used:
+  Analysis Type    : on_chip_variation
+  Max Operating Condition: C28SOI_SC_8_CORE_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm:ss28_0.90V_0.00V_0.90V_0.00V_125C
+  Max Process    : 1.00
+  Max Voltage    : 0.90
+  Max Temperature: 125.00
+  Min Operating Condition: C28SOI_SC_8_CORE_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm:ss28_0.90V_0.00V_0.90V_0.00V_125C
+  Min Process    : 1.00
+  Min Voltage    : 0.90
+  Min Temperature: 125.00
+
+TLU+ Files Used:
+  Max TLU+ file: /tool/PDK/samsung/LN28FDS_202408/TECH/LN28FDS_ICC_TECH_TLUP_S00_V2.7.3.6/6U1x_2U2x_2T8x_LB/cmos028fdsoi_6U1x_2U2x_2T8x_LB_SigRCmax.tlup
+  Min TLU+ file: /tool/PDK/samsung/LN28FDS_202408/TECH/LN28FDS_ICC_TECH_TLUP_S00_V2.7.3.6/6U1x_2U2x_2T8x_LB/cmos028fdsoi_6U1x_2U2x_2T8x_LB_SigRCmin.tlup
+  Tech2ITF mapping file: /tool/PDK/samsung/LN28FDS_202408/TECH/LN28FDS_ICC_TECH_TLUP_S00_V2.7.3.6/6U1x_2U2x_2T8x_LB/mapfile
+
+Scenario #1: mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C is active.
+Scenario options: Setup Leakage_power Dynamic_power
+Cts_corner: none
+Has timing derate: Yes
+
+Library(s) Used:
+ gtech (File: /tool/Program/synopsys/syn/V-2023.12-SP5-3/libraries/syn/gtech.db)
+
+Operating condition(s) Used:
+  Analysis Type    : on_chip_variation
+  Max Operating Condition: C28SOI_SC_8_CORE_LR_ff28_1.10V_0.00V_1.10V_0.00V_m40C_sadhm:ff28_1.10V_0.00V_1.10V_0.00V_m40C
+  Max Process    : 1.00
+  Max Voltage    : 1.10
+  Max Temperature: -40.00
+  Min Operating Condition: C28SOI_SC_8_CORE_LR_ff28_1.10V_0.00V_1.10V_0.00V_m40C_sadhm:ff28_1.10V_0.00V_1.10V_0.00V_m40C
+  Min Process    : 1.00
+  Min Voltage    : 1.10
+  Min Temperature: -40.00
+
+TLU+ Files Used:
+  Max TLU+ file: /tool/PDK/samsung/LN28FDS_202408/TECH/LN28FDS_ICC_TECH_TLUP_S00_V2.7.3.6/6U1x_2U2x_2T8x_LB/cmos028fdsoi_6U1x_2U2x_2T8x_LB_SigRCmax.tlup
+  Min TLU+ file: /tool/PDK/samsung/LN28FDS_202408/TECH/LN28FDS_ICC_TECH_TLUP_S00_V2.7.3.6/6U1x_2U2x_2T8x_LB/cmos028fdsoi_6U1x_2U2x_2T8x_LB_SigRCmin.tlup
+  Tech2ITF mapping file: /tool/PDK/samsung/LN28FDS_202408/TECH/LN28FDS_ICC_TECH_TLUP_S00_V2.7.3.6/6U1x_2U2x_2T8x_LB/mapfile
+
+1
