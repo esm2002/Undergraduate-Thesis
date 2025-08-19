@@ -10,14 +10,14 @@
 
 class PositMacModel #( 
     parameter int WIDTH_P    = 8,
-    parameter int K_P        = 1,    
+    parameter int K_P        = 9,    
     parameter int EXP_P      = 2,        
     
     localparam int WK_P         = $clog2(K_P),
     localparam int REGI_P       = $clog2(WIDTH_P)+1,
     localparam int MTS_P        = WIDTH_P-3-EXP_P,
-    localparam int USEED_P      = 2**(2**EXP_P), // useed = 2^(2^exp)  // max = useed^(width-2) = 16777216, min = useed^(-width+2)          
-    localparam int BIAS_P       = (2**(EXP_P+1))*(WIDTH_P-2),  // bias = 2^(EXP+1)*(width-2) 
+    localparam int USEED_P      = 1 << (1 << EXP_P), // useed = 2^(2^exp)  // max = useed^(width-2) = 16777216, min = useed^(-width+2)          
+    localparam int BIAS_P       = (1 << (EXP_P+1))*(WIDTH_P-2),  // bias = 2^(EXP+1)*(width-2) 
     localparam int WIDTH_A_P    = WK_P+2*BIAS_P+2,
     localparam int WZC_P        = $clog2(WIDTH_A_P),
     localparam int WTMP_P       = 3*WIDTH_P-EXP_P-4
@@ -32,8 +32,8 @@ class PositMacModel #(
     localparam int CK_MAXPOS  = 5;
     localparam int CK_RANDOM  = 6;
 
-    rand bit signed [WIDTH_P-1:0] win[K_P];
-    rand bit signed [WIDTH_P-1:0] din[K_P];
+    bit signed [WIDTH_P-1:0] win[K_P];
+    bit signed [WIDTH_P-1:0] din[K_P];
 
     int                           kind_q[$];
     bit signed [WIDTH_P-1:0]      golden_q[$];
@@ -43,13 +43,14 @@ class PositMacModel #(
   // ------------------------------------------------------------
   // Function : N-bit Posit -> Real (64-bit floating-point)
   // ------------------------------------------------------------    
-    bit [WIDTH_P-1:0] x_2s; bit sign;
-    bit regbit; int i, k, regi;
-    int idx, ebits, e, fbits, f;
-    int unsigned e, f;
-    real scale, val;
-    
-    function automatic real ps_to_real(input logic [WIDTH_P-1:0] x);
+
+    function automatic real ps_to_real(input bit signed [WIDTH_P-1:0] x);
+        bit [WIDTH_P-1:0] x_2s; bit sign;
+        bit regbit; int i, k, regi;
+        int idx, ebits, e, fbits;
+        real f;
+        real scale, val;
+        
         sign = x[WIDTH_P-1];
         x_2s = sign ? (~x + 1'b1) : x;
         
@@ -63,24 +64,23 @@ class PositMacModel #(
         regi = regbit ? (k-1) : (-k);
         
         idx = (WIDTH_P-1) - (k+1); // index of last regime bit
-        if (idx < 0) idx = 0;
         
         // exponent: up to EXP_P bits
         ebits = (idx >= EXP_P) ? EXP_P : idx;
         e = 0;
         for (i=0; i<ebits; i++) begin
-          e = (e << 1) | x_2s[idx-1 - i];
+          e = e * 2 + x_2s[idx-1 - i];
         end
-        idx -= ebits;
+        idx = idx - ebits;
     
         // fraction: remaining idx bits; implicit 1.
         fbits = idx;
         f = 1.0;
         for (i=0; i<fbits; i++) begin
-          if (x_2s[idx-1 - i]) f += 1.0 / (2.0**(i+1));
+          if (x_2s[idx-1 - i]) f = f+ (1.0 / $pow(2, (i+1)));
         end
         
-        scale = (USEED_P ** regi) * (2.0 ** e);
+        scale = $pow(USEED_P, regi) * $pow(2, e);
         val   = f * scale;
         return sign ? -val : val;
     endfunction
@@ -89,74 +89,125 @@ class PositMacModel #(
   // Function : Real (64-bit floating-point) -> N-bit Posit
   // ------------------------------------------------------------     
     
-    logic [WIDTH_P-1:0] out;
-    int MIN, MAX;
-    real m;
-    bit [WIDTH_P-1:0] tmp;
-    int K, E, IDX;
+    function automatic bit signed [WIDTH_P-1:0] real_to_ps(input real r);
+        logic [WIDTH_P-1:0] out;
+        real MIN, MAX;
+        real m;
+        bit [WIDTH_P-1:0] tmp;
+        bit [EXP_P+2*(MTS_P+1)-1:0] rd;
+        int K, E, IDX;
+        
+        real F, q_c, q, fl, diff;
+        int q_i, frac_i;
     
-    real F, q, fl, diff;
-    int frac_i;
-    
-    function automatic logic [WIDTH_P-1:0] real_to_ps(input real r);
-        MIN = USEED_P ** (-WIDTH_P+2);
-        MAX = USEED_P ** (WIDTH_P-2);
+        MIN = $pow(USEED_P, (-WIDTH_P+2));
+        MAX = $pow(USEED_P, (WIDTH_P-2));
         // NaR/Zero detection
         if (r == 0.0) begin out = '0; return out; end
-        if ((r > MAX) || (r < MIN)) begin out = (r > 0.0) ? (1 << (WIDTH_P-1))-1 : (1 << (WIDTH_P-1))+1; return out; end //+Inf
-  
         m = (r < 0.0) ? -r : r;
-        // pull by useed
+        if (m > MAX) begin out = (r > 0.0) ? (1 << (WIDTH_P-1))-1 : (1 << (WIDTH_P-1))+1; return out; end //Inf
+        if (m < MIN) begin out = 0; return out; end //Min
+        
+        // pull by useed to bring m in [1,USEED)
+        K = 0;
         if (m >= 1.0) begin
-          K = 0;
-          while (m >= USEED_P && K < (WIDTH_P-2)) begin m /= USEED_P; K++; end
+          while (m >= USEED_P && K < (WIDTH_P-2)) begin m = m / USEED_P; K++; end
         end else begin
-          K = 0;
-          while (m < 1.0 && K > (-WIDTH_P+2)) begin m *= USEED_P; K--; end
+          while (m < 1.0 && K > (-WIDTH_P+2)) begin m = m * USEED_P; K--; end
         end
         
-        tmp = '0;
+        tmp = '0; rd = '0;
         IDX = WIDTH_P-2;
         //regime
         if (K >= 0) begin
-          for (int i=0; i<(K+1) && IDX>=0; i++) tmp[IDX--] = 1'b1;
-          if (IDX>=0) tmp[IDX--] = 1'b0;
-        end else begin
-          for (int i=0; i<(-K) && IDX>=0; i++) tmp[IDX--] = 1'b0;
-          if (IDX>=0) tmp[IDX--] = 1'b1;
+          for (int i=0; i<(K+1) && IDX>=0; i++) begin
+            tmp[IDX] = 1'b1;
+            IDX = IDX - 1;
+          end
+          if (IDX>=0) begin
+            tmp[IDX] = 1'b0;
+            IDX = IDX - 1;
+          end
+        end else begin // K < 0
+          for (int i=0; i<(-K) && IDX>=0; i++) begin
+            tmp[IDX] = 1'b0;
+            IDX = IDX - 1;
+          end
+          if (IDX>=0) begin
+            tmp[IDX] = 1'b1;
+            IDX = IDX - 1;
+          end
         end
 
         // pull by 2^e to bring m in [1,2)
-        if (m >= 2.0) begin
-          E = 0; while (m >= 2.0) begin m /= 2.0; E++; end
-        end else if (m < 1.0) begin
-          E = 0; while (m < 1.0)  begin m *= 2.0; E--; end
-        end else E = 0;
-        
+        E = 0; 
+        while (m >= 2.0) begin m = m / 2.0; E++; end
         // exponent (EXP_P bits or until space runs out)
-        for (int i=EXP_P-1; i>=0 && IDX>=0; i--) begin
-          tmp[IDX--] = (E >> i) & 1;
+        if (IDX >= 0) begin
+            if (IDX >= (EXP_P-1)) begin
+                //tmp[IDX:IDX-(EXP_P-1)] = E[EXP_P-1:0];
+                for (int k = 0; k < EXP_P; k++) begin 
+                    tmp[IDX-k] = E[EXP_P-1-k];
+                end
+                IDX = IDX - EXP_P;
+            end
+            else begin
+                //tmp[IDX-:(IDX+1)] = E[(EXP_P-1)-:(IDX+1)];
+                for (int k = 0; k < (IDX+1); k++) begin 
+                    tmp[IDX-k] = E[EXP_P-1-k];
+                end
+                for (int k = 0; k < (EXP_P-1-IDX); k++) begin 
+                    rd[EXP_P+(2*MTS_P+1)-1-k] = E[EXP_P-2-IDX-k];
+                end
+                F = m - 1.0; // in [0,1)
+                q = F * $pow(2, (2*MTS_P+1));
+                fl = $floor(q);
+                frac_i = int'(fl);
+                
+                for (int k = 0; k < (2*MTS_P+1); k++) begin 
+                    rd[(2*MTS_P+1)+IDX-k] = frac_i[(2*MTS_P+1)-1-k];
+                end
+                if (rd[EXP_P+(2*MTS_P+1)-1] && (tmp[0] || (|rd[EXP_P+(2*MTS_P+1)-2:0]))) tmp = tmp + 1;
+                out = (r < 0.0) ? (~tmp + 1'b1) : tmp;
+                out[WIDTH_P-1] = (r < 0.0);
+                return out;
+            end
+        end
+        else begin
+            for (int k = 0; k < EXP_P; k++) begin 
+                rd[EXP_P+(2*MTS_P+1)-1-k] = E[EXP_P-1-k];
+            end
+            F = m - 1.0; // in [0,1)
+            q = F * $pow(2, 2*MTS_P+1);
+            fl = $floor(q);
+            frac_i = int'(fl);
+               
+            for (int k = 0; k < 2*MTS_P+1; k++) begin 
+                rd[(2*MTS_P+1)-1-k] = frac_i[(2*MTS_P+1)-1-k];
+            end
+            if (rd[EXP_P+(2*MTS_P+1)-1] && (tmp[0] || (|rd[EXP_P+(2*MTS_P+1)-2:0]))) tmp = tmp + 1;
+
+            out = (r < 0.0) ? (~tmp + 1'b1) : tmp;
+            out[WIDTH_P-1] = (r < 0.0);
+            return out;
         end
         
         // fraction: pack from m in [1,2) with rounding to nearest-even
         F = m - 1.0; // in [0,1)
-        q = F * (2.0 ** (IDX+1));
+        q_c = F * $pow(2, 2*MTS_P+1);
+        q_i = $floor(q_c);
+        q = q_i * $pow(2, (IDX+1-(2*MTS_P+1)));
         fl = $floor(q);
-        diff = q - fl;
         frac_i = int'(fl);
-        
+        diff = q - fl;
+
         // round to nearest ties-even
         if (diff > 0.5) frac_i++;
-        else if (diff == 0.5 && frac_i[0]) frac_i++;
+        else if (diff == 0.5 && frac_i[0] && IDX>=0) frac_i++;
+        else if (diff == 0.5 && tmp[0]) frac_i++;
         
         // overflow carry from rounding → bumps exponent/regime; we approximate by saturating to maxpos
-        if (frac_i >= (1 << (IDX+1))) begin
-          tmp = tmp + frac_i;
-        end else begin
-          for (int i=0; i<(IDX+1); i++) begin
-            tmp[i] = (frac_i >> i) & 1;
-          end
-        end
+        tmp = tmp + frac_i[WIDTH_P-1:0];
     
         // apply sign via two's complement
         out = (r < 0.0) ? (~tmp + 1'b1) : tmp;
@@ -168,13 +219,12 @@ class PositMacModel #(
   // Function : golden MAC generates the expected output
   // ------------------------------------------------------------ 
 
-    real acc;
-
     function automatic bit signed [WIDTH_P-1:0]
       golden_mac(input bit signed [WIDTH_P-1:0] w[K_P],
                  input bit signed [WIDTH_P-1:0] d[K_P],
                  output real acc_real,
                  output bit nar_f);
+      real acc;
       acc_real = 0.0;
       nar_f = 0;
       acc = 0.0;
@@ -191,17 +241,18 @@ class PositMacModel #(
   // ------------------------------------------------------------
   // Methods
   // ------------------------------------------------------------
-
-    real acc_r;
-    bit nar_r;
-    bit signed [WIDTH_P-1:0] g;
-
-    function void make_random();
-      real r1 = ($urandom_range(0,1)? 1.0 : -1.0) * (2.0 ** ($urandom_range(-(WIDTH_P-2),WIDTH_P-2)));
-      real r2 = ($urandom_range(0,1)? 1.0 : -1.0) * (2.0 ** ($urandom_range(-(WIDTH_P-2),WIDTH_P-2)));      
+  
+    function void make_random();   
+      real acc_r;
+      bit nar_r;
+      bit signed [WIDTH_P-1:0] g; 
       foreach (win[i]) begin 
-        win[i] = real_to_ps(r1);
-        din[i] = real_to_ps(r2);
+          int unsigned i1 = $urandom_range(0, (1<<WIDTH_P)-1);
+          int unsigned i2 = $urandom_range(0, (1<<WIDTH_P)-1);
+          bit [WIDTH_P-1:0] b1 = i1[WIDTH_P-1:0]; 
+          bit [WIDTH_P-1:0] b2 = i2[WIDTH_P-1:0]; 
+          win[i] = (b1 == (1<<(WIDTH_P-1))) ? (b1+1) : b1;
+          din[i] = (b2 == (1<<(WIDTH_P-1))) ? (b2-1) : b2;
       end
       g = golden_mac(win, din, acc_r, nar_r);
       kind_q.push_back(CK_RANDOM);
@@ -211,8 +262,11 @@ class PositMacModel #(
     endfunction
 
     function void make_corner(int kind_id);
-      real minpos = 1.0 * (USEED_P ** (-WIDTH_P+2));
-      real maxpos = 1.0 * (USEED_P ** (WIDTH_P-2));
+      real acc_r;
+      bit nar_r;
+      bit signed [WIDTH_P-1:0] g; 
+      real minpos = 1.0 * $pow(USEED_P, (-WIDTH_P+2));
+      real maxpos = 1.0 * $pow(USEED_P, (WIDTH_P-2));
       foreach (win[i]) begin
         case (kind_id)
           CK_ZERO   : begin win[i]='0;            din[i]='0;            end
@@ -241,7 +295,7 @@ module posit_mac_tb();
   // Parameters & Corner ID
   // ------------------------------------------------------------
   parameter int WIDTH      = 8;
-  parameter int K          = 1;    
+  parameter int K          = 9;    
   parameter int EXP        = 2;        
   parameter int  NumTests  = 300;
   parameter int  Debug_test = 11;
@@ -252,8 +306,8 @@ module posit_mac_tb();
 
   localparam int WK           = $clog2(K);
   localparam int REGI         = $clog2(WIDTH)+1;
-  localparam int USEED        = 2**(2**EXP); // useed = 2^(2^exp)  // max = useed^(width-2) = 16777216, min = useed^(-width+2)          
-  localparam int BIAS         = (2**(EXP+1))*(WIDTH-2); // bias = 2^(EXP+1)*(width-2) 
+  localparam int USEED        = 1 << (1 << EXP); // useed = 2^(2^exp)  // max = useed^(width-2) = 16777216, min = useed^(-width+2)          
+  localparam int BIAS         = (1 << (EXP+1))*(WIDTH-2); // bias = 2^(EXP+1)*(width-2) 
   localparam int MTS          = WIDTH-3-EXP;
   localparam int WIDTH_A      = WK+2*BIAS+2;
   localparam int WZC          = $clog2(WIDTH_A);
@@ -395,7 +449,7 @@ module posit_mac_tb();
           pass_cnt++;
         end else begin
           fail_cnt++;
-          $display("[%0t] FAIL(kind=%0d): dut=%0d(0x%0h) exp=%0d(0x%0h)  acc_real=%0f",
+          $display("[%0t] FAIL(kind=%0d): dut=%0d(0x%0h) golden=%0d(0x%0h)  acc_real=%0f",
                    $time, e_kind, acc_o, acc_o, e_golden, e_golden, e_real);
         end
       end
