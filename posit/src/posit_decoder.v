@@ -26,8 +26,9 @@ reg in_sign;
 reg [in_s-2:0] in_mag;
 reg vld_iz;
 
-wire [WZC-1:0] zc;
-wire vld;
+wire [in_s-2:0] in_lzd_oh;
+wire [WZC:0] zc;
+//wire vld;
 
 reg in_sign_o;
 reg [in_s-2:0] in_mag_o;
@@ -36,7 +37,11 @@ reg [WZC-1:0] zc_o;
 reg [1:0] out_type;
 reg out_vld;
 
-LZD #(.in_s(in_s-1), .out_s(WZC)) u_lzd(.in(in_lzd), .vld_i(vld_iz), .out(zc), .vld_o(vld));
+//LZD #(.in_s(in_s-1), .out_s(WZC+1)) u_lzd(.in(in_lzd), .vld_i(vld_iz), .out(zc), .vld_o(vld));
+
+// Instance of DW_lzd
+DW_lzd #(in_s-1) U_LZD1 ( .a(in_lzd), .dec(in_lzd_oh), .enc(zc) );
+
 
 always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
@@ -71,12 +76,12 @@ always @(posedge clk_i or negedge rstn) begin
         in_mag <= in_mag_tmp;
         vld_iz <= vld_i_tmp;
         
-        if (vld) begin
+        if (vld_iz) begin
             in_sign_o <= in_sign;
             in_mag_o <= in_mag;
             if ((in_s-2-zc) < exp_s) in_tmp <= (in_mag << (zc+1)) >> (exp_s-(in_s-2-zc));
             else in_tmp <= in_mag << (zc+1);
-            zc_o <= zc;
+            zc_o <= (in_lzd == 0) ? (in_s-1) : zc;
             if (!in_sign & (in_mag == 0)) out_type <= 2'b00; //zero
             else if (in_sign & (in_mag==0)) out_type <= 2'b10; //infinite
             else out_type <= 2'b01; //valid
