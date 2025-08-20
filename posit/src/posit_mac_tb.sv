@@ -507,9 +507,9 @@ module posit_mac_tb();
   // ------------------------------------------------------------
 
   initial begin : MAIN
-//    $fsdbDumpfile("fx_mac.fsdb");
-//    $fsdbDumpvars("+all", "+parameter");
-//    $fsdbDumpMDA(1);
+    $fsdbDumpfile("posit_mac.fsdb");
+    $fsdbDumpvars("+all", "+parameter");
+    $fsdbDumpMDA(1);
 
     @(posedge rstn);
     RESET;
