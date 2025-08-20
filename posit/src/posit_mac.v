@@ -45,19 +45,21 @@ wire [2*(MTS+1):0] norm_mts_m;
 
 (* use_dsp = "yes" *) reg [REGI+EXP+1:0] sf_bias;
 (* use_dsp = "yes" *) reg signed [2*(MTS+1):0] mts_ms;
-reg [WIDTH_A-1:0] mts_fx;
+reg signed [WIDTH_A-1:0] mts_fx;
 
 reg [WK:0] counter;
 reg acc_rdy;
 (* use_dsp = "yes" *) reg signed [WIDTH_A-1:0] acc; // bit configuration: WIDTH_A = BIAS + 2 + BIAS
 
-reg signed sign_q;
+reg sign_q;
 (* use_dsp = "yes" *) reg [WIDTH_A-1:0] acc_mag;
-wire [WZC-1:0] zc;
-wire vld;
+wire [WIDTH_A-1:0] acc_mag_oh;
+wire [WZC:0] zc;
+//wire vld;
 
-(* use_dsp = "yes" *) reg [REGI+EXP:0] sf_q;
+(* use_dsp = "yes" *) reg signed [REGI+EXP:0] sf_q;
 reg [WIDTH_A-1:0] mts_tmp;
+wire [REGI+EXP:0] sf_q_us;
 
 reg [2*(MTS+1)-1:0] mts_q;
 wire nzero;
@@ -104,8 +106,8 @@ always @(posedge clk_i or negedge rstn) begin
     end
     else if (decode_w && decode_d) begin
         if (vld_o_w[0] && vld_o_d[0]) begin // both valid
-            sf_w <= {regi_w, exp_w};
-            sf_d <= {regi_d, exp_d};
+            sf_w <= $signed({regi_w, exp_w});
+            sf_d <= $signed({regi_d, exp_d});
             sign_m <= sign_w ^ sign_d;
             mts_m <= {1'b1, mts_w} * {1'b1, mts_d}; // 01.xxxx or 10.xxxx
         end
@@ -134,10 +136,10 @@ always @(posedge clk_i or negedge rstn) begin
         mts_fx <= 0;
     end
     else begin
-        if (vld_d[3]) sf_bias <= sf_m + BIAS - 2*MTS - 1;
+        if (vld_d[3]) sf_bias <= $unsigned(sf_m + BIAS - 2*MTS - 1);
         
-        if (sign_m) mts_ms <= ~(norm_mts_m) + 1;
-        else mts_ms <= norm_mts_m;
+        if (sign_m) mts_ms <= $signed(~(norm_mts_m) + 1);
+        else mts_ms <= $signed(norm_mts_m);
         
         if (vld_d[4]) mts_fx <= (mts_ms << sf_bias);
     end
@@ -187,13 +189,15 @@ always @(posedge clk_i or negedge rstn) begin
     end
     else if (acc_rdy) begin
         sign_q <= acc[WIDTH_A-1];
-        if (acc[WIDTH_A-1]) acc_mag <= ~(acc) + 1;
-        else acc_mag <= acc;
+        if (acc[WIDTH_A-1]) acc_mag <= $unsigned(~(acc) + 1);
+        else acc_mag <= $unsigned(acc);
         zc_i <= 1'b1;
     end
 end
 
-LZD #(.in_s(WIDTH_A), .out_s(WZC)) u_lzd(.in(acc_mag), .vld_i(zc_i), .out(zc), .vld_o(vld));
+//LZD #(.in_s(WIDTH_A), .out_s(WZC+1)) u_lzd(.in(acc_mag), .vld_i(zc_i), .out(zc), .vld_o(vld));
+// Instance of DW_lzd
+DW_lzd #(WIDTH_A) U_LZD0 ( .a(acc_mag), .dec(acc_mag_oh), .enc(zc) );
  
 always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
@@ -208,8 +212,8 @@ always @(posedge clk_i or negedge rstn) begin
         
         mts_q <= 0;
     end 
-    else if (acc_rdy & vld) begin
-        sf_q <= WK + BIAS + 1 - zc; // 1 <= zc <= 2*BIAS+1 // -BIAS <= sf_q <= BIAS
+    else if (acc_rdy & zc_i) begin
+        sf_q <= (acc_mag == 0) ? $signed($unsigned(WK) + $unsigned(BIAS) + 1'b1 - $unsigned(WIDTH_A)) : $signed($unsigned(WK) + $unsigned(BIAS) + 1'b1 - zc); // 1 <= zc <= 2*BIAS+2 // -BIAS-1 <= sf_q <= BIAS
         mts_tmp <= acc_mag << zc;
         
         mts_q <= mts_tmp[WIDTH_A-1:WIDTH_A-1-(2*(MTS+1)-1)]; // 1.f format
@@ -221,6 +225,7 @@ end
 //-------------------------------------------------
 
 assign nzero = |mts_q; // 1 for non-zero (1.f format)
+assign sf_q_us = $unsigned(sf_q);
 
 always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
@@ -233,11 +238,11 @@ always @(posedge clk_i or negedge rstn) begin
         regi_sf <= 0;
         exp_sf <= 0;
     end
-    else if (acc_rdy & vld) begin    
-        sign_sf <= sf_q[REGI+EXP];
-        if (sf_q[REGI+EXP]) regi_sf <= ~(sf_q[REGI+EXP:EXP]) + 1;
-        else regi_sf <= sf_q[REGI+EXP:EXP];
-        exp_sf <= sf_q[EXP-1:0];
+    else if (acc_rdy & zc_i) begin    
+        sign_sf <= sf_q_us[REGI+EXP];
+        if (sf_q_us[REGI+EXP]) regi_sf <= ~(sf_q_us[REGI+EXP:EXP]) + 1;
+        else regi_sf <= sf_q_us[REGI+EXP:EXP];
+        exp_sf <= sf_q_us[EXP-1:0];
     end
 end
 
@@ -253,7 +258,7 @@ always @(posedge clk_i or negedge rstn) begin
         regi_p <= 0;
         exp_p <= 0;    
     end
-    else if (acc_rdy & vld) begin    
+    else if (acc_rdy & zc_i) begin    
         if (ovf_p) begin
             regi_p <= regi_sf;
             exp_p <= {EXP{1'b0}};
@@ -289,14 +294,14 @@ always @(posedge clk_i or negedge rstn) begin
     end
     else if (acc_rdy) begin
         if (vld_d[11]) begin    
-            tmp_pos <= {nzero, 1'b0, exp_p, mts_q[2*MTS:0], {(WIDTH-1){1'b0}}};
-            tmp_neg <= {1'b0, nzero, exp_p, mts_q[2*MTS:0], {(WIDTH-1){1'b0}}};
+            tmp_pos <= $signed({nzero, 1'b0, exp_p, mts_q[2*MTS:0], {(WIDTH-1){1'b0}}});
+            tmp_neg <= $signed({1'b0, nzero, exp_p, mts_q[2*MTS:0], {(WIDTH-1){1'b0}}});
             shift_pos <= regi_p;
             shift_neg <= regi_p - 1;
         end
         if (vld_d[12]) begin  
-            if (sign_sf) tmp <= tmp_neg >>> shift_neg;
-            else tmp <= tmp_pos >>> shift_pos;
+            if (sign_sf) tmp <= $unsigned(tmp_neg >>> shift_neg);
+            else tmp <= $unsigned(tmp_pos >>> shift_pos);
         end
     end 
 end
@@ -320,7 +325,7 @@ always @(posedge clk_i or negedge rstn) begin
         vld_o_tmp <= 0;
         acc_o_fin <= 0;
     end
-    else if (acc_rdy & vld) begin
+    else if (acc_rdy & zc_i) begin
         acc_o_tmp <= tmp_for_round + round_val;
         
         if (vld_d[14] && (~|vld_d[13:0])) begin
@@ -331,8 +336,8 @@ always @(posedge clk_i or negedge rstn) begin
             end
             else if (ovf_sf && ovf_p) acc_o_fin <= {WIDTH{1'b0}}; // underflow -> zero
             else if (!ovf_sf && ovf_p) begin// NaR -> max
-                if (sign_q) acc_o_fin <= (1 << (WIDTH-1))+1; 
-                else acc_o_fin <= (1 << (WIDTH-1))-1;
+                if (sign_q) acc_o_fin <= $unsigned((1 << (WIDTH-1))+1); 
+                else acc_o_fin <= $unsigned((1 << (WIDTH-1))-1);
             end
         end
     end
