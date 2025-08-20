@@ -1,0 +1,88 @@
+ 
+****************************************
+Report : area
+Design : posit_mac
+Version: V-2023.12-SP5-3
+Date   : Wed Aug 20 14:07:28 2025
+****************************************
+
+Library(s) Used:
+
+    C28SOI_SC_8_PR_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/PR/C28SOI_SC_8_PR_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C.db)
+    C28SOI_SC_8_CLK_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/CLK/C28SOI_SC_8_CLK_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm.db)
+    C28SOI_SC_8_CORE_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/CORE/C28SOI_SC_8_CORE_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm.db)
+    C28SOI_SC_8_CORESPL_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm (File: /tool/PDK/samsung/LN28FDS_202408/SC/ln28fds_sc_8t_rvt_mainstream_V1.02ae/FE-Common/LIBERTY/CORESPL/C28SOI_SC_8_CORESPL_LR_ss28_0.90V_0.00V_0.90V_0.00V_125C_sadhm.db)
+
+Number of ports:                          128
+Number of nets:                          2870
+Number of cells:                         2656
+Number of combinational cells:           2103
+Number of sequential cells:               538
+Number of macros/black boxes:               0
+Number of buf/inv:                        219
+Number of references:                      72
+
+Combinational area:               1221.932833
+Buf/Inv area:                       52.224001
+Noncombinational area:            1220.736027
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (No wire load specified)
+
+Total cell area:                  2442.668860
+Total area:                 undefined
+
+Hierarchical area distribution
+------------------------------
+
+                                  Global cell area          Local cell area
+                                  ------------------  ---------------------------- 
+Hierarchical cell                 Absolute   Percent  Combi-     Noncombi-  Black-
+                                  Total      Total    national   national   boxes   Design
+--------------------------------  ---------  -------  ---------  ---------  ------  ---------------------------------
+posit_mac                         2442.6689    100.0  1139.6800  1030.4448  0.0000  posit_mac
+clk_gate_acc_o_tmp_reg_1             1.6320      0.1     0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_posit_mac_13
+clk_gate_counter_reg                 1.6320      0.1     0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_posit_mac_9
+clk_gate_mts_fx_reg_0                1.6320      0.1     0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_posit_mac_11
+clk_gate_sf_bias_reg_0               1.6320      0.1     0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_posit_mac_10
+clk_gate_sign_m_reg                  1.6320      0.1     0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_posit_mac_0
+clk_gate_tmp_pos_reg_1               1.6320      0.1     0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_posit_mac_15
+clk_gate_tmp_reg_1                   1.6320      0.1     0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_posit_mac_16
+clk_gate_vld_o_tmp_reg               1.6320      0.1     0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_posit_mac_14
+clk_gate_zc_i_reg_1                  1.6320      0.1     0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_posit_mac_12
+u_decode_d                         128.7104      5.3    40.9088    84.5376  0.0000  decoder_0
+u_decode_d/clk_gate_in_mag_tmp_reg    1.6320     0.1     0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_decoder_0_1
+u_decode_d/clk_gate_out_vld_reg_0    1.6320      0.1     0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_decoder_0_0
+u_decode_w                         129.1456      5.3    41.3440    84.5376  0.0000  decoder_1
+u_decode_w/clk_gate_in_mag_tmp_reg    1.6320     0.1     0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_decoder_0_2
+u_decode_w/clk_gate_out_vld_reg_0    1.6320      0.1     0.0000     1.6320  0.0000  SNPS_CLOCK_GATE_HIGH_decoder_0_3
+--------------------------------  ---------  -------  ---------  ---------  ------  ---------------------------------
+Total                                                 1221.9328  1220.7360  0.0000
+
+
+Area of detected synthetic parts
+--------------------------------
+  No DW parts to report!
+
+Estimated area of ungrouped synthetic parts
+-------------------------------------------
+                                       Estimated  Perc. of
+  Module               Implem.  Count       Area cell area
+  -------------------- -------  ----- ---------- ---------
+  DP_OP_107J1_122_1393     str      1    15.7585      0.6%
+  DW01_add             apparch      4   170.3310      7.0%
+  DW01_dec             apparch      3     1.6102      0.1%
+  DW01_inc             apparch      6    16.8780      0.7%
+  DW01_sub             apparch      8   158.4142      6.5%
+  DW_cmp               apparch      1     0.3264      0.0%
+  DW_leftsh               astr      4   364.4810     14.9%
+  DW_lzd                   rtl      3    88.8028      3.6%
+  DW_mult_uns          apparch      1    19.6238      0.8%
+  DW_rightsh              astr      4    60.7104      2.5%
+  -------------------- -------  ----- ---------- ---------
+  DP_OP Subtotal:                   1    15.7585      0.6%
+  Total:                           35   896.9363     36.7%
+
+Subtotal of datapath(DP_OP) cell area:  15.7585  0.6%  (estimated)
+Total synthetic cell area:              896.9363  36.7%  (estimated)
+
+1

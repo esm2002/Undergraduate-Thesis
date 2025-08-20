@@ -1,0 +1,68 @@
+Current scenario is: mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C
+Done generating .... report_qor
+Information: Timer is not in zero interconnect delay mode. (TIM-176)
+Done generating .... report_timing
+Done generating .... report_constraints
+Done generating all report files.
+Main process mem-peak:   1459 Mb
+Multicore mem-peak:   1818 Mb
+Multicore + icc2_link mem-peak:   1818 Mb
+***********************************************
+Report          : create_qor_snapshot (posit_mac.qor_snapshot.rpt)
+Design          : posit_mac
+Version         : V-2023.12-SP5-3
+Date            : Wed Aug 20 14:07:28 2025
+Time unit       : 1.0e-09 Second(ns)
+Capacitance unit: 1.0e-12 Farad(pF)
+Voltage unit    : 1 Volt
+Power unit      : N/A
+Location        : reports/posit_mac.qor_snapshot
+***********************************************
+No. of scenario = 2
+s1 = mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C
+s2 = mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C
+------------------------------------------------------------------------
+WNS of each timing group:                       s1        s2 
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+Setup WNS:                                   2.613     5.551      -0.000 
+Setup TNS:                                     0.0       0.0      -0.000
+Number of setup violations:                      0         0           0 
+Hold WNS:                                   -0.205    -0.181      -0.205 
+Hold TNS:                                  -46.113   -70.698     -73.916 
+Number of hold violations:                     551       685         685 
+Number of max trans violations:                  0         2           2 
+Number of max cap violations:                    0         0           0 
+Number of min pulse width violations:            0         0           0 
+------------------------------------------------------------------------
+Area:                                                               2443
+Cell count:                                                         2641
+Buf/inv cell count:                                                  219
+CPU/ELAPSE(hr):                                                0.15/0.14
+Mem(Mb):                                                            1459
+Host name:                                                       mustang
+------------------------------------------------------------------------
+Histogram:             s1   s2 
+------------------------------------------------------------------------
+Max violations:         0    0 
+   above ~ -0.7  ---    0    0 
+    -0.6 ~ -0.7  ---    0    0 
+    -0.5 ~ -0.6  ---    0    0 
+    -0.4 ~ -0.5  ---    0    0 
+    -0.3 ~ -0.4  ---    0    0 
+    -0.2 ~ -0.3  ---    0    0 
+    -0.1 ~ -0.2  ---    0    0 
+       0 ~ -0.1  ---    0    0 
+------------------------------------------------------------------------
+Min violations:       551  685 
+  -0.06 ~ above  ---  326  590 
+  -0.05 ~ -0.06  ---   79   18 
+  -0.04 ~ -0.05  ---   34   11 
+  -0.03 ~ -0.04  ---   36   12 
+  -0.02 ~ -0.03  ---   44   11 
+  -0.01 ~ -0.02  ---   15    0 
+      0 ~ -0.01  ---   17   43 
+------------------------------------------------------------------------
+Current scenario is: mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C
+Snapshot (posit_mac.qor_snapshot.rpt) is created and stored under "reports/posit_mac.qor_snapshot" directory
+1
