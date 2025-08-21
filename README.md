@@ -21,8 +21,8 @@ Undergraduate-Thesis/
 ```
 
 ## 2. Experimental Results (ASIC) (# of multiplication = 9)
-
-## 3. Experimental Results (Basys-3 FPGA) (# of multiplication = 1)
+* scenario 1: mode_norm.OC_rvt_ss28_0.90V_0.00V_0.90V_0.00V_125C
+* scenario 2: mode_norm.OC_rvt_ff28_1.10V_0.00V_1.10V_0.00V_m40C
 * T (ns) = target clock period, WNS (ns) = worst negative slack, L (cycle) = latency,
   W = total bits, E = exponential part bits, F = fraction part bits
 * Dynamic Range: log10​(max/min)
@@ -39,9 +39,26 @@ Undergraduate-Thesis/
 * Max. Operating Freq. (MHz): max(1000/(T - WNS))
 * Energy-Delay-Product (J*s): Power * (L * T)^2
 
+| Fixed-Point(scenario) | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | Cell Count |
+|:-----:|:------:|:------:|:------:|:------:|:------:|
+| 8W4F(s1) | T=10ns<br>WNS=8.101ns<br>P=0.0329W<br>L=14 | log10(127)=2.104 | 526.593 (MHz)<br>= 5.26593*1e8 (Hz) | 6.4484*1e-16 | 422 |
+| 8W4F(s2) | T=10ns<br>WNS=8.755ns<br>P=0.0461W<br>L=14 | log10(127)=2.104 | 803.212 (MHz)<br>= 8.03212*1e8 (Hz) | 9.0356*1e-16 | 422 |
+
+| Floating-Point(scenario) | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | Cell Count |
+|:-----:|:------:|:------:|:------:|:------:|:------:|
+| 8W4E3F(s1) | T=10ns<br>WNS=6.428ns<br>P=0.0648W<br>L=19 | log10(122880)=5.089 | 279.955 (MHz)<br>= 2.79955*1e8 (Hz) | 23.3928*1e-16 | 1031 |
+| 8W4E3F(s2) | T=10ns<br>WNS=7.783ns<br>P=0.0873W<br>L=19 | log10(122880)=5.089 | 451.060 (MHz)<br>= 4.51060*1e8 (Hz) | 31.5153*1e-16 | 1031 |
+
+| Posit(scenario) | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | Cell Count |
+|:-----:|:------:|:------:|:------:|:------:|:------:|
+| 8W2E(s1) | T=10ns<br>WNS=2.613ns<br>P=0.13894W<br>L=24 | log10(16^12)=14.449 | 135.373 (MHz)<br>= 1.35373*1e8 (Hz) | 80.02944*1e-16 | 2641 |
+| 8W2E(s2) | T=10ns<br>WNS=5.551ns<br>P=0.1924W<br>L=24 | log10(16^12)=14.449 | 224.770 (MHz)<br>= 2.24770*1e8 (Hz) | 110.8224*1e-16 | 2641 |
+
+## 3. Experimental Results (Basys-3 FPGA) (# of multiplication = 1)
+
 | Fixed-Point | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
-| 8W4F | T=10ns<br>WNS=0.410ns<br>P=0.084W<br>L=6 | log10(127)=2.104 | 104.275 (MHz)<br>= 1.04275*1e8 (Hz) | 3.024*1e-16 | 19 |
+| 8W4F | T=10ns<br>WNS=0.410ns<br>P=0.084W<br>L=5 | log10(127)=2.104 | 104.275 (MHz)<br>= 1.04275*1e8 (Hz) | 2.1*1e-16 | 19 |
 
 | Floating-Point | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
