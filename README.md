@@ -54,7 +54,12 @@ Undergraduate-Thesis/
 | 8W2E(s1) | T=10ns<br>WNS=2.613ns<br>P=0.13894W<br>L=24 | log10(16^12)=14.449 | 135.373 (MHz)<br>= 1.35373*1e8 (Hz) | 80.02944*1e-16 | 2641 |
 | 8W2E(s2) | T=10ns<br>WNS=5.551ns<br>P=0.1924W<br>L=24 | log10(16^12)=14.449 | 224.770 (MHz)<br>= 2.24770*1e8 (Hz) | 110.8224*1e-16 | 2641 |
 
-## 3. Experimental Results (Basys-3 FPGA) (# of multiplication = 1)
+## 3. Schematic
+1. Posit Decoder (8W2E)
+<img width="2306" height="1022" alt="image" src="https://github.com/user-attachments/assets/c709456f-76cb-455d-8e8d-e3ba2a09b705" />
+
+
+## 4. Experimental Results (Basys-3 FPGA) (# of multiplication = 1)
 
 | Fixed-Point | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
