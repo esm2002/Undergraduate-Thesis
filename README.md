@@ -48,6 +48,8 @@ Undergraduate-Thesis/
 |:-----:|:------:|:------:|:------:|:------:|:------:|
 | 8W4E3F(s1) | T=10ns<br>WNS=6.428ns<br>P=0.0648W<br>L=19 | log10(122880)=5.089 | 279.955 (MHz)<br>= 2.79955*1e8 (Hz) | 23.3928*1e-16 | 1031 |
 | 8W4E3F(s2) | T=10ns<br>WNS=7.783ns<br>P=0.0873W<br>L=19 | log10(122880)=5.089 | 451.060 (MHz)<br>= 4.51060*1e8 (Hz) | 31.5153*1e-16 | 1031 |
+| 8W3E4F(s1) | T=10ns<br>WNS=7.679ns<br>P=0.0469W<br>L=19 | log10(992)=0.954 | 430.848 (MHz)<br>= 4.30848*1e8 (Hz) | 16.9309*1e-16 | 747 |
+| 8W3E4F(s2) | T=10ns<br>WNS=8.518ns<br>P=0.0683W<br>L=19 | log10(992)=0.954 | 674.763 (MHz)<br>= 6.74763*1e8 (Hz) | 24.6563*1e-16 | 747 |
 
 | Posit(scenario) | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | Cell Count |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
