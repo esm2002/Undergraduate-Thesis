@@ -44,14 +44,14 @@ Undergraduate-Thesis/
 | 8W4F(s1) | T=10ns<br>WNS=8.101ns<br>P=0.0329W<br>L=14 | log10(127)=2.104 | 526.593 (MHz)<br>= 5.26593*1e8 (Hz) | 6.4484*1e-16 | 380.6 (um^2) |
 | 8W4F(s2) | T=10ns<br>WNS=8.755ns<br>P=0.0461W<br>L=14 | log10(127)=2.104 | 803.212 (MHz)<br>= 8.03212*1e8 (Hz) | 9.0356*1e-16 | 380.6 (um^2) |
 
-| Floating-Point(scenario) | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | Cell Count |
+| Floating-Point(scenario) | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | Cell Area |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
 | 8W4E3F(s1) | T=10ns<br>WNS=6.428ns<br>P=0.0648W<br>L=19 | log10(122880)=5.089 | 279.955 (MHz)<br>= 2.79955*1e8 (Hz) | 23.3928*1e-16 | 994 (um^2) |
 | 8W4E3F(s2) | T=10ns<br>WNS=7.783ns<br>P=0.0873W<br>L=19 | log10(122880)=5.089 | 451.060 (MHz)<br>= 4.51060*1e8 (Hz) | 31.5153*1e-16 | 994 (um^2) |
-| 8W3E4F(s1) | T=10ns<br>WNS=7.679ns<br>P=0.0469W<br>L=19 | log10(992)=0.954 | 430.848 (MHz)<br>= 4.30848*1e8 (Hz) | 16.9309*1e-16 | 747 |
-| 8W3E4F(s2) | T=10ns<br>WNS=8.518ns<br>P=0.0683W<br>L=19 | log10(992)=0.954 | 674.763 (MHz)<br>= 6.74763*1e8 (Hz) | 24.6563*1e-16 | 747 |
+| 8W5E2F(s1) | T=10ns<br>WNS=4.679ns<br>P=0.0905W<br>L=19 | log10(3758096384)=9.574 | 187.934 (MHz)<br>= 1.87934*1e8 (Hz) | 32.6705*1e-16 | 1574.3 (um^2) |
+| 8W5E2F(s2) | T=10ns<br>WNS=6.769ns<br>P=0.122W<br>L=19 | log10(3758096384)=9.574 | 309.501 (MHz)<br>= 3.09501*1e8 (Hz) | 44.042*1e-16 | 1574.3 (um^2) |
 
-| Posit(scenario) | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | Cell Count |
+| Posit(scenario) | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | Cell Area |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
 | 8W2E(s1) | T=10ns<br>WNS=2.613ns<br>P=0.13894W<br>L=24 | log10(16^12)=14.449 | 135.373 (MHz)<br>= 1.35373*1e8 (Hz) | 80.02944*1e-16 | 2442.7 (um^2) |
 | 8W2E(s2) | T=10ns<br>WNS=5.551ns<br>P=0.1924W<br>L=24 | log10(16^12)=14.449 | 224.770 (MHz)<br>= 2.24770*1e8 (Hz) | 110.8224*1e-16 | 2442.7 (um^2) |
