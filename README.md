@@ -39,24 +39,24 @@ Undergraduate-Thesis/
 * Max. Operating Freq. (MHz): max(1000/(T - WNS))
 * Energy-Delay-Product (J*s): Power * (L * T)^2
 
-| Fixed-Point(scenario) | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | Cell Area |
-|:-----:|:------:|:------:|:------:|:------:|:------:|
-| 8W4F(s1) | T=10ns<br>WNS=8.101ns<br>P=0.0329W<br>L=14 | log10(127)=2.104 | 526.593 (MHz)<br>= 5.26593*1e8 (Hz) | 6.4484*1e-16 | 380.6 (um^2) |
-| 8W4F(s2) | T=10ns<br>WNS=8.755ns<br>P=0.0461W<br>L=14 | log10(127)=2.104 | 803.212 (MHz)<br>= 8.03212*1e8 (Hz) | 9.0356*1e-16 | 380.6 (um^2) |
+| Fixed-Point(scenario) | Dynamic Range | Values | Max. Operating Freq.| Energy-Delay-Product | Cell Area | Values with Max. Clock Freq. |
+|:-----:|:------:|:------:|:------:|:------:|:------:|:------:|
+| 8W4F(s1) | log10(127)=2.104 | T=10ns<br>WNS=8.101ns<br>P=0.0329W<br>L=14 | 526.593 (MHz)<br>= 5.26593*1e8 (Hz) | 6.4484*1e-16 | 380.6 (um^2) | T=1.899ns<br>WNS=0.248ns<br>P=0.162W<br>L=14<br>EDP=1.1454*1e-16<br>cell_area=380.8(um^2) |
+| 8W4F(s2) | log10(127)=2.104 | T=10ns<br>WNS=8.755ns<br>P=0.0461W<br>L=14 | 803.212 (MHz)<br>= 8.03212*1e8 (Hz) | 9.0356*1e-16 | 380.6 (um^2) | T=1.245ns<br>WNS=0.267ns<br>P=0.370W<br>L=14<br>EDP=1.1241*1e-16<br>cell_area=380.8(um^2) |
 
-| Floating-Point(scenario) | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | Cell Area |
-|:-----:|:------:|:------:|:------:|:------:|:------:|
-| 8W4E3F(s1) | T=10ns<br>WNS=6.428ns<br>P=0.0648W<br>L=19 | log10(122880)=5.089 | 279.955 (MHz)<br>= 2.79955*1e8 (Hz) | 23.3928*1e-16 | 994 (um^2) |
-| 8W4E3F(s2) | T=10ns<br>WNS=7.783ns<br>P=0.0873W<br>L=19 | log10(122880)=5.089 | 451.060 (MHz)<br>= 4.51060*1e8 (Hz) | 31.5153*1e-16 | 994 (um^2) |
-| 8W5E2F(s1) | T=10ns<br>WNS=4.679ns<br>P=0.0905W<br>L=19 | log10(3758096384)=9.574 | 187.934 (MHz)<br>= 1.87934*1e8 (Hz) | 32.6705*1e-16 | 1574.3 (um^2) |
-| 8W5E2F(s2) | T=10ns<br>WNS=6.769ns<br>P=0.122W<br>L=19 | log10(3758096384)=9.574 | 309.501 (MHz)<br>= 3.09501*1e8 (Hz) | 44.042*1e-16 | 1574.3 (um^2) |
+| Floating-Point(scenario) | Dynamic Range | Values | Max. Operating Freq.| Energy-Delay-Product | Cell Area | Values with Max. Clock Freq. |
+|:-----:|:------:|:------:|:------:|:------:|:------:|:------:|
+| 8W4E3F(s1) | log10(122880)=5.089 | T=10ns<br>WNS=6.428ns<br>P=0.0648W<br>L=19 | 279.955 (MHz)<br>= 2.79955*1e8 (Hz) | 23.3928*1e-16 | 994 (um^2) | T=3.572ns<br>WNS=0.432ns<br>P=0.160W<br>L=19<br>EDP=7.369*1e-16 <br>cell_area=930.8(um^2) |
+| 8W4E3F(s2) | log10(122880)=5.089 | T=10ns<br>WNS=7.783ns<br>P=0.0873W<br>L=19 | 451.060 (MHz)<br>= 4.51060*1e8 (Hz) | 31.5153*1e-16 | 994 (um^2) | T=2.217ns<br>WNS=0.376ns<br>P=0.399W<br>L=19<br>EDP=7.079*1e-16<br>cell_area=930.8(um^2) |
+| 8W5E2F(s1) | log10(3758096384)=9.574 | T=10ns<br>WNS=4.679ns<br>P=0.0905W<br>L=19 | 187.934 (MHz)<br>= 1.87934*1e8 (Hz) | 32.6705*1e-16 | 1574.3 (um^2) | T=5.321ns<br>WNS=0.256ns<br>P=0.157W<br>L=19<br>EDP=16.0477*1e-16 <br>cell_area=1484.0(um^2) | 
+| 8W5E2F(s2) | log10(3758096384)=9.574 | T=10ns<br>WNS=6.769ns<br>P=0.122W<br>L=19 | 309.501 (MHz)<br>= 3.09501*1e8 (Hz) | 44.042*1e-16 | 1574.3 (um^2) | T=3.231ns<br>WNS=0.250ns<br>P=0.388W<br>L=19<br>EDP=14.622*1e-16<br>cell_area=1484.0(um^2) |
 
-| Posit(scenario) | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | Cell Area |
-|:-----:|:------:|:------:|:------:|:------:|:------:|
-| 8W2E(s1) | T=10ns<br>WNS=2.613ns<br>P=0.13894W<br>L=24 | log10(16^12)=14.449 | 135.373 (MHz)<br>= 1.35373*1e8 (Hz) | 80.02944*1e-16 | 2442.7 (um^2) |
-| 8W2E(s2) | T=10ns<br>WNS=5.551ns<br>P=0.1924W<br>L=24 | log10(16^12)=14.449 | 224.770 (MHz)<br>= 2.24770*1e8 (Hz) | 110.8224*1e-16 | 2442.7 (um^2) |
-| 8W1E(s1) | T=10ns<br>WNS=5.844ns<br>P=0.1098W<br>L=24 | log10(4^12)=7.224 | 240.615 (MHz)<br>= 2.40615*1e8 (Hz) | 63.2448*1e-16 | 1781.3 (um^2) |
-| 8W1E(s2) | T=10ns<br>WNS=7.444ns<br>P=0.1556W<br>L=24 | log10(4^12)=7.224 | 391.236 (MHz)<br>= 3.91236*1e8 (Hz) | 89.6256*1e-16 | 1781.3 (um^2) |
+| Posit(scenario) | Dynamic Range | Values | Max. Operating Freq.| Energy-Delay-Product | Cell Area | Values with Max. Clock Freq. |
+|:-----:|:------:|:------:|:------:|:------:|:------:|:------:|
+| 8W2E(s1) | log10(16^12)=14.449 | T=10ns<br>WNS=2.613ns<br>P=0.13894W<br>L=24 | 135.373 (MHz)<br>= 1.35373*1e8 (Hz) | 80.02944*1e-16 | 2442.7 (um^2) | T=7.387ns<br>WNS=0.396ns<br>P=0.1814W<br>L=24<br>EDP=57.018*1e-16<br>cell_area=2491.0 (um^2) |
+| 8W2E(s2) | log10(16^12)=14.449 | T=10ns<br>WNS=5.551ns<br>P=0.1924W<br>L=24 | 224.770 (MHz)<br>= 2.24770*1e8 (Hz) | 110.8224*1e-16 | 2442.7 (um^2) | T=4.449ns<br>WNS=0.284ns<br>P=0.4284W<br>L=24<br>EDP=48.846*1e-16<br>cell_area=2491.0 (um^2) |
+| 8W1E(s1) | log10(4^12)=7.224 | T=10ns<br>WNS=5.844ns<br>P=0.1098W<br>L=24 | 240.615 (MHz)<br>= 2.40615*1e8 (Hz) | 63.2448*1e-16 | 1781.3 (um^2) | T=4.156ns<br>WNS=0.168ns<br>P=0.245W<br>L=24<br>EDP=24.375*1e-16<br>cell_area=1780.7 (um^2) |
+| 8W1E(s2) | log10(4^12)=7.224 | T=10ns<br>WNS=7.444ns<br>P=0.1556W<br>L=24 | 391.236 (MHz)<br>= 3.91236*1e8 (Hz) | 89.6256*1e-16 | 1781.3 (um^2) | T=2.556ns<br>WNS=0.221ns<br>P=0.6032W<br>L=24<br>EDP=22.699*1e-16<br>cell_area=1780.7 (um^2) |
 
 ## 3. Schematic
 1. Posit Decoder (8W2E)
