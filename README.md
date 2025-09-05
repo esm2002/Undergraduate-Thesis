@@ -63,6 +63,7 @@ Undergraduate-Thesis/
 <img width="2306" height="1022" alt="image" src="https://github.com/user-attachments/assets/c709456f-76cb-455d-8e8d-e3ba2a09b705" />
 
 ## 4. New Posit MAC Idea
+<img width="1081" height="886" alt="image" src="https://github.com/user-attachments/assets/098f2c48-bbc2-4a6b-87f0-2c3002223cc5" />
 <img width="1150" height="1393" alt="image" src="https://github.com/user-attachments/assets/de315e7a-4075-4752-a46e-e10d0216f31a" />
 
 ## 5. Experimental Results (Basys-3 FPGA) (# of multiplication = 1)
