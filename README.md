@@ -62,8 +62,10 @@ Undergraduate-Thesis/
 1. Posit Decoder (8W2E)
 <img width="2306" height="1022" alt="image" src="https://github.com/user-attachments/assets/c709456f-76cb-455d-8e8d-e3ba2a09b705" />
 
+## 4. New Posit MAC Idea
+<img width="1150" height="1393" alt="image" src="https://github.com/user-attachments/assets/de315e7a-4075-4752-a46e-e10d0216f31a" />
 
-## 4. Experimental Results (Basys-3 FPGA) (# of multiplication = 1)
+## 5. Experimental Results (Basys-3 FPGA) (# of multiplication = 1)
 
 | Fixed-Point | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
