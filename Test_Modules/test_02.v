@@ -13,7 +13,8 @@ output [6:0] out_x
         shftd_x <= 0;
     end
     else begin
-        shftd_x <= in_x <<< shift_mag; 
+        if (in_x[6] ^ shift_mag[3]) shftd_x <= in_x >>> shift_mag; 
+        else shftd_x <= in_x <<< shift_mag; 
     end
  end
  
