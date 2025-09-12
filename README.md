@@ -16,7 +16,7 @@ Undergraduate-Thesis/
 ├── posit/                      
 │   ├── src/
 │   ├── reports_FPGA/
-│   └── reports/  
+│   └── reports/
 └── 8bit_FPGA_CONSTR.xdc/                      
 ```
 
@@ -65,7 +65,6 @@ Undergraduate-Thesis/
 
 ## 3. Conventional Posit MAC Report
 <img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/098f2c48-bbc2-4a6b-87f0-2c3002223cc5" />
-<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/de315e7a-4075-4752-a46e-e10d0216f31a" />
 
 ## 4. New Posit MAC Report
 <img width="1124" height="1352" alt="image" src="https://github.com/user-attachments/assets/18cfc62e-3570-498e-9c4a-1b8083883e3b" />
