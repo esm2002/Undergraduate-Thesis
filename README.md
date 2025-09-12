@@ -6,17 +6,14 @@
 Undergraduate-Thesis/
 ├── README.md                 
 ├── fixed_point/                    
-│   ├── src/                   
-│   ├── reports_FPGA/
-│   └── reports/           
+│   ├── src/               
+│   └── reports_FPGA/           
 ├── floating_point/                       
 │   ├── src/
-│   ├── reports_FPGA/
-│   └── reports/           
+│   └── reports_FPGA/        
 ├── posit/                      
 │   ├── src/
-│   ├── reports_FPGA/
-│   └── reports/
+│   └── reports_FPGA/
 ├── Test_Modules/  
 └── 8bit_FPGA_CONSTR.xdc/                      
 ```
@@ -77,6 +74,8 @@ test_02 Total Power: 1.73e-02(W), 2.67e-02(W)
 
 <img width="940" height="338" alt="image" src="https://github.com/user-attachments/assets/69e6c55d-5896-46c5-8f39-f554954a055d" />
 test_01 Total Power: 1.99e-02(W), 2.85e-02(W)
+* Writing the testbench and debugging detailed operations
+* Optimization to minimize hardware resource usage
 
 ## 6. Experimental Results (Basys-3 FPGA) (# of multiplication = 1)
 
