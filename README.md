@@ -71,9 +71,10 @@ Undergraduate-Thesis/
 <img width="1066" height="1160" alt="image" src="https://github.com/user-attachments/assets/dfb42bcb-6ebb-4a67-a8c0-672c23f238be" />
 
 ## 5. Problems to Solve
-* Decode & Multiplication stage of new posit mac has no advantage (test_01: original, test_02: new)
+* The Decode & Multiplication stage of the new posit MAC has no advantage (test_01: original, test_02: new)
 <img width="940" height="293" alt="image" src="https://github.com/user-attachments/assets/eeee2d94-4ec7-4762-bbc3-889c7d232231" />
 test_02 Total Power: 1.73e-02(W), 2.67e-02(W)
+
 <img width="940" height="338" alt="image" src="https://github.com/user-attachments/assets/69e6c55d-5896-46c5-8f39-f554954a055d" />
 test_01 Total Power: 1.99e-02(W), 2.85e-02(W)
 
