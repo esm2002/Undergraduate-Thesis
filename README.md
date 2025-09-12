@@ -58,13 +58,18 @@ Undergraduate-Thesis/
 | 8W1E(s1) | log10(4^12)=7.224 | T=10ns<br>WNS=5.844ns<br>P=0.1098W<br>L=24 | 240.615 (MHz)<br>= 2.40615*1e8 (Hz) | 63.2448*1e-16 | 1781.3 (um^2) | T=4.156ns<br>WNS=0.168ns<br>P=0.245W<br>L=24<br>EDP=24.375*1e-16<br>cell_area=1780.7 (um^2) |
 | 8W1E(s2) | log10(4^12)=7.224 | T=10ns<br>WNS=7.444ns<br>P=0.1556W<br>L=24 | 391.236 (MHz)<br>= 3.91236*1e8 (Hz) | 89.6256*1e-16 | 1781.3 (um^2) | T=2.556ns<br>WNS=0.221ns<br>P=0.6032W<br>L=24<br>EDP=22.699*1e-16<br>cell_area=1780.7 (um^2) |
 
-## 3. Schematic
-1. Posit Decoder (8W2E)
-<img width="2306" height="1022" alt="image" src="https://github.com/user-attachments/assets/c709456f-76cb-455d-8e8d-e3ba2a09b705" />
+| NewPosit(scenario) | Dynamic Range | Values | Max. Operating Freq.| Energy-Delay-Product | Cell Area | Values with Max. Clock Freq. |
+|:-----:|:------:|:------:|:------:|:------:|:------:|:------:|
+| 8W2E(s1) | log10(16^12)=14.449 | T=10ns<br>WNS=6.280ns<br>P=0.0787W<br>L=21 | 268.817 (MHz)<br>= 2.68817*1e8 (Hz) | 34.7067*1e-16 | 2097.3 (um^2) | T=ns<br>WNS=ns<br>P=W<br>L=21<br>EDP=*1e-16<br>cell_area= (um^2) |
+| 8W2E(s2) | log10(16^12)=14.449 | T=10ns<br>WNS=7.713ns<br>P=0.0987W<br>L=21 | 437.254 (MHz)<br>= 4.37254*1e8 (Hz) | 43.5267*1e-16 | 2097.3 (um^2) | T=ns<br>WNS=ns<br>P=W<br>L=21<br>EDP=*1e-16<br>cell_area= (um^2) |
 
-## 4. New Posit MAC Idea
-<img width="1081" height="886" alt="image" src="https://github.com/user-attachments/assets/098f2c48-bbc2-4a6b-87f0-2c3002223cc5" />
-<img width="1150" height="1393" alt="image" src="https://github.com/user-attachments/assets/de315e7a-4075-4752-a46e-e10d0216f31a" />
+## 3. Conventional Posit MAC Report
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/098f2c48-bbc2-4a6b-87f0-2c3002223cc5" />
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/de315e7a-4075-4752-a46e-e10d0216f31a" />
+
+## 4. New Posit MAC Report
+<img width="1124" height="1352" alt="image" src="https://github.com/user-attachments/assets/18cfc62e-3570-498e-9c4a-1b8083883e3b" />
+<img width="1066" height="1160" alt="image" src="https://github.com/user-attachments/assets/dfb42bcb-6ebb-4a67-a8c0-672c23f238be" />
 
 ## 5. Experimental Results (Basys-3 FPGA) (# of multiplication = 1)
 
