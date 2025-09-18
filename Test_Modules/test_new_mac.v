@@ -216,18 +216,18 @@ always @(*) begin
             in_lzd = win_ext[WIDTH-2] ? (~win_tmp) : win_tmp;
             in_short = din_tmp;
             sign_s_tmp = din[WIDTH-1];
-//            regi_tmp = 0;
-//            exp_tmp = 0;
-//            mts_tmp = 0;
+            regi_tmp = 0;
+            exp_tmp = 0;
+            mts_tmp = 0;
         end else begin
             in_long = din_tmp;  
             sign_l_tmp = din[WIDTH-1];
             in_lzd = din_ext[WIDTH-2] ? (~din_tmp) : din_tmp;
             in_short = win_tmp;
             sign_s_tmp = win[WIDTH-1];
-//            regi_tmp = 0;
-//            exp_tmp = 0;
-//            mts_tmp = 0;
+            regi_tmp = 0;
+            exp_tmp = 0;
+            mts_tmp = 0;
         end
     end else begin
         for (j = WIDTH-2; j >= 0; j = j - 1) begin
@@ -548,22 +548,11 @@ task carry_propagation (input [ACC_HEAD-1:0] acc_100,
         acc_010_tmp = $unsigned(acc_010);
         acc_011_tmp = $unsigned(acc_011);
 		for (k = 0; k < 4; k = k + 1) begin
-            if (acc_000_tmp[ACC-1]) begin
-                acc_100_tmp = acc_100_tmp + 1;
-                acc_000_tmp[ACC-1] = 1'b0;
-            end
-            if (acc_001_tmp[ACC-1]) begin
-                acc_000_tmp = acc_000_tmp + 1;
-                acc_001_tmp[ACC-1] = 1'b0;
-            end
-            if (acc_010_tmp[ACC-1]) begin
-                acc_001_tmp = acc_001_tmp + 1;
-                acc_010_tmp[ACC-1] = 1'b0;
-            end
-            if (acc_011_tmp[ACC-1]) begin
-                acc_010_tmp = acc_010_tmp + 1;
-                acc_011_tmp[ACC-1] = 1'b0;
-            end
+            acc_100_tmp = acc_100_tmp + {{(ACC-1){1'b0}}, acc_000_tmp[ACC-1]};
+            acc_000_tmp = {1'b0, acc_000_tmp[ACC-2:0]} + {{(ACC-1){1'b0}}, acc_001_tmp[ACC-1]};
+            acc_001_tmp = {1'b0, acc_001_tmp[ACC-2:0]} + {{(ACC-1){1'b0}}, acc_010_tmp[ACC-1]};
+            acc_010_tmp = {1'b0, acc_010_tmp[ACC-2:0]} + {{(ACC-1){1'b0}}, acc_011_tmp[ACC-1]};
+            acc_011_tmp[ACC-1] = 1'b0;
         end
         acc_100_c = acc_100_tmp;
         acc_000_c = acc_000_tmp;
