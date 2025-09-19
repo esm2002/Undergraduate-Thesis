@@ -54,9 +54,9 @@ Undergraduate-Thesis/
 | Posit(scenario) | Dynamic Range | Values | Max. Operating Freq.| Energy-Delay-Product | Cell Area | Values with Max. Clock Freq. |
 |:-----:|:------:|:------:|:------:|:------:|:------:|:------:|
 | 8W2E(s1) | log10(16^12)=14.449 | T=10ns<br>WNS=2.613ns<br>P=0.13894W<br>L=24 | 135.373 (MHz)<br>= 1.35373*1e8 (Hz) | 80.02944*1e-16 | 2442.7 (um^2) | T=7.387ns<br>WNS=0.396ns<br>P=0.1814W<br>L=24<br>EDP=57.018*1e-16<br>cell_area=2491.0 (um^2) |
-| **NEW** 8W2E(s1) | log10(16^12)=14.449 | T=10ns<br>WNS=6.280ns<br>P=0.0787W<br>L=21 | 268.817 (MHz)<br>= 2.68817*1e8 (Hz) | 34.7067*1e-16 | 2097.3 (um^2) | T=ns<br>WNS=ns<br>P=W<br>L=21<br>EDP=*1e-16<br>cell_area= (um^2) |
+| **NEW** 8W2E(s1) | log10(16^12)=14.449 | T=10ns<br>WNS=1.711ns<br>P=0.103W<br>L=21 | 120.641 (MHz)<br>= 1.20641*1e8 (Hz) | 45.423*1e-16 | 2156.1 (um^2) | T=ns<br>WNS=ns<br>P=W<br>L=21<br>EDP=*1e-16<br>cell_area= (um^2) |
 | 8W2E(s2) | log10(16^12)=14.449 | T=10ns<br>WNS=5.551ns<br>P=0.1924W<br>L=24 | 224.770 (MHz)<br>= 2.24770*1e8 (Hz) | 110.8224*1e-16 | 2442.7 (um^2) | T=4.449ns<br>WNS=0.284ns<br>P=0.4284W<br>L=24<br>EDP=48.846*1e-16<br>cell_area=2491.0 (um^2) |
-| **NEW** 8W2E(s2) | log10(16^12)=14.449 | T=10ns<br>WNS=7.713ns<br>P=0.0987W<br>L=21 | 437.254 (MHz)<br>= 4.37254*1e8 (Hz) | 43.5267*1e-16 | 2097.3 (um^2) | T=ns<br>WNS=ns<br>P=W<br>L=21<br>EDP=*1e-16<br>cell_area= (um^2) |
+| **NEW** 8W2E(s2) | log10(16^12)=14.449 | T=10ns<br>WNS=5.047ns<br>P=0.137W<br>L=21 | 201.897 (MHz)<br>= 2.01897*1e8 (Hz) | 60.417*1e-16 | 2156.1 (um^2) | T=ns<br>WNS=ns<br>P=W<br>L=21<br>EDP=*1e-16<br>cell_area= (um^2) |
 | 8W1E(s1) | log10(4^12)=7.224 | T=10ns<br>WNS=5.844ns<br>P=0.1098W<br>L=24 | 240.615 (MHz)<br>= 2.40615*1e8 (Hz) | 63.2448*1e-16 | 1781.3 (um^2) | T=4.156ns<br>WNS=0.168ns<br>P=0.245W<br>L=24<br>EDP=24.375*1e-16<br>cell_area=1780.7 (um^2) |
 | 8W1E(s2) | log10(4^12)=7.224 | T=10ns<br>WNS=7.444ns<br>P=0.1556W<br>L=24 | 391.236 (MHz)<br>= 3.91236*1e8 (Hz) | 89.6256*1e-16 | 1781.3 (um^2) | T=2.556ns<br>WNS=0.221ns<br>P=0.6032W<br>L=24<br>EDP=22.699*1e-16<br>cell_area=1780.7 (um^2) |
 
@@ -65,6 +65,9 @@ Undergraduate-Thesis/
 
 ## 4. New Posit MAC Report
 <img width="1124" height="1352" alt="image" src="https://github.com/user-attachments/assets/18cfc62e-3570-498e-9c4a-1b8083883e3b" /><img width="1066" height="1160" alt="image" src="https://github.com/user-attachments/assets/dfb42bcb-6ebb-4a67-a8c0-672c23f238be" />
+<img width="1117" height="1393" alt="image" src="https://github.com/user-attachments/assets/4d87ae65-d61a-462a-bb86-5ef229f98360" />
+
+
 * Bit-reversal & >> has no advantage (test_01: Bit-reversal & >>, test_02: original <<)
 <img width="940" height="216" alt="image" src="https://github.com/user-attachments/assets/50222c26-3933-4b8c-91c6-7023c9a09f1a" />
 test_01 Total Power: 3.12e-03(W), 4.40e-03(W)
@@ -73,9 +76,9 @@ test_01 Total Power: 3.12e-03(W), 4.40e-03(W)
 test_02 Total Power: 3.04e-03(W), 4.34e-03(W)
 
 ## 5. Problems to Solve
-* Writing the testbench and debugging detailed operations
 * Optimization to minimize hardware resource usage
-* The Decode & Multiplication stage of the new posit MAC has no advantage (test_01: original, test_02: new)
+* Reducing the delay and area of a combinational circuit through pipelining
+* Attempting a method that limits the regime length to a maximum of 4 bits
 <img width="940" height="338" alt="image" src="https://github.com/user-attachments/assets/69e6c55d-5896-46c5-8f39-f554954a055d" />
 test_01 Total Power: 1.99e-02(W), 2.85e-02(W)
 
