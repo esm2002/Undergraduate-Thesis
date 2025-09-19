@@ -32,8 +32,7 @@ wire [WIDTH-2:0] win_ext;
 wire [WIDTH-2:0] din_ext_tmp;
 wire [WIDTH-2:0] din_ext;
 
-wire [WIDTH-2:0] cmp_len;
-wire [WIDTH-2:0] one_hot;
+wire [WIDTH-2:0] nor_ext_tmp;
 
 reg signed [2*(WIDTH-2):0] regi_ext;
 reg [WIDTH-2:0] in_long;
@@ -189,72 +188,67 @@ endfunction
 assign win_tmp = win[WIDTH-1] ? ~win[WIDTH-2:0]+1 : win[WIDTH-2:0];
 assign din_tmp = din[WIDTH-1] ? ~din[WIDTH-2:0]+1 : din[WIDTH-2:0];
 
-assign win_ext_tmp[WIDTH-2] = 1'b1;  
-assign din_ext_tmp[WIDTH-2] = 1'b1; 
+assign win_ext_tmp[WIDTH-2] = 1'b0;  
+assign din_ext_tmp[WIDTH-2] = 1'b0;  
+
 genvar i;
 generate
-  for (i = 3; i <= WIDTH; i = i + 1) begin // from MSB to LSB
-    assign win_ext_tmp[WIDTH-i] = win_ext_tmp[WIDTH-i+1] & (win_tmp[WIDTH-2] == win_tmp[WIDTH-i]); 
-    assign din_ext_tmp[WIDTH-i] = din_ext_tmp[WIDTH-i+1] & (din_tmp[WIDTH-2] == din_tmp[WIDTH-i]); 
+  for (i = 3; i <= WIDTH; i = i + 1) begin : gen_inv
+    assign win_ext_tmp[WIDTH-i] =
+        win_ext_tmp[WIDTH-i+1] | (win_tmp[WIDTH-2] != win_tmp[WIDTH-i]);
+    assign din_ext_tmp[WIDTH-i] =
+        din_ext_tmp[WIDTH-i+1] | (din_tmp[WIDTH-2] != din_tmp[WIDTH-i]);
   end
 endgenerate
-assign win_ext = win_tmp[WIDTH-2] ? win_ext_tmp : ~win_ext_tmp;
-assign din_ext = din_tmp[WIDTH-2] ? din_ext_tmp : ~din_ext_tmp;
 
-assign cmp_len = win_ext ^ din_ext;
-assign one_hot = cmp_len[WIDTH-2] ? ~cmp_len : cmp_len;
+assign win_ext = win_tmp[WIDTH-2] ? ~win_ext_tmp : win_ext_tmp; // for regime shift
+assign din_ext = din_tmp[WIDTH-2] ? ~din_ext_tmp : din_ext_tmp; // for regime shift
+
+assign nor_ext_tmp = ~(win_ext_tmp | din_ext_tmp);
 
 integer j;
 reg found_one;
 
 always @(*) begin
     found_one = 0;
-    if (one_hot == 0) begin
-        if (win_ext[WIDTH-2] == 0) begin
-            in_long = win_tmp;
-            sign_l_tmp = win[WIDTH-1];
-            in_lzd = win_ext[WIDTH-2] ? (~win_tmp) : win_tmp;
-            in_short = din_tmp;
-            sign_s_tmp = din[WIDTH-1];
-            regi_tmp = 0;
-            exp_tmp = 0;
-            mts_tmp = 0;
-        end else begin
-            in_long = din_tmp;  
-            sign_l_tmp = din[WIDTH-1];
-            in_lzd = din_ext[WIDTH-2] ? (~din_tmp) : din_tmp;
-            in_short = win_tmp;
-            sign_s_tmp = win[WIDTH-1];
-            regi_tmp = 0;
-            exp_tmp = 0;
-            mts_tmp = 0;
-        end
-    end else begin
         for (j = WIDTH-2; j >= 0; j = j - 1) begin
-            if (!found_one && one_hot[j]) begin
+            if (!(found_one || nor_ext_tmp[j])) begin
                 if (win_ext[WIDTH-2] == win_ext[j]) begin
-                    in_long = win_tmp;
-                    sign_l_tmp = win[WIDTH-1];
-                    in_lzd = win_ext[WIDTH-2] ? (~win_tmp) : win_tmp;
+                    in_long  = win_tmp;
                     in_short = din_tmp;
+                    sign_l_tmp = win[WIDTH-1];
                     sign_s_tmp = din[WIDTH-1];
-                    regi_tmp = din_tmp[WIDTH-2] ? (WIDTH-3-j) : -(WIDTH-2-j);
-                    exp_tmp = get_exp(din_tmp, $unsigned(WIDTH)-2-$unsigned(j));
-                    mts_tmp = get_mts(din_tmp, $unsigned(WIDTH)-2-$unsigned(j));
-                end else begin 
-                    in_long = din_tmp;
-                    sign_l_tmp = din[WIDTH-1];
-                    in_lzd = din_ext[WIDTH-2] ? (~din_tmp) : din_tmp;
-                    in_short = win_tmp;
-                    sign_s_tmp = win[WIDTH-1];
-                    regi_tmp = win_tmp[WIDTH-2] ? (WIDTH-3-j) : -(WIDTH-2-j);
-                    exp_tmp = get_exp(win_tmp, $unsigned(WIDTH)-2-$unsigned(j));
-                    mts_tmp = get_mts(win_tmp, $unsigned(WIDTH)-2-$unsigned(j));
+                    in_lzd = win_ext_tmp;
                 end
-                found_one = 1'b1;
+                else if (din_ext[WIDTH-2] == din_ext[j]) begin
+                    in_long  = din_tmp;
+                    in_short = win_tmp;
+                    sign_l_tmp = din[WIDTH-1];
+                    sign_s_tmp = win[WIDTH-1];
+                    in_lzd = din_ext_tmp;
+                end
+                else if (win_ext[WIDTH-2] == 0) begin
+                    in_long  = win_tmp;
+                    in_short = din_tmp;
+                    sign_l_tmp = win[WIDTH-1];
+                    sign_s_tmp = din[WIDTH-1];
+                    in_lzd = win_ext_tmp;
+                end
+                else begin
+                    in_long  = din_tmp;
+                    in_short = win_tmp;
+                    sign_l_tmp = din[WIDTH-1];
+                    sign_s_tmp = win[WIDTH-1];
+                    in_lzd = din_ext_tmp;
+                end
+    
+                regi_tmp   = in_short[WIDTH-2] ? (WIDTH-3-j) : -(WIDTH-2-j);
+                exp_tmp    = get_exp(in_short, $unsigned(WIDTH)-2-$unsigned(j));
+                mts_tmp    = get_mts(in_short, $unsigned(WIDTH)-2-$unsigned(j));
+    
+                found_one  = 1'b1;
             end
         end
-    end
 end
 
 LZD #(.in_s(WIDTH-1)) u_lzd(.in(in_lzd), .out(in_zc)); //, .out_s(WZC+1)
@@ -277,19 +271,11 @@ always @(posedge clk_i or negedge rstn) begin
         decode <= 0; 
    end
    else begin
-       if (one_hot == 0) begin
-            regi_ext <= (win_ext[WIDTH-2]) ? $signed({din_ext, {(WIDTH-2){~din_ext[WIDTH-2]}}}) : $signed({win_ext, {(WIDTH-2){~win_ext[WIDTH-2]}}});
-            sign_s <= sign_s_tmp;
-            regi_s <= in_short[WIDTH-2] ? $signed(in_zc-1) : $signed(~in_zc+1);
-            exp_s <= get_exp(in_short, $unsigned(in_zc));
-            mts_s <= get_mts(in_short, $unsigned(in_zc));
-       end else begin
-            regi_ext <= (in_long == din_tmp) ? $signed({din_ext, {(WIDTH-2){~din_ext[WIDTH-2]}}}) : $signed({win_ext, {(WIDTH-2){~win_ext[WIDTH-2]}}});
-            sign_s <= sign_s_tmp;
-            regi_s <= regi_tmp;
-            exp_s <= exp_tmp;
-            mts_s <= mts_tmp;
-       end
+       regi_ext <= (in_long == din_tmp) ? $signed({din_ext, {(WIDTH-2){~din_ext[WIDTH-2]}}}) : $signed({win_ext, {(WIDTH-2){~win_ext[WIDTH-2]}}});
+       sign_s <= sign_s_tmp;
+       regi_s <= regi_tmp;
+       exp_s <= exp_tmp;
+       mts_s <= mts_tmp;
        vld_o_w <= get_vld(win);
        sign_l <= sign_l_tmp;
        regi_l <= in_long[WIDTH-2] ? $signed(in_zc-1) : $signed(~in_zc+1);
@@ -310,10 +296,7 @@ wire [MTS:0] mts_l_iso;
 assign mts_s_iso = (vld_o_w[0] && vld_o_d[0]) ? {1'b1, mts_s} : 0;
 assign mts_l_iso = (vld_o_w[0] && vld_o_d[0]) ? {1'b1, mts_l} : 0;
 
-wire vld0clk;
-assign vld0clk = vld_d[0] && clk_i;
-
-always @(posedge vld0clk or negedge rstn) begin
+always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         regi_acc <= 0;
         sign_m <= 0;
@@ -321,7 +304,7 @@ always @(posedge vld0clk or negedge rstn) begin
         mts_m <= 0;
     end
     else begin
-        if (vld_o_w[0] && vld_o_d[0]) begin // both valid
+        if (vld_d[0] && vld_o_w[0] && vld_o_d[0]) begin // both valid
             if (regi_l[REGI-1] ^ regi_s[REGI-1]) regi_acc <= lshift_lsb_ext($unsigned(regi_ext), shift_mag);
             else regi_acc <= $unsigned(regi_ext >>> shift_mag); 
             sign_m <= sign_s ^ sign_l;
@@ -387,16 +370,13 @@ always @(*) begin
     shift_o_right = mts_ms >>> shift_amt_r;
 end
 
-wire vld1clk;
-assign vld1clk = vld_d[1] && clk_i;
-
-always @(posedge vld1clk or negedge rstn) begin
+always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         acc_num <= 0;
         acc_lzd <= 0;
         mts_ms <= 0;
         bias_exp <= 0;
-    end else begin
+    end else if (vld_d[1]) begin
             if (regi_acc == {(2*WIDTH-3){1'b1}}) begin
                 acc_num <= 3'b100;
             end else if (regi_acc[(WIDTH-2)+:(WIDTH-1)] == {(WIDTH-1){1'b1}}) begin
@@ -606,10 +586,7 @@ assign mag_001_wo_c = mag_001_c[ACC-2:0];
 assign mag_010_wo_c = mag_010_c[ACC-2:0];
 assign mag_011_wo_c = mag_011_c[ACC-2:0];
 
-wire gclk;
-assign gclk = acc_rdy && clk_i;
-
-always @(posedge gclk or negedge rstn) begin
+always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         sign_q <= 0;
         acc_regi <= 0;
@@ -624,7 +601,7 @@ always @(posedge gclk or negedge rstn) begin
         udf <= 0;
         nzero <= 1'b1;
     end
-    else begin // vld_d[4]
+    else if (acc_rdy) begin // vld_d[4]
         sign_q <= acc_100_c[ACC_HEAD-1];
         if ((mag_100_c != 0) || (mag_000_wo_c != 0)) begin
             acc_regi <= 0; // max or overflow
@@ -648,7 +625,7 @@ wire [ACC-2:0] mts_src2;
 assign mts_src1 = (mag_001_wo_c != 0) ? mag_001_wo_c : mag_010_wo_c;
 assign mts_src2 = (mag_001_wo_c != 0) ? mag_010_wo_c : mag_011_wo_c;
  
-always @(posedge gclk or negedge rstn) begin
+always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         sf_q <= 0;
         mts_q_tmp1 <= 0;
@@ -663,7 +640,7 @@ always @(posedge gclk or negedge rstn) begin
         
         mts_q <= 0;
     end 
-    else begin // vld_d[5], vld_d[6]
+    else if (acc_rdy) begin // vld_d[5], vld_d[6]
         if (mag_001_wo_c != 0) sf_q <= $signed($unsigned(ACC)-1-$unsigned(acc_zc)-1); // positive scale factor  
         else sf_q <= $signed(~($unsigned(acc_zc)+1)+1); // negative scale factor 
         
@@ -683,7 +660,7 @@ end
 wire [REGI+EXP:0] sf_q_us;
 assign sf_q_us = $unsigned(sf_q);
 
-always @(posedge gclk or negedge rstn) begin
+always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         sign_sf <= 0;
         regi_q <= 0;
@@ -694,7 +671,7 @@ always @(posedge gclk or negedge rstn) begin
         regi_q <= 0;
         exp_q <= 0;    
     end
-    else begin // vld_d[7]
+    else if (acc_rdy) begin // vld_d[7]
         sign_sf <= sf_q_us[REGI+EXP];
         if (sf_q_us[REGI+EXP]) regi_q <= ~(sf_q_us[REGI+EXP:EXP]) + 1;
         else regi_q <= sf_q_us[REGI+EXP:EXP];
@@ -707,7 +684,7 @@ end
 // Convertion to Posit: Encode & Round
 //-------------------------------------------------
 
-always @(posedge gclk or negedge rstn) begin
+always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         tmp_pos <= 0;
         tmp_neg <= 0;
@@ -724,7 +701,7 @@ always @(posedge gclk or negedge rstn) begin
         
         tmp <= 0;
     end
-    else begin
+    else if (acc_rdy) begin
         if (vld_d[8]) begin    
             tmp_pos <= $signed({nzero, 1'b0, exp_q, mts_q[2*MTS:0], {(WIDTH-1){1'b0}}});
             tmp_neg <= $signed({1'b0, nzero, exp_q, mts_q[2*MTS:0], {(WIDTH-1){1'b0}}});
@@ -744,7 +721,7 @@ assign sticky_bit = |tmp[WTMP-1-(WIDTH):0];
 assign round_val = (ovf || udf) ? 1'b0 : (guard_bit & (lsb_bit | sticky_bit));
 assign tmp_for_round = tmp[WTMP-1:WTMP-1-(WIDTH-2)];
 
-always @(posedge gclk or negedge rstn) begin
+always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         acc_o_tmp <= 0;
         
@@ -757,7 +734,7 @@ always @(posedge gclk or negedge rstn) begin
         vld_o_tmp <= 0;
         acc_o_fin <= 0;
     end
-    else begin
+    else if (acc_rdy) begin
         acc_o_tmp <= tmp_for_round + round_val;
         
         if (vld_d[11] && (~|vld_d[10:0])) begin
