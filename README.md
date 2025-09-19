@@ -64,26 +64,13 @@ Undergraduate-Thesis/
 <img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/098f2c48-bbc2-4a6b-87f0-2c3002223cc5" />
 
 ## 4. New Posit MAC Report
-<img width="1124" height="1352" alt="image" src="https://github.com/user-attachments/assets/18cfc62e-3570-498e-9c4a-1b8083883e3b" /><img width="1066" height="1160" alt="image" src="https://github.com/user-attachments/assets/dfb42bcb-6ebb-4a67-a8c0-672c23f238be" />
 <img width="1117" height="1393" alt="image" src="https://github.com/user-attachments/assets/4d87ae65-d61a-462a-bb86-5ef229f98360" />
-
-
-* Bit-reversal & >> has no advantage (test_01: Bit-reversal & >>, test_02: original <<)
-<img width="940" height="216" alt="image" src="https://github.com/user-attachments/assets/50222c26-3933-4b8c-91c6-7023c9a09f1a" />
-test_01 Total Power: 3.12e-03(W), 4.40e-03(W)
-
-<img width="940" height="172" alt="image" src="https://github.com/user-attachments/assets/2169263d-b376-41ef-a3fd-49fab876c4ac" />
-test_02 Total Power: 3.04e-03(W), 4.34e-03(W)
+<img width="940" height="890" alt="image" src="https://github.com/user-attachments/assets/0ef4d097-3697-4173-b2a9-71d5921418d7" />
 
 ## 5. Problems to Solve
 * Optimization to minimize hardware resource usage
 * Reducing the delay and area of a combinational circuit through pipelining
 * Attempting a method that limits the regime length to a maximum of 4 bits
-<img width="940" height="338" alt="image" src="https://github.com/user-attachments/assets/69e6c55d-5896-46c5-8f39-f554954a055d" />
-test_01 Total Power: 1.99e-02(W), 2.85e-02(W)
-
-<img width="940" height="293" alt="image" src="https://github.com/user-attachments/assets/eeee2d94-4ec7-4762-bbc3-889c7d232231" />
-test_02 Total Power: 1.73e-02(W), 2.67e-02(W)
 
 ## 6. Experimental Results (Basys-3 FPGA) (# of multiplication = 1)
 
