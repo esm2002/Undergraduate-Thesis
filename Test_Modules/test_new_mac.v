@@ -67,17 +67,17 @@ reg [ACC+ACC_HEAD-1:0] acc_011_c;
 reg [WK:0] counter;
 reg acc_rdy;
 
-wire [ACC_HEAD-1:0] mag_100;
-wire [ACC+ACC_HEAD-1:0] mag_000;
-wire [ACC+ACC_HEAD-1:0] mag_001;
-wire [ACC+ACC_HEAD-1:0] mag_010;
-wire [ACC+ACC_HEAD-1:0] mag_011;
+//wire [ACC_HEAD-1:0] mag_100;
+//wire [ACC+ACC_HEAD-1:0] mag_000;
+//wire [ACC+ACC_HEAD-1:0] mag_001;
+//wire [ACC+ACC_HEAD-1:0] mag_010;
+//wire [ACC+ACC_HEAD-1:0] mag_011;
 
-reg [ACC_HEAD-1:0] mag_100_c;
-reg [ACC+ACC_HEAD-1:0] mag_000_c;
-reg [ACC+ACC_HEAD-1:0] mag_001_c;
-reg [ACC+ACC_HEAD-1:0] mag_010_c;
-reg [ACC+ACC_HEAD-1:0] mag_011_c;
+wire [ACC_HEAD-1:0] mag_100_c;
+//reg [ACC+ACC_HEAD-1:0] mag_000_c;
+//reg [ACC+ACC_HEAD-1:0] mag_001_c;
+//reg [ACC+ACC_HEAD-1:0] mag_010_c;
+//reg [ACC+ACC_HEAD-1:0] mag_011_c;
 
 wire [ACC-1:0] mag_000_wo_c;
 wire [ACC-1:0] mag_001_wo_c;
@@ -118,7 +118,7 @@ reg [WIDTH-2:0] acc_o_tmp;
 reg [WIDTH-1:0] acc_o_fin;
 
 reg vld_o_tmp;
-reg [11:0] vld_d;
+reg [15:0] vld_d;
 
 //-------------------------------------------------
 // Functions
@@ -371,51 +371,49 @@ end
 // Accumulation (carry)
 //-------------------------------------------------
 
-integer k;
-
-task carry_propagation (input [ACC_HEAD-1:0] acc_100, 
-                        input [ACC+ACC_HEAD-1:0] acc_000, acc_001, acc_010, acc_011, 
-                        output [ACC_HEAD-1:0] acc_100_c, 
-                        output [ACC+ACC_HEAD-1:0] acc_000_c, acc_001_c, acc_010_c, acc_011_c);
-	reg [ACC_HEAD-1:0] acc_100_tmp;
-	reg [ACC+ACC_HEAD-1:0] acc_000_tmp;
-	reg [ACC+ACC_HEAD-1:0] acc_001_tmp;
-	reg [ACC+ACC_HEAD-1:0] acc_010_tmp;
-	reg [ACC+ACC_HEAD-1:0] acc_011_tmp;
-	begin
-	    acc_100_tmp = $unsigned(acc_100);
-        acc_000_tmp = $unsigned(acc_000);
-        acc_001_tmp = $unsigned(acc_001);
-        acc_010_tmp = $unsigned(acc_010);
-        acc_011_tmp = $unsigned(acc_011);
+//task carry_propagation (input [ACC_HEAD-1:0] acc_100, 
+//                        input [ACC+ACC_HEAD-1:0] acc_000, acc_001, acc_010, acc_011, 
+//                        output [ACC_HEAD-1:0] acc_100_c, 
+//                        output [ACC+ACC_HEAD-1:0] acc_000_c, acc_001_c, acc_010_c, acc_011_c);
+//	reg [ACC_HEAD-1:0] acc_100_tmp;
+//	reg [ACC+ACC_HEAD-1:0] acc_000_tmp;
+//	reg [ACC+ACC_HEAD-1:0] acc_001_tmp;
+//	reg [ACC+ACC_HEAD-1:0] acc_010_tmp;
+//	reg [ACC+ACC_HEAD-1:0] acc_011_tmp;
+//	begin
+//	    acc_100_tmp = $unsigned(acc_100);
+//        acc_000_tmp = $unsigned(acc_000);
+//        acc_001_tmp = $unsigned(acc_001);
+//        acc_010_tmp = $unsigned(acc_010);
+//        acc_011_tmp = $unsigned(acc_011);
 		
-		acc_010_tmp = acc_010_tmp + {{(ACC){1'b0}}, acc_011_tmp[ACC+ACC_HEAD-1-:ACC_HEAD]};
-		acc_001_tmp = acc_001_tmp + {{(ACC){1'b0}}, acc_010_tmp[ACC+ACC_HEAD-1-:ACC_HEAD]};
-		acc_000_tmp = acc_000_tmp + {{(ACC){1'b0}}, acc_001_tmp[ACC+ACC_HEAD-1-:ACC_HEAD]};
-		acc_100_tmp = acc_100_tmp + {{(ACC){1'b0}}, acc_000_tmp[ACC+ACC_HEAD-1-:ACC_HEAD]};
-        acc_011_tmp[ACC+ACC_HEAD-1-:ACC_HEAD] = {(ACC_HEAD){1'b0}};
-        acc_010_tmp[ACC+ACC_HEAD-1-:ACC_HEAD] = {(ACC_HEAD){1'b0}};
-        acc_001_tmp[ACC+ACC_HEAD-1-:ACC_HEAD] = {(ACC_HEAD){1'b0}};
-        acc_000_tmp[ACC+ACC_HEAD-1-:ACC_HEAD] = {(ACC_HEAD){1'b0}};
+//		acc_010_tmp = acc_010_tmp + {{(ACC){1'b0}}, acc_011_tmp[ACC+ACC_HEAD-1-:ACC_HEAD]};
+//		acc_001_tmp = acc_001_tmp + {{(ACC){1'b0}}, acc_010_tmp[ACC+ACC_HEAD-1-:ACC_HEAD]};
+//		acc_000_tmp = acc_000_tmp + {{(ACC){1'b0}}, acc_001_tmp[ACC+ACC_HEAD-1-:ACC_HEAD]};
+//		acc_100_tmp = acc_100_tmp + {{(ACC){1'b0}}, acc_000_tmp[ACC+ACC_HEAD-1-:ACC_HEAD]};
+//        acc_011_tmp[ACC+ACC_HEAD-1-:ACC_HEAD] = {(ACC_HEAD){1'b0}};
+//        acc_010_tmp[ACC+ACC_HEAD-1-:ACC_HEAD] = {(ACC_HEAD){1'b0}};
+//        acc_001_tmp[ACC+ACC_HEAD-1-:ACC_HEAD] = {(ACC_HEAD){1'b0}};
+//        acc_000_tmp[ACC+ACC_HEAD-1-:ACC_HEAD] = {(ACC_HEAD){1'b0}};
         
-        acc_100_c = acc_100_tmp;
-        acc_000_c = acc_000_tmp;
-        acc_001_c = acc_001_tmp;
-        acc_010_c = acc_010_tmp;
-        acc_011_c = acc_011_tmp;
-	end
-endtask
+//        acc_100_c = acc_100_tmp;
+//        acc_000_c = acc_000_tmp;
+//        acc_001_c = acc_001_tmp;
+//        acc_010_c = acc_010_tmp;
+//        acc_011_c = acc_011_tmp;
+//	end
+//endtask
 
-always @(*) begin
-    if (vld_d == 0 || counter == K) begin
-        carry_propagation (acc_100, acc_000, acc_001, acc_010, acc_011, 
-                           acc_100_c, acc_000_c, acc_001_c, acc_010_c, acc_011_c);
-    end
-    if (acc_rdy) begin
-        carry_propagation (mag_100, mag_000, mag_001, mag_010, mag_011, 
-                           mag_100_c, mag_000_c, mag_001_c, mag_010_c, mag_011_c);
-    end
-end
+//always @(*) begin
+//    if (vld_d == 0 || counter == K) begin
+//        carry_propagation (acc_100, acc_000, acc_001, acc_010, acc_011, 
+//                           acc_100_c, acc_000_c, acc_001_c, acc_010_c, acc_011_c);
+//    end
+//    if (acc_rdy) begin
+//        carry_propagation (mag_100, mag_000, mag_001, mag_010, mag_011, 
+//                           mag_100_c, mag_000_c, mag_001_c, mag_010_c, mag_011_c);
+//    end
+//end
 
 always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
@@ -430,25 +428,53 @@ always @(posedge clk_i or negedge rstn) begin
         counter <= counter + 1;
         acc_rdy <= 0;
     end
-    else if (counter == K) acc_rdy <= 1;
+    else if (vld_d[7] & ~|vld_d[6:0]) begin
+        acc_rdy <= 1;
+    end
     else ;
+end
+
+always @(posedge clk_i or negedge rstn) begin
+    if (~rstn) begin
+        acc_011_c <= 0;
+        acc_010_c <= 0;
+        acc_001_c <= 0;
+        acc_000_c <= 0;
+        acc_100_c <= 0;
+    end
+    else if (vld_d[4]) begin
+        acc_011_c <= {{(ACC_HEAD){1'b0}}, acc_011[ACC-1:0]};
+        acc_010_c <= acc_010 + {{(ACC){1'b0}}, acc_011[ACC+ACC_HEAD-1-:ACC_HEAD]};
+    end
+    else if (vld_d[5]) begin
+        acc_010_c <= {{(ACC_HEAD){1'b0}}, acc_010_c[ACC-1:0]};
+        acc_001_c <= acc_001 + {{(ACC){1'b0}}, acc_010_c[ACC+ACC_HEAD-1-:ACC_HEAD]};
+    end
+    else if (vld_d[6]) begin
+        acc_001_c <= {{(ACC_HEAD){1'b0}}, acc_001_c[ACC-1:0]};
+        acc_000_c <= acc_000 + {{(ACC){1'b0}}, acc_001_c[ACC+ACC_HEAD-1-:ACC_HEAD]};
+    end
+    else if (vld_d[7]) begin
+        acc_000_c <= {{(ACC_HEAD){1'b0}}, acc_000_c[ACC-1:0]};
+        acc_100_c <= acc_100 + acc_000_c[ACC+ACC_HEAD-1-:ACC_HEAD];
+    end
 end
 
 //-------------------------------------------------
 // Convertion to Posit: Fraction & SF Extraction
 //-------------------------------------------------
 
-// if it is negative, mag_xxx is 1 less than real mag
-assign mag_011 = acc_100_c[ACC_HEAD-1] ? {{(ACC_HEAD){1'b0}}, ~acc_011_c[ACC-1:0]}+1 : acc_011_c;
-assign mag_010 = acc_100_c[ACC_HEAD-1] ? {{(ACC_HEAD){1'b0}}, ~acc_010_c[ACC-1:0]} : acc_010_c;
-assign mag_001 = acc_100_c[ACC_HEAD-1] ? {{(ACC_HEAD){1'b0}}, ~acc_001_c[ACC-1:0]} : acc_001_c;
-assign mag_000 = acc_100_c[ACC_HEAD-1] ? {{(ACC_HEAD){1'b0}}, ~acc_000_c[ACC-1:0]} : acc_000_c;
-assign mag_100 = acc_100_c[ACC_HEAD-1] ? ~acc_100_c : acc_100_c;
+wire [ACC_HEAD+4*ACC-1:0] mag_acc;
 
-assign mag_000_wo_c = mag_000_c[ACC-1:0];
-assign mag_001_wo_c = mag_001_c[ACC-1:0];
-assign mag_010_wo_c = mag_010_c[ACC-1:0];
-assign mag_011_wo_c = mag_011_c[ACC-1:0];
+assign mag_acc = acc_100_c[ACC_HEAD-1] 
+                ? ~{acc_100_c, acc_000_c[ACC-1:0], acc_001_c[ACC-1:0], acc_010_c[ACC-1:0], acc_011_c[ACC-1:0]}+1 
+                : {acc_100_c, acc_000_c[ACC-1:0], acc_001_c[ACC-1:0], acc_010_c[ACC-1:0], acc_011_c[ACC-1:0]};
+
+assign mag_011_wo_c = mag_acc[(ACC-1)-:ACC];
+assign mag_010_wo_c = mag_acc[(2*ACC-1)-:ACC];
+assign mag_001_wo_c = mag_acc[(3*ACC-1)-:ACC];
+assign mag_000_wo_c = mag_acc[(4*ACC-1)-:ACC];
+assign mag_100_c = mag_acc[(ACC_HEAD+4*ACC-1)-:ACC_HEAD];
 
 always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
@@ -465,7 +491,7 @@ always @(posedge clk_i or negedge rstn) begin
         udf <= 0;
         nzero <= 1'b1;
     end
-    else if (acc_rdy) begin // vld_d[4]
+    else if (acc_rdy) begin // vld_d[8]
         sign_q <= acc_100_c[ACC_HEAD-1];
         if ((mag_100_c != 0) || (mag_000_wo_c != 0)) begin
             acc_regi <= 0; // max or overflow
@@ -504,7 +530,7 @@ always @(posedge clk_i or negedge rstn) begin
         
         mts_q <= 0;
     end 
-    else if (acc_rdy) begin // vld_d[5], vld_d[6]
+    else if (acc_rdy) begin // vld_d[9], vld_d[10]
         if (mag_001_wo_c != 0) sf_q <= $signed($unsigned(ACC)-$unsigned(acc_zc)-1); // positive scale factor  
         else sf_q <= $signed(~($unsigned(acc_zc)+1)+1); // negative scale factor 
         
@@ -535,7 +561,7 @@ always @(posedge clk_i or negedge rstn) begin
         regi_q <= 0;
         exp_q <= 0;    
     end
-    else if (acc_rdy) begin // vld_d[7]
+    else if (acc_rdy) begin // vld_d[11]
         sign_sf <= sf_q_us[REGI+EXP];
         if (sf_q_us[REGI+EXP]) regi_q <= ~(sf_q_us[REGI+EXP:EXP]) + 1;
         else regi_q <= sf_q_us[REGI+EXP:EXP];
@@ -566,13 +592,13 @@ always @(posedge clk_i or negedge rstn) begin
         tmp <= 0;
     end
     else if (acc_rdy) begin
-        if (vld_d[8]) begin    
+        if (vld_d[12]) begin    
             tmp_pos <= $signed({nzero, 1'b0, exp_q, mts_q[2*MTS:0], {(WIDTH-1){1'b0}}});
             tmp_neg <= $signed({1'b0, nzero, exp_q, mts_q[2*MTS:0], {(WIDTH-1){1'b0}}});
             shift_pos <= regi_q;
             shift_neg <= regi_q - 1;
         end
-        if (vld_d[9]) begin  
+        if (vld_d[13]) begin  
             if (sign_sf) tmp <= $unsigned(tmp_neg >>> shift_neg);
             else tmp <= $unsigned(tmp_pos >>> shift_pos);
         end
@@ -601,7 +627,7 @@ always @(posedge clk_i or negedge rstn) begin
     else if (acc_rdy) begin
         acc_o_tmp <= tmp_for_round + round_val;
         
-        if (vld_d[11] && (~|vld_d[10:0])) begin
+        if (vld_d[15] && (~|vld_d[14:0])) begin
             vld_o_tmp <= 1'b1;
             if (!ovf && !udf) begin
                 if (sign_q) acc_o_fin <= {sign_q, (~(acc_o_tmp)+1)};
@@ -623,7 +649,7 @@ always@(posedge clk_i or negedge rstn) begin
 		vld_d <= 0;
 	end
 	else begin
-		vld_d <= {vld_d[11-1:0], vld_i};
+		vld_d <= {vld_d[15-1:0], vld_i};
     end
 end
 
