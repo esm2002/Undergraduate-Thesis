@@ -58,11 +58,12 @@ reg [ACC+ACC_HEAD-1:0] acc_001;
 reg [ACC+ACC_HEAD-1:0] acc_010;
 reg [ACC+ACC_HEAD-1:0] acc_011;
 
-reg [ACC_HEAD-1:0] acc_100_c;
-reg [ACC+ACC_HEAD-1:0] acc_000_c;
-reg [ACC+ACC_HEAD-1:0] acc_001_c;
-reg [ACC+ACC_HEAD-1:0] acc_010_c;
-reg [ACC+ACC_HEAD-1:0] acc_011_c;
+reg [ACC_HEAD+4*ACC-1:0] acc_concat;
+//reg [ACC_HEAD-1:0] acc_100_c;
+//reg [ACC+ACC_HEAD-1:0] acc_000_c;
+//reg [ACC+ACC_HEAD-1:0] acc_001_c;
+//reg [ACC+ACC_HEAD-1:0] acc_010_c;
+//reg [ACC+ACC_HEAD-1:0] acc_011_c;
 
 reg [WK:0] counter;
 reg acc_rdy;
@@ -118,7 +119,7 @@ reg [WIDTH-2:0] acc_o_tmp;
 reg [WIDTH-1:0] acc_o_fin;
 
 reg vld_o_tmp;
-reg [15:0] vld_d;
+reg [12:0] vld_d;
 
 //-------------------------------------------------
 // Functions
@@ -428,7 +429,7 @@ always @(posedge clk_i or negedge rstn) begin
         counter <= counter + 1;
         acc_rdy <= 0;
     end
-    else if (vld_d[7] & ~|vld_d[6:0]) begin
+    else if (vld_d[4] & ~|vld_d[3:0]) begin
         acc_rdy <= 1;
     end
     else ;
@@ -436,27 +437,11 @@ end
 
 always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
-        acc_011_c <= 0;
-        acc_010_c <= 0;
-        acc_001_c <= 0;
-        acc_000_c <= 0;
-        acc_100_c <= 0;
+        acc_concat <= 0;
     end
-    else if (vld_d[4]) begin
-        acc_011_c <= {{(ACC_HEAD){1'b0}}, acc_011[ACC-1:0]};
-        acc_010_c <= acc_010 + {{(ACC){1'b0}}, acc_011[ACC+ACC_HEAD-1-:ACC_HEAD]};
-    end
-    else if (vld_d[5]) begin
-        acc_010_c <= {{(ACC_HEAD){1'b0}}, acc_010_c[ACC-1:0]};
-        acc_001_c <= acc_001 + {{(ACC){1'b0}}, acc_010_c[ACC+ACC_HEAD-1-:ACC_HEAD]};
-    end
-    else if (vld_d[6]) begin
-        acc_001_c <= {{(ACC_HEAD){1'b0}}, acc_001_c[ACC-1:0]};
-        acc_000_c <= acc_000 + {{(ACC){1'b0}}, acc_001_c[ACC+ACC_HEAD-1-:ACC_HEAD]};
-    end
-    else if (vld_d[7]) begin
-        acc_000_c <= {{(ACC_HEAD){1'b0}}, acc_000_c[ACC-1:0]};
-        acc_100_c <= acc_100 + acc_000_c[ACC+ACC_HEAD-1-:ACC_HEAD];
+    else if (vld_d[4] & ~|vld_d[3:0]) begin
+        acc_concat <= {acc_100, acc_000[ACC-1:0], acc_001[ACC-1:0], acc_010[ACC-1:0], acc_011[ACC-1:0]} + 
+                      {acc_000[ACC+ACC_HEAD-1-:ACC_HEAD], {(ACC-ACC_HEAD){1'b0}}, acc_001[ACC+ACC_HEAD-1-:ACC_HEAD], {(ACC-ACC_HEAD){1'b0}}, acc_010[ACC+ACC_HEAD-1-:ACC_HEAD], {(ACC-ACC_HEAD){1'b0}}, acc_011[ACC+ACC_HEAD-1-:ACC_HEAD], {(ACC){1'b0}}};
     end
 end
 
@@ -466,9 +451,7 @@ end
 
 wire [ACC_HEAD+4*ACC-1:0] mag_acc;
 
-assign mag_acc = acc_100_c[ACC_HEAD-1] 
-                ? ~{acc_100_c, acc_000_c[ACC-1:0], acc_001_c[ACC-1:0], acc_010_c[ACC-1:0], acc_011_c[ACC-1:0]}+1 
-                : {acc_100_c, acc_000_c[ACC-1:0], acc_001_c[ACC-1:0], acc_010_c[ACC-1:0], acc_011_c[ACC-1:0]};
+assign mag_acc = acc_concat[ACC_HEAD+4*ACC-1] ? ~acc_concat+1 : acc_concat;
 
 assign mag_011_wo_c = mag_acc[(ACC-1)-:ACC];
 assign mag_010_wo_c = mag_acc[(2*ACC-1)-:ACC];
@@ -491,8 +474,8 @@ always @(posedge clk_i or negedge rstn) begin
         udf <= 0;
         nzero <= 1'b1;
     end
-    else if (acc_rdy) begin // vld_d[8]
-        sign_q <= acc_100_c[ACC_HEAD-1];
+    else if (acc_rdy) begin // vld_d[5]
+        sign_q <= acc_concat[ACC_HEAD+4*ACC-1];
         if ((mag_100_c != 0) || (mag_000_wo_c != 0)) begin
             acc_regi <= 0; // max or overflow
             ovf <= 1'b1;
@@ -530,7 +513,7 @@ always @(posedge clk_i or negedge rstn) begin
         
         mts_q <= 0;
     end 
-    else if (acc_rdy) begin // vld_d[9], vld_d[10]
+    else if (acc_rdy) begin // vld_d[6], vld_d[7]
         if (mag_001_wo_c != 0) sf_q <= $signed($unsigned(ACC)-$unsigned(acc_zc)-1); // positive scale factor  
         else sf_q <= $signed(~($unsigned(acc_zc)+1)+1); // negative scale factor 
         
@@ -561,7 +544,7 @@ always @(posedge clk_i or negedge rstn) begin
         regi_q <= 0;
         exp_q <= 0;    
     end
-    else if (acc_rdy) begin // vld_d[11]
+    else if (acc_rdy) begin // vld_d[8]
         sign_sf <= sf_q_us[REGI+EXP];
         if (sf_q_us[REGI+EXP]) regi_q <= ~(sf_q_us[REGI+EXP:EXP]) + 1;
         else regi_q <= sf_q_us[REGI+EXP:EXP];
@@ -592,13 +575,13 @@ always @(posedge clk_i or negedge rstn) begin
         tmp <= 0;
     end
     else if (acc_rdy) begin
-        if (vld_d[12]) begin    
+        if (vld_d[9]) begin    
             tmp_pos <= $signed({nzero, 1'b0, exp_q, mts_q[2*MTS:0], {(WIDTH-1){1'b0}}});
             tmp_neg <= $signed({1'b0, nzero, exp_q, mts_q[2*MTS:0], {(WIDTH-1){1'b0}}});
             shift_pos <= regi_q;
             shift_neg <= regi_q - 1;
         end
-        if (vld_d[13]) begin  
+        if (vld_d[10]) begin  
             if (sign_sf) tmp <= $unsigned(tmp_neg >>> shift_neg);
             else tmp <= $unsigned(tmp_pos >>> shift_pos);
         end
@@ -627,7 +610,7 @@ always @(posedge clk_i or negedge rstn) begin
     else if (acc_rdy) begin
         acc_o_tmp <= tmp_for_round + round_val;
         
-        if (vld_d[15] && (~|vld_d[14:0])) begin
+        if (vld_d[12] && (~|vld_d[11:0])) begin
             vld_o_tmp <= 1'b1;
             if (!ovf && !udf) begin
                 if (sign_q) acc_o_fin <= {sign_q, (~(acc_o_tmp)+1)};
@@ -649,7 +632,7 @@ always@(posedge clk_i or negedge rstn) begin
 		vld_d <= 0;
 	end
 	else begin
-		vld_d <= {vld_d[15-1:0], vld_i};
+		vld_d <= {vld_d[12-1:0], vld_i};
     end
 end
 
