@@ -9,18 +9,18 @@ input rstn,
 input vld_i, 
 input [WIDTH-1:0] win, 
 input [WIDTH-1:0] din, 
-output signed [2*(WIDTH-2):0] regi_ext,
-output sign_s,
-output sign_l,
-output signed [$clog2(WIDTH):0] regi_s,
-output signed [$clog2(WIDTH):0] regi_l,
-output [EXP-1:0] exp_s,
-output [EXP-1:0] exp_l,
-output [WIDTH-3-EXP-1:0] mts_s,
-output [WIDTH-3-EXP-1:0] mts_l,
-output [1:0] vld_o_w,
-output [1:0] vld_o_d,
-output decode);
+output reg signed [2*(WIDTH-2):0] regi_ext,
+output reg sign_s,
+output reg sign_l,
+output reg signed [$clog2(WIDTH):0] regi_s,
+output reg signed [$clog2(WIDTH):0] regi_l,
+output reg [EXP-1:0] exp_s,
+output reg [EXP-1:0] exp_l,
+output reg [WIDTH-3-EXP-1:0] mts_s,
+output reg [WIDTH-3-EXP-1:0] mts_l,
+output reg [1:0] vld_o_w,
+output reg [1:0] vld_o_d,
+output reg decode);
 
 localparam REGI = $clog2(WIDTH)+1;      // Number of regime bits   
 localparam MTS = WIDTH-3-EXP;       // Maximum number of mantissa bits  
@@ -51,10 +51,10 @@ reg sign_s_tmp;
 reg sign_l_tmp;
 reg signed [REGI-1:0] regi_s_tmp;
 reg signed [REGI-1:0] regi_l_tmp;
-reg [EXP-1:0] exp_s_tmp;
-reg [EXP-1:0] exp_l_tmp;
-reg [MTS-1:0] mts_s_tmp;
-reg [MTS-1:0] mts_l_tmp;
+reg [WIDTH-2:0] exp_mts_s_tmp;
+reg [WIDTH-2:0] exp_mts_l_tmp;
+reg [WZC-1:0] idx_s;
+reg [WZC-1:0] idx_l;
 
 reg signed [2*(WIDTH-2):0] r_regi_ext;
 reg r_sign_s;
@@ -73,39 +73,11 @@ reg r_decode;
 // Functions
 //-------------------------------------------------
 
-function [1:0] get_exp(input [WIDTH-2:0] in, input [3:0] i);
-  case (i)
-    4'b0111: get_exp = 2'd0;
-    4'b0110: get_exp = 2'd0;
-    4'b0101: get_exp = {1'b0, in[0]};
-    default: get_exp = in[($unsigned(WIDTH)-3-i)-:2];
-  endcase
-endfunction
-  
-function [2:0] get_mts(input [WIDTH-2:0] in, input [3:0] i);
-  case (i)
-    4'b0011: get_mts = {in[$unsigned(WIDTH)-5-i], {2{1'b0}}};
-    4'b0010: get_mts = {in[$unsigned(WIDTH)-5-i], in[$unsigned(WIDTH)-6-i], 1'b0};
-    4'b0001: get_mts = {in[$unsigned(WIDTH)-5-i], in[$unsigned(WIDTH)-6-i], in[$unsigned(WIDTH)-7-i]};
-    default: get_mts = 3'd0;
-  endcase
-endfunction
-
 function [1:0] get_vld(input [WIDTH-1:0] in);
-  if (in == 0) get_vld = 2'b00; //zero
-  else if (in[WIDTH-1] && (in[WIDTH-2:0] == 0)) get_vld = 2'b10; //infinite
+  if (~|in) get_vld = 2'b00; //zero
+  else if (in[WIDTH-1] & ~|in[WIDTH-2:0]) get_vld = 2'b10; //infinite
   else get_vld = 2'b01; //valid
 endfunction
-
-function [2*(WIDTH-2):0] lshift_lsb_ext(input [2*(WIDTH-2):0] x, input [REGI-1:0] s);
-  integer k;
-  begin
-    lshift_lsb_ext = x << s;
-    for (k = 0; k <= 2*(WIDTH-2); k = k+1)
-      if (k < s) lshift_lsb_ext[k] = x[0];
-  end
-endfunction
-
 
 //-------------------------------------------------
 // Decode
@@ -119,11 +91,9 @@ assign din_ext_tmp[WIDTH-2] = 1'b0;
 
 genvar i;
 generate
-  for (i = 3; i <= WIDTH; i = i + 1) begin : gen_inv
-    assign win_ext_tmp[WIDTH-i] =
-        win_ext_tmp[WIDTH-i+1] | (win_tmp[WIDTH-2] != win_tmp[WIDTH-i]);
-    assign din_ext_tmp[WIDTH-i] =
-        din_ext_tmp[WIDTH-i+1] | (din_tmp[WIDTH-2] != din_tmp[WIDTH-i]);
+  for (i = WIDTH-2; i > 0; i = i - 1) begin
+    assign win_ext_tmp[i-1] = win_ext_tmp[i] | (win_tmp[WIDTH-2] != win_tmp[i-1]);
+    assign din_ext_tmp[i-1] = din_ext_tmp[i] | (din_tmp[WIDTH-2] != din_tmp[i-1]);
   end
 endgenerate
 
@@ -139,30 +109,16 @@ reg found_one_l;
 always @(*) begin
     found_one_s = 0;
     found_one_l = 0;
-    regi_s_tmp = 'd6;
-    regi_l_tmp = 'd6;
-    exp_s_tmp = 0;
-    exp_l_tmp = 0;
-    mts_s_tmp = 0;
-    mts_l_tmp = 0;
+    regi_s_tmp = (WIDTH-2);
+    regi_l_tmp = (WIDTH-2);
+    exp_mts_s_tmp = 0;
+    exp_mts_l_tmp = 0;
+    idx_s = 0;
+    idx_l = 0;
         for (j = WIDTH-2; j >= 0; j = j - 1) begin
-            if (!found_one_l && !nor_ext_tmp[j]) begin
+            if (!found_one_l & !nor_ext_tmp[j]) begin
                 if (!found_one_s) begin
-                    if (win_ext[WIDTH-2] == win_ext[j]) begin
-                        in_long  = win_tmp;
-                        in_short = din_tmp;
-                        sign_l_tmp = win[WIDTH-1];
-                        sign_s_tmp = din[WIDTH-1];
-                        in_lzd = win_ext_tmp;
-                    end
-                    else if (din_ext[WIDTH-2] == din_ext[j]) begin
-                        in_long  = din_tmp;
-                        in_short = win_tmp;
-                        sign_l_tmp = din[WIDTH-1];
-                        sign_s_tmp = win[WIDTH-1];
-                        in_lzd = din_ext_tmp;
-                    end
-                    else if (win_ext[WIDTH-2] == 0) begin
+                    if ((win_ext[WIDTH-2] == win_ext[j]) | ((win_ext_tmp[j] == din_ext_tmp[j]) & (win_ext[WIDTH-2] == 0))) begin
                         in_long  = win_tmp;
                         in_short = din_tmp;
                         sign_l_tmp = win[WIDTH-1];
@@ -178,18 +134,18 @@ always @(*) begin
                     end
         
                     regi_s_tmp = in_short[WIDTH-2] ? (WIDTH-3-j) : -(WIDTH-2-j);
-                    exp_s_tmp = get_exp(in_short, $unsigned(WIDTH)-2-$unsigned(j));
-                    mts_s_tmp = get_mts(in_short, $unsigned(WIDTH)-2-$unsigned(j));
+                    exp_mts_s_tmp = in_short << ($unsigned(WIDTH)-1-$unsigned(j));
         
                     found_one_s = 1'b1;
+                    idx_s = j;
                 end
-                if (!found_one_l) begin
+                if (found_one_s & !found_one_l) begin
                     if (in_lzd[j]) begin
                         regi_l_tmp = in_long[WIDTH-2] ? (WIDTH-3-j) : -(WIDTH-2-j);
-                        exp_l_tmp = get_exp(in_long, $unsigned(WIDTH)-2-$unsigned(j));
-                        mts_l_tmp = get_mts(in_long, $unsigned(WIDTH)-2-$unsigned(j));
+                        exp_mts_l_tmp = in_long << ($unsigned(WIDTH)-1-$unsigned(j));
                         
                         found_one_l = 1'b1;
+                        idx_l = j;
                     end 
                 end
             end
@@ -199,47 +155,33 @@ end
 
 always @(posedge clk_i or negedge rstn) begin
    if (~rstn) begin
-        r_regi_ext <= 0;
-        r_sign_s <= 0;
-        r_regi_s <= 0;
-        r_exp_s <= 0;
-        r_mts_s <= 0;
-        r_vld_o_w <= 0;
-        r_sign_l <= 0;
-        r_regi_l <= 0;
-        r_exp_l <= 0;
-        r_mts_l <= 0;
-        r_vld_o_d <= 0;  
-        r_decode <= 0; 
+        regi_ext <= 0;
+        sign_s <= 0;
+        regi_s <= 0;
+        exp_s <= 0;
+        mts_s <= 0;
+        vld_o_w <= 0;
+        sign_l <= 0;
+        regi_l <= 0;
+        exp_l <= 0;
+        mts_l <= 0;
+        vld_o_d <= 0;  
+        decode <= 0; 
    end
    else begin
-       r_regi_ext <= (in_long == din_tmp) ? $signed({din_ext, {(WIDTH-2){~din_ext[WIDTH-2]}}}) : $signed({win_ext, {(WIDTH-2){~win_ext[WIDTH-2]}}});
-       r_sign_s <= sign_s_tmp;
-       r_regi_s <= regi_s_tmp;
-       r_exp_s <= exp_s_tmp;
-       r_mts_s <= mts_s_tmp;
-       r_vld_o_w <= get_vld(win);
-       r_sign_l <= sign_l_tmp;
-       r_regi_l <= regi_l_tmp;
-       r_exp_l <= exp_l_tmp;
-       r_mts_l <= mts_l_tmp;
-       r_vld_o_d <= get_vld(din);
-       r_decode <= 1'b1;
+       regi_ext <= (in_long == din_tmp) ? $signed({din_ext, {(WIDTH-2){~din_ext[WIDTH-2]}}}) : $signed({win_ext, {(WIDTH-2){~win_ext[WIDTH-2]}}});
+       sign_s <= sign_s_tmp;
+       regi_s <= regi_s_tmp;
+       exp_s <= (idx_s == 1) ? {1'b0, exp_mts_s_tmp[WIDTH-2]} : exp_mts_s_tmp[WIDTH-2-:EXP];
+       mts_s <= exp_mts_s_tmp[WIDTH-2-EXP-:MTS];
+       vld_o_w <= get_vld(win);
+       sign_l <= sign_l_tmp;
+       regi_l <= regi_l_tmp;
+       exp_l <= (idx_l == 1) ? {1'b0, exp_mts_l_tmp[WIDTH-2]} : exp_mts_l_tmp[WIDTH-2-:EXP];
+       mts_l <= exp_mts_l_tmp[WIDTH-2-EXP-:MTS];
+       vld_o_d <= get_vld(din);
+       decode <= 1'b1;
    end
 end
 
-assign regi_ext = r_regi_ext;
-assign sign_s = r_sign_s;
-assign sign_l = r_sign_l;
-assign regi_s = r_regi_s;
-assign regi_l = r_regi_l;
-assign exp_s = r_exp_s;
-assign exp_l = r_exp_l;
-assign mts_s = r_mts_s;
-assign mts_l = r_mts_l;
-assign vld_o_w = r_vld_o_w;
-assign vld_o_d = r_vld_o_d;
-assign decode = r_decode;
-
 endmodule
-
