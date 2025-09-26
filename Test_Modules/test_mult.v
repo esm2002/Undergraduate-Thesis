@@ -37,8 +37,8 @@ wire [MTS:0] mts_l_iso;
 
 assign shift_mag = regi_s[REGI-1] ? $unsigned(~regi_s+1) : $unsigned(regi_s);
 
-assign mts_s_iso = (vld_o_w[0] && vld_o_d[0]) ? {1'b1, mts_s} : 0;
-assign mts_l_iso = (vld_o_w[0] && vld_o_d[0]) ? {1'b1, mts_l} : 0;
+assign mts_s_iso = {(MTS+1){(vld_o_w[0] & vld_o_d[0])}} & {1'b1, mts_s};
+assign mts_l_iso = {(MTS+1){(vld_o_w[0] & vld_o_d[0])}} & {1'b1, mts_l};
 
 always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
