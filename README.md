@@ -72,13 +72,12 @@ Undergraduate-Thesis/
 <img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/098f2c48-bbc2-4a6b-87f0-2c3002223cc5" />
 
 ## 4. New Posit MAC Report
+<div>
 <img width="1117" height="1393" alt="image" src="https://github.com/user-attachments/assets/4d87ae65-d61a-462a-bb86-5ef229f98360" />
-<img width="940" height="890" alt="image" src="https://github.com/user-attachments/assets/0ef4d097-3697-4173-b2a9-71d5921418d7" />
+<img width="940" height="849" alt="image" src="https://github.com/user-attachments/assets/61a42421-7dfd-4953-a12f-0afa9f0b8c17" />
+</div>
 
 ## 5. Problems to Solve
-* Optimization to minimize hardware resource usage
-* Reducing the delay and area of a combinational circuit through pipelining
-* Attempting a method that limits the regime length to a maximum of 4 bits
 
 ## 6. Experimental Results (Basys-3 FPGA) (# of multiplication = 1)
 
