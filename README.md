@@ -54,11 +54,20 @@ Undergraduate-Thesis/
 | Posit(scenario) | Dynamic Range | Values | Max. Operating Freq.| Energy-Delay-Product | Cell Area | Values with Max. Clock Freq. |
 |:-----:|:------:|:------:|:------:|:------:|:------:|:------:|
 | 8W2E(s1) | log10(16^12)=14.449 | T=10ns<br>WNS=2.613ns<br>P=0.13894W<br>L=24 | 135.373 (MHz)<br>= 1.35373*1e8 (Hz) | 80.02944*1e-16 | 2442.7 (um^2) | T=7.387ns<br>WNS=0.396ns<br>P=0.1814W<br>L=24<br>EDP=57.018*1e-16<br>cell_area=2491.0 (um^2) |
-| **NEW** 8W2E(s1) | log10(16^12)=14.449 | T=10ns<br>WNS=1.711ns<br>P=0.103W<br>L=21 | 120.641 (MHz)<br>= 1.20641*1e8 (Hz) | 45.423*1e-16 | 2156.1 (um^2) | T=ns<br>WNS=ns<br>P=W<br>L=21<br>EDP=*1e-16<br>cell_area= (um^2) |
 | 8W2E(s2) | log10(16^12)=14.449 | T=10ns<br>WNS=5.551ns<br>P=0.1924W<br>L=24 | 224.770 (MHz)<br>= 2.24770*1e8 (Hz) | 110.8224*1e-16 | 2442.7 (um^2) | T=4.449ns<br>WNS=0.284ns<br>P=0.4284W<br>L=24<br>EDP=48.846*1e-16<br>cell_area=2491.0 (um^2) |
-| **NEW** 8W2E(s2) | log10(16^12)=14.449 | T=10ns<br>WNS=5.047ns<br>P=0.137W<br>L=21 | 201.897 (MHz)<br>= 2.01897*1e8 (Hz) | 60.417*1e-16 | 2156.1 (um^2) | T=ns<br>WNS=ns<br>P=W<br>L=21<br>EDP=*1e-16<br>cell_area= (um^2) |
 | 8W1E(s1) | log10(4^12)=7.224 | T=10ns<br>WNS=5.844ns<br>P=0.1098W<br>L=24 | 240.615 (MHz)<br>= 2.40615*1e8 (Hz) | 63.2448*1e-16 | 1781.3 (um^2) | T=4.156ns<br>WNS=0.168ns<br>P=0.245W<br>L=24<br>EDP=24.375*1e-16<br>cell_area=1780.7 (um^2) |
 | 8W1E(s2) | log10(4^12)=7.224 | T=10ns<br>WNS=7.444ns<br>P=0.1556W<br>L=24 | 391.236 (MHz)<br>= 3.91236*1e8 (Hz) | 89.6256*1e-16 | 1781.3 (um^2) | T=2.556ns<br>WNS=0.221ns<br>P=0.6032W<br>L=24<br>EDP=22.699*1e-16<br>cell_area=1780.7 (um^2) |
+
+* Posit MAC Modularization
+
+| 8W2E | Original Posit MAC (s1) | New Posit MAC (s1) | Original Posit MAC (s2) | New Posit MAC (s2) |
+|---------|-------------------------------|--------------------------|------------------------------|--------------------------|
+| WNS(ns) | 2.613 |  4.611  | 5.551 |  6.755  |
+| Power(W) | Total=0.129<br>Decode=1.982e-02<br>Mult=1.69e-03<br>Acc=4.90e-02<br>Extract=3.50e-02<br>Encode=1.67e-02 | Total=9.24e-02<br>Decode=2.09e-02<br>Mult=9.36e-03<br>Acc=3.52e-02<br>Extract=1.31e-02<br>Encode=9.15e-03 | Total=0.186<br>Decode=2.83e-02<br>Mult=4.65e-03<br>Acc=7.35e-02<br>Extract=4.68e-02<br>Encode=2.33e-02
+| Total=0.131<br>Decode=3.20e-02<br>Mult=1.42e-02<br>Acc=4.91e-02<br>Extract=1.60e-02<br>Encode=1.22e-02 |
+| Latency(cycle) | 24 | 21 | 24 | 21 |
+| Area(um^2) | Total=2474.0033<br>Decode=257.4208<br>Mult=83.2320<br>Acc=916.4224<br>Extract=901.7344<br>Encode=277.8752 | Total=1975.3729<br>Decode=214.4448<br>Mult=167.6608<br>Acc=921.2096<br>Extract=421.7088<br>Encode=220.8640 | - | - |
+
 
 ## 3. Original Posit MAC Report
 <img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/098f2c48-bbc2-4a6b-87f0-2c3002223cc5" />
