@@ -189,12 +189,12 @@ always @(posedge clk_i or negedge rstn) begin
        regi_ext <= shorter_w ? $signed({din_ext, {(WIDTH-2){~din_ext[WIDTH-2]}}}) : $signed({win_ext, {(WIDTH-2){~win_ext[WIDTH-2]}}});
        sign_s <= sign_s_tmp;
        regi_s <= regi_s_tmp;
-       exp_s <= (idx_s == 1) ? {1'b0, exp_mts_s_tmp[WIDTH-2]} : exp_mts_s_tmp[WIDTH-2-:EXP];
+       exp_s <= (idx_s == 1'b1 && EXP == 2'd2) ? {1'b0, exp_mts_s_tmp[WIDTH-2]} : exp_mts_s_tmp[WIDTH-2-:EXP];
        mts_s <= exp_mts_s_tmp[WIDTH-2-EXP-:MTS];
        vld_o_w <= get_vld(win);
        sign_l <= sign_l_tmp;
        regi_l <= regi_l_tmp;
-       exp_l <= (idx_l == 1) ? {1'b0, exp_mts_l_tmp[WIDTH-2]} : exp_mts_l_tmp[WIDTH-2-:EXP];
+       exp_l <= (idx_s == 1'b1 && EXP == 2'd2) ? {1'b0, exp_mts_l_tmp[WIDTH-2]} : exp_mts_l_tmp[WIDTH-2-:EXP];
        mts_l <= exp_mts_l_tmp[WIDTH-2-EXP-:MTS];
        vld_o_d <= get_vld(din);
        decode <= 1'b1;
