@@ -14,10 +14,10 @@ parameter ACC_HEAD=$clog2(K)+2) (
     input [2*(MTS+1)-1:0] mts_m,
     output reg acc_rdy,
     output reg [ACC_HEAD-1:0] acc_100_c,
-    output reg [ACC+2-1:0] acc_000_c,
-    output reg [ACC+2-1:0] acc_001_c,
-    output reg [ACC+2-1:0] acc_010_c,
-    output reg [ACC+2-1:0] acc_011_c
+    output reg [ACC-1:0] acc_000_c,
+    output reg [ACC-1:0] acc_001_c,
+    output reg [ACC-1:0] acc_010_c,
+    output reg [ACC-1:0] acc_011_c
 );
 localparam WK = $clog2(K);
 localparam REGI = $clog2(WIDTH)+1; 
@@ -33,20 +33,20 @@ wire [WZC:0] bias_zc;
 wire [REGI+EXP-1:0] acc_bias;
 
 reg [ACC_HEAD-1:0] acc_100;
-reg [ACC+2-1:0] acc_000;
-reg [ACC+2-1:0] acc_001;
-reg [ACC+2-1:0] acc_010;
-reg [ACC+2-1:0] acc_011;
+reg [ACC:0] acc_000;
+reg [ACC:0] acc_001;
+reg [ACC:0] acc_010;
+reg [ACC:0] acc_011;
 
 reg [WK:0] counter;
 
-LZD #(.in_s(WIDTH-2)) u_acc_lzd(.in(acc_lzd), .out(bias_zc)); //, .out_s(WZC+1)
+//LZD #(.in_s(WIDTH-2)) u_acc_lzd(.in(acc_lzd), .out(bias_zc)); //, .out_s(WZC+1)
 // Instance of DW_lzd
-//DW_lzd #(WIDTH-2) U_LZD2 ( .a(acc_lzd), .dec(acc_lzd_oh), .enc(bias_zc) );
+DW_lzd #(WIDTH-2) U_LZD2 ( .a(acc_lzd), .dec(acc_lzd_oh), .enc(bias_zc) );
 
 assign acc_bias = acc_num[1] 
-    ? ({ (WIDTH-2 - bias_zc), {EXP{1'b0}} } + bias_exp) 
-    : ({ bias_zc, {EXP{1'b0}} } + bias_exp);
+    ? (acc_lzd == 0 ? bias_exp : ({ ($unsigned(WIDTH)-2 - bias_zc), {$unsigned(EXP){1'b0}} } + bias_exp)) 
+    : (acc_lzd == 0 ? ({ $unsigned(WIDTH)-2, {$unsigned(EXP){1'b0}} } + bias_exp) : ({ bias_zc, {$unsigned(EXP){1'b0}} } + bias_exp));
     
 reg [ACCZC-1:0] shift_amt_l;  
 reg [ACCZC-1:0] shift_amt_r;         
@@ -61,7 +61,7 @@ assign shift_sel = (acc_bias >= ($unsigned(ACC)-1)) ? 2'b00 :
                                                       2'b10 ;
 assign shift_left = $unsigned(shift_o_left);
 assign shift_right = $unsigned(shift_o_right);
-
+ 
 always @(*) begin
     shift_amt_l  = 0;
     shift_amt_r  = 0;
@@ -155,14 +155,14 @@ always @(posedge clk_i or negedge rstn) begin
                                 end
                         3'b010: begin
                                     acc_100 <= acc_100_c + {(ACC_HEAD){mts_ms[2*(MTS+1)]}};
-                                    acc_000 <= acc_000_c + {2'b00, {(ACC){mts_ms[2*(MTS+1)]}}};
+                                    acc_000 <= acc_000_c + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
                                     acc_001 <= acc_001_c + shift_right;
                                     acc_010 <= acc_010_c + shift_left;
                                 end
                         3'b011: begin
                                     acc_100 <= acc_100_c + {(ACC_HEAD){mts_ms[2*(MTS+1)]}};
-                                    acc_000 <= acc_000_c + {2'b00, {(ACC){mts_ms[2*(MTS+1)]}}};
-                                    acc_001 <= acc_001_c + {2'b00, {(ACC){mts_ms[2*(MTS+1)]}}};
+                                    acc_000 <= acc_000_c + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
+                                    acc_001 <= acc_001_c + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
                                     acc_010 <= acc_010_c + shift_right;
                                     acc_011 <= acc_011_c + shift_left;
                                 end
@@ -182,14 +182,14 @@ always @(posedge clk_i or negedge rstn) begin
                                 end
                         3'b001: begin
                                     acc_100 <= acc_100_c + {(ACC_HEAD){mts_ms[2*(MTS+1)]}};
-                                    acc_000 <= acc_000_c + {2'b00, {(ACC){mts_ms[2*(MTS+1)]}}};
+                                    acc_000 <= acc_000_c + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
                                     acc_001 <= acc_001_c + shift_right;
                                     acc_010 <= acc_010_c + shift_left;
                                 end
                         3'b010: begin
                                     acc_100 <= acc_100_c + {(ACC_HEAD){mts_ms[2*(MTS+1)]}};
-                                    acc_000 <= acc_000_c + {2'b00, {(ACC){mts_ms[2*(MTS+1)]}}};
-                                    acc_001 <= acc_001_c + {2'b00, {(ACC){mts_ms[2*(MTS+1)]}}};
+                                    acc_000 <= acc_000_c + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
+                                    acc_001 <= acc_001_c + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
                                     acc_010 <= acc_010_c + shift_right;
                                     acc_011 <= acc_011_c + shift_left;
                                 end
@@ -204,20 +204,20 @@ always @(posedge clk_i or negedge rstn) begin
                                 end
                         3'b001: begin
                                     acc_100 <= acc_100_c + {(ACC_HEAD){mts_ms[2*(MTS+1)]}};
-                                    acc_000 <= acc_000_c + {2'b00, {(ACC){mts_ms[2*(MTS+1)]}}};
+                                    acc_000 <= acc_000_c + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
                                     acc_001 <= acc_001_c + shift_left;
                                 end
                         3'b010: begin
                                     acc_100 <= acc_100_c + {(ACC_HEAD){mts_ms[2*(MTS+1)]}};
-                                    acc_000 <= acc_000_c + {2'b00, {(ACC){mts_ms[2*(MTS+1)]}}};
-                                    acc_001 <= acc_001_c + {2'b00, {(ACC){mts_ms[2*(MTS+1)]}}};
+                                    acc_000 <= acc_000_c + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
+                                    acc_001 <= acc_001_c + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
                                     acc_010 <= acc_010_c + shift_left;
                                 end
                         3'b011: begin
                                     acc_100 <= acc_100_c + {(ACC_HEAD){mts_ms[2*(MTS+1)]}};
-                                    acc_000 <= acc_000_c + {2'b00, {(ACC){mts_ms[2*(MTS+1)]}}};
-                                    acc_001 <= acc_001_c + {2'b00, {(ACC){mts_ms[2*(MTS+1)]}}};
-                                    acc_010 <= acc_010_c + {2'b00, {(ACC){mts_ms[2*(MTS+1)]}}};
+                                    acc_000 <= acc_000_c + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
+                                    acc_001 <= acc_001_c + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
+                                    acc_010 <= acc_010_c + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
                                     acc_011 <= acc_011_c + shift_left;
                                 end
                         default: ;
@@ -235,35 +235,26 @@ end
 integer k;
 
 task carry_propagation (input [ACC_HEAD-1:0] acc_100, 
-                        input [ACC+2-1:0] acc_000, acc_001, acc_010, acc_011, 
+                        input [ACC:0] acc_000, acc_001, acc_010, acc_011, 
                         output [ACC_HEAD-1:0] acc_100_c, 
-                        output [ACC+2-1:0] acc_000_c, acc_001_c, acc_010_c, acc_011_c);
+                        output [ACC-1:0] acc_000_c, acc_001_c, acc_010_c, acc_011_c);
 	reg [ACC_HEAD-1:0] acc_100_tmp;
-	reg [ACC+2-1:0] acc_000_tmp;
-	reg [ACC+2-1:0] acc_001_tmp;
-	reg [ACC+2-1:0] acc_010_tmp;
-	reg [ACC+2-1:0] acc_011_tmp;
+	reg [ACC:0] acc_000_tmp;
+	reg [ACC:0] acc_001_tmp;
+	reg [ACC:0] acc_010_tmp;
+	reg [ACC:0] acc_011_tmp;
 	begin
-	    acc_100_tmp = $unsigned(acc_100);
-        acc_000_tmp = $unsigned(acc_000);
-        acc_001_tmp = $unsigned(acc_001);
-        acc_010_tmp = $unsigned(acc_010);
-        acc_011_tmp = $unsigned(acc_011);
-		
-		acc_010_tmp = acc_010_tmp + {{(ACC){1'b0}}, acc_011_tmp[ACC+2-1-:2]};
-		acc_001_tmp = acc_001_tmp + {{(ACC){1'b0}}, acc_010_tmp[ACC+2-1-:2]};
-		acc_000_tmp = acc_000_tmp + {{(ACC){1'b0}}, acc_001_tmp[ACC+2-1-:2]};
-		acc_100_tmp = acc_100_tmp + {{(ACC){1'b0}}, acc_000_tmp[ACC+2-1-:2]};
-        acc_011_tmp[ACC+2-1-:2] = 2'b00;
-        acc_010_tmp[ACC+2-1-:2] = 2'b00;
-        acc_001_tmp[ACC+2-1-:2] = 2'b00;
-        acc_000_tmp[ACC+2-1-:2] = 2'b00;
+        acc_011_tmp = acc_011;
+		acc_010_tmp = acc_010 + {{(ACC){1'b0}}, acc_011_tmp[ACC]};
+		acc_001_tmp = acc_001 + {{(ACC){1'b0}}, acc_010_tmp[ACC]};
+		acc_000_tmp = acc_000 + {{(ACC){1'b0}}, acc_001_tmp[ACC]};
+		acc_100_tmp = acc_100 + {{(ACC){1'b0}}, acc_000_tmp[ACC]};
         
         acc_100_c = acc_100_tmp;
-        acc_000_c = acc_000_tmp;
-        acc_001_c = acc_001_tmp;
-        acc_010_c = acc_010_tmp;
-        acc_011_c = acc_011_tmp;
+        acc_000_c = acc_000_tmp[ACC-1:0];
+        acc_001_c = acc_001_tmp[ACC-1:0];
+        acc_010_c = acc_010_tmp[ACC-1:0];
+        acc_011_c = acc_011_tmp[ACC-1:0];
 	end
 endtask
 
@@ -286,7 +277,9 @@ always @(posedge clk_i or negedge rstn) begin
         counter <= counter + 1;
         acc_rdy <= 0;
     end
-    else if (counter == K) acc_rdy <= 1;
+    else if (counter == K) begin
+        acc_rdy <= 1;
+    end
     else ;
 end
 
