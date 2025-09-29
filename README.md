@@ -69,10 +69,11 @@ Undergraduate-Thesis/
 
 | 8W1E | Original Posit MAC (s1) | New Posit MAC (s1) | Original Posit MAC (s2) | New Posit MAC (s2) |
 |---------|-------------------------------|--------------------------|------------------------------|--------------------------|
-| WNS(ns) | 5.831  | 6.384 | 7.436 | 7.766 |
-| Power(W) | Total=9.56e-02<br>Decode=2.02e-02<br>Mult=2.19e-03<br>Acc=2.82e-02<br>Extract=2.22e-02<br>Encode=1.67e-02 | Total=8.02e-02<br>Decode=2.02e-02<br>Mult=1.02e-02<br>Acc=2.47e-02<br>Extract=1.08e-02<br>Encode=9.58e-03 | Total=0.138<br>Decode=2.89e-02<br>Mult=5.11e-03<br>Acc=4.25e-02<br>Extract=2.94e-02<br>Encode=2.26e-02 | Total=0.120<br>Decode=3.05e-02<br>Mult=2.05e-02<br>Acc=3.37e-02<br>Extract=1.61e-02<br>Encode=1.27e-02 |
+| WNS(ns) | 5.831  | 6.323 | 7.436 | 7.713 |
+| Power(W) | Total=9.56e-02<br>Decode=2.02e-02<br>Mult=2.19e-03<br>Acc=2.82e-02<br>Extract=2.22e-02<br>Encode=1.67e-02 | Total=7.75e-02<br>Decode=2.06e-02<br>Mult=1.03e-02<br>Acc=2.29e-02<br>Extract=9.54e-03<br>Encode=9.07e-03 | Total=0.138<br>Decode=2.89e-02<br>Mult=5.11e-03<br>Acc=4.25e-02<br>Extract=2.94e-02<br>Encode=2.26e-02 | Total=0.116<br>Decode=3.10e-02<br>Mult=2.06e-02<br>Acc=3.08e-02<br>Extract=1.42e-02<br>Encode=1.18e-02 |
 | Latency(cycle) | 24 | 21 | 24 | 21 |
-| Area(um^2) | Total=1784.1024<br>Decode=256.3328<br>Mult=104.1216<br>Acc=563.9104<br>Extract=543.2384<br>Encode=279.6160 | Total=1577.1648<br>Decode=214.5536<br>Mult=183.3280<br>Acc=613.6320<br>Extract=310.6240<br>Encode=224.4544 | - | - |
+| Area(um^2) | Total=1784.1024<br>Decode=256.3328<br>Mult=104.1216<br>Acc=563.9104<br>Extract=543.2384<br>Encode=279.6160 | Total=1563.7824<br>Decode=214.5536<br>Mult=180.4992<br>Acc=602.5344<br>Extract=311.9296<br>Encode=224.8896 | - | - |
+| Speedup | 1.295x | 1.281x |
 
 
 ## 3. Original Posit MAC Report
