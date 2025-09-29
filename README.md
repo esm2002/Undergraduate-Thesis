@@ -36,6 +36,7 @@ Undergraduate-Thesis/
     min = useed^(-W+2)
 * Max. Operating Freq. (MHz): max(1000/(T - WNS))
 * Energy-Delay-Product (J*s): Power * (L * T)^2
+* Speedup : (L_base*(T-WNS_base)) / (L_new*(T-WNS_new))
 
 | Fixed-Point(scenario) | Dynamic Range | Values | Max. Operating Freq.| Energy-Delay-Product | Cell Area | Values with Max. Clock Freq. |
 |:-----:|:------:|:------:|:------:|:------:|:------:|:------:|
@@ -62,10 +63,11 @@ Undergraduate-Thesis/
 
 | 8W2E | Original Posit MAC (s1) | New Posit MAC (s1) | Original Posit MAC (s2) | New Posit MAC (s2) |
 |---------|-------------------------------|--------------------------|------------------------------|--------------------------|
-| WNS(ns) | 2.613 |  4.611  | 5.551 |  6.755  |
-| Power(W) | Total=0.129<br>Decode=1.982e-02<br>Mult=1.69e-03<br>Acc=4.90e-02<br>Extract=3.50e-02<br>Encode=1.67e-02 | Total=9.24e-02<br>Decode=2.09e-02<br>Mult=9.36e-03<br>Acc=3.52e-02<br>Extract=1.31e-02<br>Encode=9.15e-03 | Total=0.186<br>Decode=2.83e-02<br>Mult=4.65e-03<br>Acc=7.35e-02<br>Extract=4.68e-02<br>Encode=2.33e-02 | Total=0.131<br>Decode=3.20e-02<br>Mult=1.42e-02<br>Acc=4.91e-02<br>Extract=1.60e-02<br>Encode=1.22e-02 |
+| WNS(ns) | 2.613 |  4.763  | 5.551 |  6.822  |
+| Power(W) | Total=0.129<br>Decode=1.982e-02<br>Mult=1.69e-03<br>Acc=4.90e-02<br>Extract=3.50e-02<br>Encode=1.67e-02 | Total=9.12e-02<br>Decode=2.03e-02<br>Mult=9.23e-03<br>Acc=3.44e-02<br>Extract=1.33e-02<br>Encode=9.22e-03 | Total=0.186<br>Decode=2.83e-02<br>Mult=4.65e-03<br>Acc=7.35e-02<br>Extract=4.68e-02<br>Encode=2.33e-02 | Total=0.129<br>Decode=3.08e-02<br>Mult=1.42e-02<br>Acc=4.81e-02<br>Extract=1.60e-02<br>Encode=1.22e-02 |
 | Latency(cycle) | 24 | 21 | 24 | 21 |
-| Area(um^2) | Total=2474.0033<br>Decode=257.4208<br>Mult=83.2320<br>Acc=916.4224<br>Extract=901.7344<br>Encode=277.8752 | Total=1975.3729<br>Decode=214.4448<br>Mult=167.6608<br>Acc=921.2096<br>Extract=421.7088<br>Encode=220.8640 | - | - |
+| Area(um^2) | Total=2474.0033<br>Decode=257.4208<br>Mult=83.2320<br>Acc=916.4224<br>Extract=901.7344<br>Encode=277.8752 | Total=1952.4160<br>Decode=215.3152<br>Mult=164.3968<br>Acc=903.9104<br>Extract=419.7504<br>Encode=219.5584 | - | - |
+| Speedup | - | 1.612x | - | 1.599x |
 
 | 8W1E | Original Posit MAC (s1) | New Posit MAC (s1) | Original Posit MAC (s2) | New Posit MAC (s2) |
 |---------|-------------------------------|--------------------------|------------------------------|--------------------------|
