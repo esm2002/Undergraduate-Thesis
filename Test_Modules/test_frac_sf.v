@@ -11,7 +11,7 @@ parameter ACC_HEAD = $clog2(K) + 2) (
     input [11:0] vld_d,
     input acc_rdy,
     input [ACC_HEAD-1:0] acc_100_c,
-    input [ACC+2-1:0] acc_000_c, acc_001_c, acc_010_c, acc_011_c,
+    input [ACC-1:0] acc_000_c, acc_001_c, acc_010_c, acc_011_c,
     output reg sign_q,
     output reg ovf,
     output reg udf,
@@ -31,7 +31,7 @@ wire [ACC-1:0] mag_010_wo_c;
 wire [ACC-1:0] mag_011_wo_c;
 wire [ACC_HEAD-1:0] mag_100_c;
 
-assign mag_concat = {acc_100_c, acc_000_c[ACC-1:0], acc_001_c[ACC-1:0], acc_010_c[ACC-1:0], acc_011_c[ACC-1:0]};
+assign mag_concat = {acc_100_c, acc_000_c, acc_001_c, acc_010_c, acc_011_c};
 assign mag_acc = acc_100_c[ACC_HEAD-1] ? (~mag_concat + 1'b1) : mag_concat;
 
 assign mag_011_wo_c = mag_acc[(ACC-1)-:ACC];
@@ -102,15 +102,6 @@ always @(posedge clk_i or negedge rstn) begin
                 nzero <= 0;
             end
         endcase
-//        if ((mag_100_c != 0) || (mag_000_wo_c != 0)) begin
-//            acc_regi <= 0; // max or overflow
-//            ovf <= 1'b1;
-//        end else if ((mag_001_wo_c == 0) && (mag_010_wo_c == 0)) begin
-//            acc_regi <= 0; // underflow
-//            udf <= 1'b1;
-//            if (mag_011_wo_c == 0) nzero <= 0; // 0 for zero
-//        end else if (mag_001_wo_c != 0) acc_regi <= mag_001_wo_c;// positive scale factor
-//        else acc_regi <= mag_010_wo_c;// negative scale factor 
     end
 end
 
