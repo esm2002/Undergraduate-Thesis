@@ -2,7 +2,7 @@
 module test_new_mac #(
 parameter WIDTH = 8,          // Bitwidth of inputs                      
 parameter K  = 9,
-parameter EXP = 2       // Number of exponent bits                 
+parameter EXP = 1       // Number of exponent bits                 
 )( // revised from '$clog2(WIDTH_A)' to '$clog2(2*BIAS+1)'
 input clk_i,
 input rstn,
@@ -28,8 +28,8 @@ localparam WTMP = 3*WIDTH - EXP - 4;
 wire signed [2*(WIDTH-2):0] regi_ext;
 wire sign_s;
 wire sign_l;
-wire signed [REGI-1:0] regi_s;
-wire signed [REGI-1:0] regi_l;
+wire [REGI-1:0] regi_s;
+wire [REGI-1:0] regi_l;
 wire [EXP-1:0] exp_s;
 wire [EXP-1:0] exp_l;
 wire [MTS-1:0] mts_s;
@@ -47,10 +47,10 @@ wire [2*(MTS+1)-1:0] mts_m;
 
 // Accumulation ------------------
 wire [ACC_HEAD-1:0] acc_100_c;
-wire [ACC+2-1:0] acc_000_c;
-wire [ACC+2-1:0] acc_001_c;
-wire [ACC+2-1:0] acc_010_c;
-wire [ACC+2-1:0] acc_011_c;
+wire [ACC-1:0] acc_000_c;
+wire [ACC-1:0] acc_001_c;
+wire [ACC-1:0] acc_010_c;
+wire [ACC-1:0] acc_011_c;
 
 wire acc_rdy;
 
