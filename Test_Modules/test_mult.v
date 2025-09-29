@@ -9,28 +9,29 @@ parameter MTS = WIDTH-3-EXP) (
     input signed [2*(WIDTH-2):0] regi_ext,
     input sign_s, 
     input sign_l,
-    input signed [REGI-1:0] regi_s, 
-    input signed [REGI-1:0] regi_l,
+    input [REGI-1:0] regi_s, 
+    input [REGI-1:0] regi_l,
     input [EXP-1:0] exp_s, 
     input [EXP-1:0] exp_l,
     input [MTS-1:0] mts_s,
     input [MTS-1:0] mts_l,
     input [1:0] vld_o_w,
     input [1:0] vld_o_d,
-    output reg signed [2*(WIDTH-2):0] regi_acc,
+    output reg [2*(WIDTH-2):0] regi_acc,
     output reg sign_m,
     output reg [EXP:0] exp_m,
     output reg [2*(MTS+1)-1:0] mts_m
 );
 
-function [2*(WIDTH-2):0] lshift_lsb_ext(input [2*(WIDTH-2):0] x, input [REGI-1:0] s);
-  integer k;
+function [2*(WIDTH-2):0] bit_reverse(input [2*(WIDTH-2):0] in);
+  integer i;
   begin
-    lshift_lsb_ext = x << s;
-    for (k = 0; k <= 2*(WIDTH-2); k = k+1)
-      if (k < s) lshift_lsb_ext[k] = x[0];
+    for (i = 0; i <= 2*(WIDTH-2); i = i+1)
+      bit_reverse[i] = in[2*(WIDTH-2)-i];
   end
 endfunction
+
+
 wire [REGI-1:0] shift_mag;
 wire [MTS:0] mts_s_iso;
 wire [MTS:0] mts_l_iso;
@@ -49,7 +50,7 @@ always @(posedge clk_i or negedge rstn) begin
     end
     else begin
         if (vld_d[0] && vld_o_w[0] && vld_o_d[0]) begin // both valid
-            if (regi_l[REGI-1] ^ regi_s[REGI-1]) regi_acc <= lshift_lsb_ext($unsigned(regi_ext), shift_mag);
+            if (regi_l[REGI-1] ^ regi_s[REGI-1]) regi_acc <= bit_reverse($signed(bit_reverse(regi_ext)) >>> shift_mag);
             else regi_acc <= $unsigned(regi_ext >>> shift_mag); 
             sign_m <= sign_s ^ sign_l;
             exp_m <= {1'b0, exp_s} + {1'b0, exp_l};
