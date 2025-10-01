@@ -97,15 +97,15 @@ Undergraduate-Thesis/
 
 | Floating-Point | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs/#FFs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
-| 8W4E3F | T=10ns<br>WNS=0.ns<br>P=0.W<br>L=19 | log10(122880)=5.089 |   (MHz)<br>= *1e8 (Hz) | *1e-16 |  |
+| 8W4E3F | T=10ns<br>WNS=0.410ns<br>P=0.074W<br>L=19 | log10(122880)=5.089 |   (MHz)<br>= *1e8 (Hz) | *1e-16 | 358/177 |
 | 8W5E2F | T=10ns<br>WNS=0.ns<br>P=0.W<br>L=19 | log10(3758096384)=9.574 |   (MHz)<br>= *1e8 (Hz) | *1e-16 |  |
 
 | Posit | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs/#FFs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
-| 8W2E | T=10ns<br>WNS=0.ns<br>P=0.W<br>L=24 | log10(16^12)=14.449 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | |
+| 8W2E | T=10ns<br>WNS=0.410ns<br>P=0.082W<br>L=24 | log10(16^12)=14.449 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 950/511 |
 | 8W1E | T=10ns<br>WNS=0.410ns<br>P=0.079W<br>L=24 | log10(4^12)=7.224 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 647/371 |
 
 | NEW Posit | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs/#FFs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
 | 8W2E | T=10ns<br>WNS=0.ns<br>P=0.W<br>L=21 | log10(16^12)=14.449 |  (MHz)<br>= *1e8 (Hz) | *1e-16 |  |
-| 8W1E | T=10ns<br>WNS=0.ns<br>P=0.W<br>L=21 | log10(4^12)=7.224 |  (MHz)<br>= *1e8 (Hz) | *1e-16 |  |
+| 8W1E | T=10ns<br>WNS=0.302ns<br>P=0.089W<br>L=21 | log10(4^12)=7.224 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 854/244 |
