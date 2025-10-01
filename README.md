@@ -89,17 +89,23 @@ Undergraduate-Thesis/
 
 ## 5. Problems to Solve
 
-## 6. Experimental Results (Basys-3 FPGA) (# of multiplication = 1)
+## 6. Experimental Results (Basys-3 FPGA) (# of multiplication = 9)
 
-| Fixed-Point | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs |
+| Fixed-Point | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs/#FFs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
-| 8W4F | T=10ns<br>WNS=0.410ns<br>P=0.084W<br>L=5 | log10(127)=2.104 | 104.275 (MHz)<br>= 1.04275*1e8 (Hz) | 2.1*1e-16 | 19 |
+| 8W4F | T=10ns<br>WNS=0.ns<br>P=0.W<br>L=14 | log10(127)=2.104 |   (MHz)<br>= *1e8 (Hz) | *1e-16 |  |
 
-| Floating-Point | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs |
+| Floating-Point | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs/#FFs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
-| 8W4E3F | T=10ns<br>WNS=0.410ns<br>P=0.089W<br>L=11 | log10(122880)=5.089 | 104.275 (MHz)<br>= 1.04275*1e8 (Hz) | 10.769*1e-16 | 228 |
+| 8W4E3F | T=10ns<br>WNS=0.ns<br>P=0.W<br>L=19 | log10(122880)=5.089 |   (MHz)<br>= *1e8 (Hz) | *1e-16 |  |
+| 8W5E2F | T=10ns<br>WNS=0.ns<br>P=0.W<br>L=19 | log10(3758096384)=9.574 |   (MHz)<br>= *1e8 (Hz) | *1e-16 |  |
 
-| Posit | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs |
+| Posit | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs/#FFs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
-| 8W2E | T=10ns<br>WNS=0.301ns<br>P=0.105W<br>L=16 | log10(16^12)=14.449 | 103.103 (MHz)<br>= 1.03103*1e8 (Hz) | 26.88*1e-16 | 548 |
+| 8W2E | T=10ns<br>WNS=0.ns<br>P=0.W<br>L=24 | log10(16^12)=14.449 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | |
+| 8W1E | T=10ns<br>WNS=0.410ns<br>P=0.079W<br>L=24 | log10(4^12)=7.224 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 647/371 |
 
+| NEW Posit | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs/#FFs |
+|:-----:|:------:|:------:|:------:|:------:|:------:|
+| 8W2E | T=10ns<br>WNS=0.ns<br>P=0.W<br>L=21 | log10(16^12)=14.449 |  (MHz)<br>= *1e8 (Hz) | *1e-16 |  |
+| 8W1E | T=10ns<br>WNS=0.ns<br>P=0.W<br>L=21 | log10(4^12)=7.224 |  (MHz)<br>= *1e8 (Hz) | *1e-16 |  |
