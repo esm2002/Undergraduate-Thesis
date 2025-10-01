@@ -10,6 +10,7 @@ parameter ACC_HEAD = $clog2(K) + 2) (
     input clk_i, input rstn,
     input [11:0] vld_d,
     input acc_rdy,
+    input acc_sign,
     input [ACC_HEAD-1:0] acc_100_c,
     input [ACC-1:0] acc_000_c, acc_001_c, acc_010_c, acc_011_c,
     output reg sign_q,
@@ -21,24 +22,6 @@ parameter ACC_HEAD = $clog2(K) + 2) (
 );
 
 localparam ACCZC = $clog2(ACC);
-
-wire [ACC_HEAD+4*ACC-1:0] mag_concat;
-wire [ACC_HEAD+4*ACC-1:0] mag_acc;
-
-wire [ACC-1:0] mag_000_wo_c;
-wire [ACC-1:0] mag_001_wo_c;
-wire [ACC-1:0] mag_010_wo_c;
-wire [ACC-1:0] mag_011_wo_c;
-wire [ACC_HEAD-1:0] mag_100_c;
-
-assign mag_concat = {acc_100_c, acc_000_c, acc_001_c, acc_010_c, acc_011_c};
-assign mag_acc = acc_100_c[ACC_HEAD-1] ? (~mag_concat + 1'b1) : mag_concat;
-
-assign mag_011_wo_c = mag_acc[(ACC-1)-:ACC];
-assign mag_010_wo_c = mag_acc[(2*ACC-1)-:ACC];
-assign mag_001_wo_c = mag_acc[(3*ACC-1)-:ACC];
-assign mag_000_wo_c = mag_acc[(4*ACC-1)-:ACC];
-assign mag_100_c = mag_acc[(ACC_HEAD+4*ACC-1)-:ACC_HEAD];
 
 reg [ACC-1:0] acc_regi;
 wire [ACC-1:0] acc_regi_oh;
@@ -63,8 +46,8 @@ always @(posedge clk_i or negedge rstn) begin
         nzero <= 1'b1;
     end
     else if (acc_rdy) begin // vld_d[4]
-        sign_q <= acc_100_c[ACC_HEAD-1];
-        casez ({(mag_100_c!=0), (mag_000_wo_c!=0), (mag_001_wo_c!=0), (mag_010_wo_c!=0), (mag_011_wo_c!=0)})
+        sign_q <= acc_sign;
+        casez ({(acc_100_c!=0), (acc_000_c!=0), (acc_001_c!=0), (acc_010_c!=0), (acc_011_c!=0)})
             5'b1????: begin // max or overflow
                 acc_regi <= 0;
                 ovf <= 1'b1;
@@ -78,13 +61,13 @@ always @(posedge clk_i or negedge rstn) begin
                 nzero <= 1'b1;
             end
             5'b001??: begin // positive scale factor
-                acc_regi <= mag_001_wo_c; 
+                acc_regi <= acc_001_c; 
                 ovf <= 0;
                 udf <= 0;
                 nzero <= 1'b1;
             end
             5'b0001?: begin // negative scale factor 
-                acc_regi <= mag_010_wo_c; 
+                acc_regi <= acc_010_c; 
                 ovf <= 0;
                 udf <= 0;
                 nzero <= 1'b1;
@@ -105,15 +88,15 @@ always @(posedge clk_i or negedge rstn) begin
     end
 end
 
-//LZD #(.in_s(ACC)) u_regi_lzd(.in(acc_regi), .out(acc_zc));
+LZD #(.in_s(ACC)) u_regi_lzd(.in(acc_regi), .out(acc_zc));
 // Instance of DW_lzd
-DW_lzd #(ACC) U_LZD3 (.a(acc_regi), .dec(acc_regi_oh), .enc(acc_zc));
+//DW_lzd #(ACC) U_LZD3 (.a(acc_regi), .dec(acc_regi_oh), .enc(acc_zc));
  
 wire [ACC-1:0] mts_src1;
 wire [ACC-1:0] mts_src2; 
 
-assign mts_src1 = (mag_001_wo_c != 0) ? mag_001_wo_c : mag_010_wo_c;
-assign mts_src2 = (mag_001_wo_c != 0) ? mag_010_wo_c : mag_011_wo_c;
+assign mts_src1 = (acc_001_c != 0) ? acc_001_c : acc_010_c;
+assign mts_src2 = (acc_001_c != 0) ? acc_010_c : acc_011_c;
  
 always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
@@ -131,7 +114,7 @@ always @(posedge clk_i or negedge rstn) begin
         mts_q <= 0;
     end 
     else if (acc_rdy) begin // vld_d[5], vld_d[6]
-        if (mag_001_wo_c != 0) sf_q <= $signed($unsigned(ACC)-$unsigned(acc_zc)-1); // positive scale factor  
+        if (acc_001_c != 0) sf_q <= $signed($unsigned(ACC)-$unsigned(acc_zc)-1); // positive scale factor  
         else sf_q <= $signed(~($unsigned(acc_zc)+1)+1); // negative scale factor 
         
         mts_q_tmp1 <= mts_src1 << acc_zc;
