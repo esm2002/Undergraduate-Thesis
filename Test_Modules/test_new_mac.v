@@ -2,15 +2,15 @@
 module test_new_mac #(
 parameter WIDTH = 8,          // Bitwidth of inputs                      
 parameter K  = 9,
-parameter EXP = 1       // Number of exponent bits                 
+parameter EXP = 2       // Number of exponent bits                 
 )( // revised from '$clog2(WIDTH_A)' to '$clog2(2*BIAS+1)'
 input clk_i,
 input rstn,
-(* IOB = "TRUE" *) input vld_i, 
-(* IOB = "TRUE" *) input [WIDTH-1:0] win, 
-(* IOB = "TRUE" *) input [WIDTH-1:0] din, 
-(* IOB = "TRUE" *) output[WIDTH-1:0] acc_o,
-(* IOB = "TRUE" *) output  vld_o
+input vld_i, 
+input [WIDTH-1:0] win, 
+input [WIDTH-1:0] din, 
+output[WIDTH-1:0] acc_o,
+output  vld_o
 );
 
 localparam WK = $clog2(K);
@@ -53,7 +53,6 @@ wire [ACC-1:0] acc_010_c;
 wire [ACC-1:0] acc_011_c;
 
 wire acc_rdy;
-wire acc_sign;
 
 // Fraction & SF Extraction -----
 wire sign_q;
@@ -105,7 +104,7 @@ test_accumulate #(.WIDTH(WIDTH), .K(K), .EXP(EXP), .MTS(MTS), .ACC(ACC), .ACC_HE
         .regi_acc(regi_acc), .sign_m(sign_m), .exp_m(exp_m), .mts_m(mts_m),
         .acc_rdy(acc_rdy),
         .acc_100_c(acc_100_c), .acc_000_c(acc_000_c), .acc_001_c(acc_001_c),
-        .acc_010_c(acc_010_c), .acc_011_c(acc_011_c), .acc_sign(acc_sign)
+        .acc_010_c(acc_010_c), .acc_011_c(acc_011_c)
     );
 
 //-------------------------------------------------
@@ -116,7 +115,6 @@ test_frac_sf #(.WIDTH(WIDTH), .K(K), .EXP(EXP), .ACC(ACC), .MTS(MTS), .REGI(REGI
         .clk_i(clk_i), .rstn(rstn),
         .vld_d(vld_d),
         .acc_rdy(acc_rdy), 
-        .acc_sign(acc_sign),
         .acc_100_c(acc_100_c), 
         .acc_000_c(acc_000_c), .acc_001_c(acc_001_c),
         .acc_010_c(acc_010_c), .acc_011_c(acc_011_c),
