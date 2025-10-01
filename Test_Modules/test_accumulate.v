@@ -17,8 +17,7 @@ parameter ACC_HEAD=$clog2(K)+2) (
     output reg [ACC-1:0] acc_000_c,
     output reg [ACC-1:0] acc_001_c,
     output reg [ACC-1:0] acc_010_c,
-    output reg [ACC-1:0] acc_011_c,
-    output reg acc_sign
+    output reg [ACC-1:0] acc_011_c
 );
 localparam WK = $clog2(K);
 localparam REGI = $clog2(WIDTH)+1; 
@@ -41,9 +40,9 @@ reg [ACC:0] acc_011;
 
 reg [WK:0] counter;
 
-LZD #(.in_s(WIDTH-2)) u_acc_lzd(.in(acc_lzd), .out(bias_zc)); //, .out_s(WZC+1)
+//LZD #(.in_s(WIDTH-2)) u_acc_lzd(.in(acc_lzd), .out(bias_zc)); //, .out_s(WZC+1)
 // Instance of DW_lzd
-//DW_lzd #(WIDTH-2) U_LZD2 ( .a(acc_lzd), .dec(acc_lzd_oh), .enc(bias_zc) );
+DW_lzd #(WIDTH-2) U_LZD2 ( .a(acc_lzd), .dec(acc_lzd_oh), .enc(bias_zc) );
 
 assign acc_bias = acc_num[1] 
     ? (acc_lzd == 0 ? bias_exp : ({ ($unsigned(WIDTH)-2 - bias_zc), {$unsigned(EXP){1'b0}} } + bias_exp)) 
@@ -125,21 +124,18 @@ always @(posedge clk_i or negedge rstn) begin
         acc_001 <= 0;
         acc_010 <= 0;
         acc_011 <= 0;
-        acc_sign <= 0;
     end else if (vld_d == 0) begin
         acc_100 <= 0;
         acc_000 <= 0;
         acc_001 <= 0;
         acc_010 <= 0;
         acc_011 <= 0;
-        acc_sign <= 0;
     end else if (vld_d[2]) begin
             acc_100 <= acc_100_c;
             acc_000 <= acc_000_c;
             acc_001 <= acc_001_c;
             acc_010 <= acc_010_c;
             acc_011 <= acc_011_c;
-            acc_sign <= acc_100_c[ACC_HEAD-1];
             
             case (shift_sel)                       
                 2'b00: begin //if (acc_bias >= ($unsigned(ACC)-2))
@@ -230,14 +226,6 @@ always @(posedge clk_i or negedge rstn) begin
                 default: ;
            endcase    
     end
-    else if (vld_d[4] && counter == K) begin
-        acc_011 <= acc_100_c[ACC_HEAD-1] ? {1'b0, ~acc_011_c}+1 : acc_011_c;
-        acc_010 <= acc_100_c[ACC_HEAD-1] ? {1'b0, ~acc_010_c} : acc_010_c;
-        acc_001 <= acc_100_c[ACC_HEAD-1] ? {1'b0, ~acc_001_c} : acc_001_c;
-        acc_000 <= acc_100_c[ACC_HEAD-1] ? {1'b0, ~acc_000_c} : acc_000_c;
-        acc_100 <= acc_100_c[ACC_HEAD-1] ? ~acc_100_c : acc_100_c;
-        acc_sign <= acc_100_c[ACC_HEAD-1];
-    end
 end
 
 //-------------------------------------------------
@@ -250,11 +238,11 @@ task carry_propagation (input [ACC_HEAD-1:0] acc_100,
                         input [ACC:0] acc_000, acc_001, acc_010, acc_011, 
                         output [ACC_HEAD-1:0] acc_100_c, 
                         output [ACC-1:0] acc_000_c, acc_001_c, acc_010_c, acc_011_c);
-	 reg [ACC_HEAD-1:0] acc_100_tmp;
-	 reg [ACC:0] acc_000_tmp;
-	 reg [ACC:0] acc_001_tmp;
-	 reg [ACC:0] acc_010_tmp;
-	 reg [ACC:0] acc_011_tmp;
+	reg [ACC_HEAD-1:0] acc_100_tmp;
+	reg [ACC:0] acc_000_tmp;
+	reg [ACC:0] acc_001_tmp;
+	reg [ACC:0] acc_010_tmp;
+	reg [ACC:0] acc_011_tmp;
 	begin
         acc_011_tmp = acc_011;
 		acc_010_tmp = acc_010 + {{(ACC){1'b0}}, acc_011_tmp[ACC]};
