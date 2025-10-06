@@ -107,5 +107,5 @@ Undergraduate-Thesis/
 
 | NEW Posit | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs/#FFs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
-| 8W2E | T=10ns<br>WNS=0.ns<br>P=0.W<br>L=21 | log10(16^12)=14.449 |  (MHz)<br>= *1e8 (Hz) | *1e-16 |  |
-| 8W1E | T=10ns<br>WNS=0.302ns<br>P=0.089W<br>L=21 | log10(4^12)=7.224 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 854/244 |
+| 8W2E | T=10ns<br>WNS=0.066ns<br>P=0.090W<br>L=21 | log10(16^12)=14.449 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 1060/396 |
+| 8W1E | T=10ns<br>WNS=0.388ns<br>P=0.086W<br>L=21 | log10(4^12)=7.224 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 746/296 |
