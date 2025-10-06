@@ -37,25 +37,16 @@ wire [WIDTH-2:0] win_tmp_z;
 wire [WIDTH-2:0] din_tmp_z;
 wire [WIDTH-2:0] nor_tmp_z;
 
-reg [WIDTH-2:0] win_ext_tmp;
-reg [WIDTH-2:0] din_ext_tmp;
-wire [WIDTH-2:0] win_ext;
-wire [WIDTH-2:0] din_ext;
-
-reg [WIDTH-2:0] in_long;
-reg [WIDTH-2:0] in_short;
-
+reg found_one_s;
+reg found_one_l;
+reg win_long;
+reg [WIDTH-2:0] long_ext;
 reg [WIDTH-2:0] in_lzd;
-wire [WZC:0] in_zc;
-
-reg sign_s_tmp;
-reg sign_l_tmp;
-reg [REGI-1:0] regi_s_tmp;
-reg [REGI-1:0] regi_l_tmp;
-reg [WIDTH-2:0] exp_mts_s_tmp;
-reg [WIDTH-2:0] exp_mts_l_tmp;
 reg [WZC-1:0] idx_s;
 reg [WZC-1:0] idx_l;
+
+wire [WIDTH-2:0] exp_mts_s_tmp;
+wire [WIDTH-2:0] exp_mts_l_tmp;
 
 //-------------------------------------------------
 // Functions
@@ -71,91 +62,77 @@ endfunction
 // Decode
 //-------------------------------------------------
 
-assign win_tmp = win[WIDTH-1] ? ~win[WIDTH-2:0]+1 : win[WIDTH-2:0];
-assign din_tmp = din[WIDTH-1] ? ~din[WIDTH-2:0]+1 : din[WIDTH-2:0];
+function [WIDTH-2:0] sign_mag(input [WIDTH-1:0] x);
+  sign_mag = x[WIDTH-1] ? (~x[WIDTH-2:0] + 1'b1) : x[WIDTH-2:0];
+endfunction
+
+assign win_tmp = sign_mag(win);
+assign din_tmp = sign_mag(din);
+
+function [WIDTH-2:0] bit_inv(input [WIDTH-2:0] x);
+  bit_inv = x[WIDTH-2] ? ~x : x;
+endfunction
 
 // Let MSB start with 0
-assign win_tmp_z = win_tmp[WIDTH-2] ? ~win_tmp : win_tmp;
-assign din_tmp_z = din_tmp[WIDTH-2] ? ~din_tmp : din_tmp;
+assign win_tmp_z = bit_inv(win_tmp);
+assign din_tmp_z = bit_inv(din_tmp);
 
 assign nor_tmp_z = ~(win_tmp_z | din_tmp_z);
 
-// For regime shift
-assign win_ext = win_tmp[WIDTH-2] ? ~win_ext_tmp : win_ext_tmp; 
-assign din_ext = din_tmp[WIDTH-2] ? ~din_ext_tmp : din_ext_tmp;
-
 integer j;
-reg found_one_s;
-reg found_one_l;
-reg shorter_w;
 
 always @(*) begin
     found_one_s = 0;
     found_one_l = 0;
-    in_long  = win_tmp;
-    in_short = din_tmp;
-    sign_l_tmp = win[WIDTH-1];
-    sign_s_tmp = din[WIDTH-1];
-    shorter_w   = 0;
-    win_ext_tmp = 0;
-    din_ext_tmp = 0;
-    regi_s_tmp = ($unsigned(WIDTH)-2);
-    regi_l_tmp = ($unsigned(WIDTH)-2);
-    exp_mts_s_tmp = 0;
-    exp_mts_l_tmp = 0;
-    idx_s = 0;
-    idx_l = 0;
+    idx_s = ($unsigned(WIDTH)-1);
+    idx_l = ($unsigned(WIDTH)-1);
+    win_long = 0;
+    long_ext = 0;
     
     for (j = WIDTH-2; j >= 0; j = j - 1) begin
         if (!found_one_l) begin
             if (!found_one_s  & !nor_tmp_z[j]) begin
                 if ((win_tmp_z[WIDTH-2] == win_tmp_z[j]) | ((win_tmp_z[j] == din_tmp_z[j]) & (~win_tmp[WIDTH-2]))) begin
-                    in_long  = win_tmp;
-                    in_short = din_tmp;
-                    sign_l_tmp = win[WIDTH-1];
-                    sign_s_tmp = din[WIDTH-1];
+                    win_long = 1'b1;
                     in_lzd = win_tmp_z;
-                    din_ext_tmp[j] = 1'b1;
-                    shorter_w = 0;
                 end
                 else begin
-                    in_long  = din_tmp;
-                    in_short = win_tmp;
-                    sign_l_tmp = din[WIDTH-1];
-                    sign_s_tmp = win[WIDTH-1];
+                    win_long = 0;
                     in_lzd = din_tmp_z;
-                    win_ext_tmp[j] = 1'b1;
-                    shorter_w = 1'b1;
-                end
-        
-                regi_s_tmp = in_short[WIDTH-2] ? ($unsigned(WIDTH)-3-$unsigned(j)) : ~($unsigned(WIDTH)-2-$unsigned(j))+1;
-                exp_mts_s_tmp = in_short << ($unsigned(WIDTH)-1-$unsigned(j));
-        
+                end 
                 found_one_s = 1'b1;
-                idx_s = $unsigned(j);
+                idx_s = ($unsigned(WIDTH)-2-$unsigned(j));
             end
             if (found_one_s  & !found_one_l) begin
                 if (in_lzd[j]) begin
-                    regi_l_tmp = in_long[WIDTH-2] ? ($unsigned(WIDTH)-3-$unsigned(j)) : ~($unsigned(WIDTH)-2-$unsigned(j))+1;
-                    exp_mts_l_tmp = in_long << ($unsigned(WIDTH)-1-$unsigned(j));
-                    
-                    win_ext_tmp[j] = 1'b1;
-                    din_ext_tmp[j] = 1'b1;
-                        
                     found_one_l = 1'b1;
-                    idx_l = $unsigned(j);
-                end else begin
-                    win_ext_tmp[j] = shorter_w ? 1'b1 : (j == WIDTH-2 ? 1'b0 : win_ext_tmp[j+1]);
-                    din_ext_tmp[j] = shorter_w ? (j == WIDTH-2 ? 1'b0 : din_ext_tmp[j+1]) : 1'b1;
+                    idx_l = ($unsigned(WIDTH)-2-$unsigned(j));
+                    long_ext[j] = 1'b1;
                 end
+                else ;
             end
-        end else begin
-            win_ext_tmp[j] = 1'b1;
-            din_ext_tmp[j] = 1'b1;
+        end 
+        else begin
+            long_ext[j] = 1'b1;        
         end
     end
 end
 
+//wire [EXP-1:0] w_exp_s;
+//wire [EXP-1:0] w_exp_l;
+
+//generate
+//  if (EXP == 2) begin
+//    assign w_exp_s = (idx_s == 1'b1) ? {1'b0, exp_mts_s_tmp[WIDTH-2]} : exp_mts_s_tmp[WIDTH-2-:EXP];
+//    assign w_exp_l = (idx_l == 1'b1) ? {1'b0, exp_mts_l_tmp[WIDTH-2]} : exp_mts_l_tmp[WIDTH-2-:EXP];
+//  end else if (EXP == 1) begin
+//    assign w_exp_s = exp_mts_s_tmp[WIDTH-2-:EXP];
+//    assign w_exp_l = exp_mts_l_tmp[WIDTH-2-:EXP];
+//  end
+//endgenerate
+
+assign exp_mts_s_tmp = (win_long) ? din_tmp << (idx_s+1) : win_tmp << (idx_s+1);
+assign exp_mts_l_tmp = (win_long) ? win_tmp << (idx_l+1) : din_tmp << (idx_l+1);
 
 always @(posedge clk_i or negedge rstn) begin
    if (~rstn) begin
@@ -173,16 +150,29 @@ always @(posedge clk_i or negedge rstn) begin
         decode <= 0; 
    end
    else begin
-       regi_ext <= shorter_w ? $signed({din_ext, {(WIDTH-2){~din_ext[WIDTH-2]}}}) : $signed({win_ext, {(WIDTH-2){~win_ext[WIDTH-2]}}});
-       sign_s <= sign_s_tmp;
-       regi_s <= regi_s_tmp;
+       if (win_long) begin 
+           regi_ext <= win_tmp[WIDTH-2] ? 
+                       $signed({~long_ext, {(WIDTH-2){long_ext[WIDTH-2]}}}) : 
+                       $signed({long_ext, {(WIDTH-2){~long_ext[WIDTH-2]}}});
+           sign_s <= din[WIDTH-1]; 
+           regi_s <= din_tmp[WIDTH-2] ? (idx_s-1) : (~idx_s)+1;
+           sign_l <= win[WIDTH-1];
+           regi_l <= win_tmp[WIDTH-2] ? (idx_l-1) : (~idx_l)+1;
+       end
+       else begin
+           regi_ext <= din_tmp[WIDTH-2] ? 
+                       $signed({~long_ext, {(WIDTH-2){long_ext[WIDTH-2]}}}) : 
+                       $signed({long_ext, {(WIDTH-2){~long_ext[WIDTH-2]}}});
+           sign_s <= win[WIDTH-1];
+           regi_s <= win_tmp[WIDTH-2] ? (idx_s-1) : (~idx_s)+1;
+           sign_l <= din[WIDTH-1];
+           regi_l <= din_tmp[WIDTH-2] ? (idx_l-1) : (~idx_l)+1;
+       end
        exp_s <= (idx_s == 1'b1 && $unsigned(EXP) == 2'd2) ? {1'b0, exp_mts_s_tmp[WIDTH-2]} : exp_mts_s_tmp[WIDTH-2-:EXP];
-       mts_s <= exp_mts_s_tmp[WIDTH-2-EXP-:MTS];
-       vld_o_w <= get_vld(win);
-       sign_l <= sign_l_tmp;
-       regi_l <= regi_l_tmp;
        exp_l <= (idx_l == 1'b1 && $unsigned(EXP) == 2'd2) ? {1'b0, exp_mts_l_tmp[WIDTH-2]} : exp_mts_l_tmp[WIDTH-2-:EXP];
+       mts_s <= exp_mts_s_tmp[WIDTH-2-EXP-:MTS];
        mts_l <= exp_mts_l_tmp[WIDTH-2-EXP-:MTS];
+       vld_o_w <= get_vld(win);
        vld_o_d <= get_vld(din);
        decode <= 1'b1;
    end
