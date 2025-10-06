@@ -2,15 +2,15 @@
 module test_new_mac #(
 parameter WIDTH = 8,          // Bitwidth of inputs                      
 parameter K  = 9,
-parameter EXP = 2       // Number of exponent bits                 
+parameter EXP = 1       // Number of exponent bits                 
 )( // revised from '$clog2(WIDTH_A)' to '$clog2(2*BIAS+1)'
 input clk_i,
 input rstn,
-input vld_i, 
-input [WIDTH-1:0] win, 
-input [WIDTH-1:0] din, 
-output[WIDTH-1:0] acc_o,
-output  vld_o
+(* IOB = "TRUE" *) input vld_i, 
+(* IOB = "TRUE" *) input [WIDTH-1:0] win, 
+(* IOB = "TRUE" *) input [WIDTH-1:0] din, 
+(* IOB = "TRUE" *) output[WIDTH-1:0] acc_o,
+(* IOB = "TRUE" *) output  vld_o
 );
 
 localparam WK = $clog2(K);
@@ -40,17 +40,16 @@ wire decode;
 
 // Multiplication ----------------
 wire [2*(WIDTH-2):0] regi_acc;
-wire [REGI-1:0] shift_mag;
 wire sign_m;
 wire [EXP:0] exp_m;
 wire [2*(MTS+1)-1:0] mts_m;
 
 // Accumulation ------------------
-wire [ACC_HEAD-1:0] acc_100_c;
-wire [ACC-1:0] acc_000_c;
+wire [ACC_HEAD-1:0] acc_000_c;
 wire [ACC-1:0] acc_001_c;
 wire [ACC-1:0] acc_010_c;
 wire [ACC-1:0] acc_011_c;
+wire [ACC-1:0] acc_100_c;
 
 wire acc_rdy;
 
@@ -103,8 +102,8 @@ test_accumulate #(.WIDTH(WIDTH), .K(K), .EXP(EXP), .MTS(MTS), .ACC(ACC), .ACC_HE
         .vld_d(vld_d),
         .regi_acc(regi_acc), .sign_m(sign_m), .exp_m(exp_m), .mts_m(mts_m),
         .acc_rdy(acc_rdy),
-        .acc_100_c(acc_100_c), .acc_000_c(acc_000_c), .acc_001_c(acc_001_c),
-        .acc_010_c(acc_010_c), .acc_011_c(acc_011_c)
+        .acc_000_c(acc_000_c), .acc_001_c(acc_001_c), .acc_010_c(acc_010_c), 
+        .acc_011_c(acc_011_c), .acc_100_c(acc_100_c)
     );
 
 //-------------------------------------------------
@@ -115,9 +114,9 @@ test_frac_sf #(.WIDTH(WIDTH), .K(K), .EXP(EXP), .ACC(ACC), .MTS(MTS), .REGI(REGI
         .clk_i(clk_i), .rstn(rstn),
         .vld_d(vld_d),
         .acc_rdy(acc_rdy), 
-        .acc_100_c(acc_100_c), 
-        .acc_000_c(acc_000_c), .acc_001_c(acc_001_c),
-        .acc_010_c(acc_010_c), .acc_011_c(acc_011_c),
+        .acc_000_c(acc_000_c), 
+        .acc_001_c(acc_001_c), .acc_010_c(acc_010_c), 
+        .acc_011_c(acc_011_c), .acc_100_c(acc_100_c), 
         .sign_q(sign_q), .ovf(ovf), .udf(udf), .nzero(nzero), 
         .sf_q(sf_q), .mts_q(mts_q)
     );
