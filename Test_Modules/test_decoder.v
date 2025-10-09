@@ -92,7 +92,7 @@ always @(*) begin
     for (j = WIDTH-2; j >= 0; j = j - 1) begin
         if (!found_one_l) begin
             if (!found_one_s  & !nor_tmp_z[j]) begin
-                if ((win_tmp_z[WIDTH-2] == win_tmp_z[j]) | ((win_tmp_z[j] == din_tmp_z[j]) & (~win_tmp[WIDTH-2]))) begin
+                if ((!win_tmp_z[j]) | ((win_tmp_z[j] == din_tmp_z[j]) & (!win_tmp[WIDTH-2]))) begin
                     win_long = 1'b1;
                     in_lzd = win_tmp_z;
                 end
@@ -103,6 +103,7 @@ always @(*) begin
                 found_one_s = 1'b1;
                 idx_s = ($unsigned(WIDTH)-2-$unsigned(j));
             end
+            else ;
             if (found_one_s  & !found_one_l) begin
                 if (in_lzd[j]) begin
                     found_one_l = 1'b1;
@@ -111,25 +112,13 @@ always @(*) begin
                 end
                 else ;
             end
+            else ;
         end 
         else begin
             long_ext[j] = 1'b1;        
         end
     end
 end
-
-//wire [EXP-1:0] w_exp_s;
-//wire [EXP-1:0] w_exp_l;
-
-//generate
-//  if (EXP == 2) begin
-//    assign w_exp_s = (idx_s == 1'b1) ? {1'b0, exp_mts_s_tmp[WIDTH-2]} : exp_mts_s_tmp[WIDTH-2-:EXP];
-//    assign w_exp_l = (idx_l == 1'b1) ? {1'b0, exp_mts_l_tmp[WIDTH-2]} : exp_mts_l_tmp[WIDTH-2-:EXP];
-//  end else if (EXP == 1) begin
-//    assign w_exp_s = exp_mts_s_tmp[WIDTH-2-:EXP];
-//    assign w_exp_l = exp_mts_l_tmp[WIDTH-2-:EXP];
-//  end
-//endgenerate
 
 assign exp_mts_s_tmp = (win_long) ? din_tmp << (idx_s+1) : win_tmp << (idx_s+1);
 assign exp_mts_l_tmp = (win_long) ? win_tmp << (idx_l+1) : din_tmp << (idx_l+1);
@@ -168,8 +157,8 @@ always @(posedge clk_i or negedge rstn) begin
            sign_l <= din[WIDTH-1];
            regi_l <= din_tmp[WIDTH-2] ? (idx_l-1) : (~idx_l)+1;
        end
-       exp_s <= (idx_s == 1'b1 && $unsigned(EXP) == 2'd2) ? {1'b0, exp_mts_s_tmp[WIDTH-2]} : exp_mts_s_tmp[WIDTH-2-:EXP];
-       exp_l <= (idx_l == 1'b1 && $unsigned(EXP) == 2'd2) ? {1'b0, exp_mts_l_tmp[WIDTH-2]} : exp_mts_l_tmp[WIDTH-2-:EXP];
+       exp_s <= (idx_s == ($unsigned(WIDTH)-3) && $unsigned(EXP) == 2'd2) ? {1'b0, exp_mts_s_tmp[WIDTH-2]} : exp_mts_s_tmp[WIDTH-2-:EXP];
+       exp_l <= (idx_l == ($unsigned(WIDTH)-3) && $unsigned(EXP) == 2'd2) ? {1'b0, exp_mts_l_tmp[WIDTH-2]} : exp_mts_l_tmp[WIDTH-2-:EXP];
        mts_s <= exp_mts_s_tmp[WIDTH-2-EXP-:MTS];
        mts_l <= exp_mts_l_tmp[WIDTH-2-EXP-:MTS];
        vld_o_w <= get_vld(win);
