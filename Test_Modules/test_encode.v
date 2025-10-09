@@ -41,11 +41,6 @@ always @(posedge clk_i or negedge rstn) begin
         regi_q <= 0;
         exp_q <= 0;
     end
-    else if (vld_d == 0) begin
-        sign_sf <= 0;
-        regi_q <= 0;
-        exp_q <= 0;    
-    end
     else if (acc_rdy) begin // vld_d[7]
         sign_sf <= sf_q_us[REGI+EXP];
         if (sf_q_us[REGI+EXP]) regi_q <= ~(sf_q_us[REGI+EXP:EXP]) + 1;
@@ -53,38 +48,26 @@ always @(posedge clk_i or negedge rstn) begin
         if (ovf || udf || !nzero) exp_q <= {EXP{1'b0}};
         else exp_q <= sf_q_us[EXP-1:0];
     end
+    else ;
 end
 
 always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         tmp_bf_sft <= 0;
-        //tmp_neg <= 0;
         shift_val <= 0;
-        //shift_neg <= 0;
-        
-        tmp <= 0;
-    end
-    else if (vld_d == 0) begin
-        tmp_bf_sft <= 0;
-        //tmp_neg <= 0;
-        shift_val <= 0;
-        //shift_neg <= 0;
         
         tmp <= 0;
     end
     else if (acc_rdy) begin
         if (vld_d[8]) begin    
             tmp_bf_sft <= $signed({(~sign_sf & nzero), (sign_sf & nzero), exp_q, mts_q[2*MTS:0], {(WIDTH-1){1'b0}}});
-            //tmp_neg <= $signed({1'b0, nzero, exp_q, mts_q[2*MTS:0], {(WIDTH-1){1'b0}}});
             shift_val <= (sign_sf) ? regi_q-1 : regi_q;
-            //shift_neg <= regi_q - 1;
         end
         if (vld_d[9]) begin  
             tmp <= $unsigned(tmp_bf_sft >>> shift_val);
-//            if (sign_sf) tmp <= $unsigned(tmp_neg >>> shift_neg);
-//            else tmp <= $unsigned(tmp_pos >>> shift_pos);
         end
     end 
+    else ;
 end
 
 assign lsb_bit = tmp[WTMP-1-(WIDTH-2)];
@@ -122,6 +105,7 @@ always @(posedge clk_i or negedge rstn) begin
             end
         end
     end
+    else ;
 end
 
 endmodule
