@@ -60,6 +60,8 @@ Undergraduate-Thesis/
 | 8W1E(s2) | log10(4^12)=7.224 | T=10ns<br>WNS=7.436ns<br>P=0.138mW<br>L=24 | 390.015 (MHz)<br>= 3.90015*1e8 (Hz) | 79.488*1e-19 | 1784.1 (um^2) | T=2.556ns<br>WNS=0.221ns<br>P=0.6032mW<br>L=24<br>EDP=22.699*1e-19<br>cell_area=1780.7 (um^2) |
 
 * Posit MAC Modularization
+* ver.1 : The WNS error exists in the FPGA implementation
+* ver.2 : No WNS error, but larger area
 
 | 8W2E | Original Posit MAC (s1) | New Posit MAC (s1) | Original Posit MAC (s2) | New Posit MAC (s2) |
 |---------|-------------------------------|--------------------------|------------------------------|--------------------------|
@@ -69,13 +71,13 @@ Undergraduate-Thesis/
 | Area(um^2) | Total=2474.0033<br>Decode=257.4208<br>Mult=83.2320<br>Acc=916.4224<br>Extract=901.7344<br>Encode=277.8752 | Total=1952.4160<br>Decode=215.3152<br>Mult=164.3968<br>Acc=903.9104<br>Extract=419.7504<br>Encode=219.5584 | - | - |
 | Speedup | - | 1.612x | - | 1.599x |
 
-| 8W1E | Original Posit MAC (s1) | New Posit MAC (s1) | Original Posit MAC (s2) | New Posit MAC (s2) |
-|---------|-------------------------------|--------------------------|------------------------------|--------------------------|
-| WNS(ns) | 5.831  | 6.317 | 7.436 | 7.709 |
-| Power(mW) | Total=9.56e-02<br>Decode=2.02e-02<br>Mult=2.19e-03<br>Acc=2.82e-02<br>Extract=2.22e-02<br>Encode=1.67e-02 | Total=7.79e-02<br>Decode=1.97e-02<br>Mult=1.04e-02<br>Acc=2.31e-02<br>Extract=1.02e-02<br>Encode=1.00e-02 | Total=0.138<br>Decode=2.89e-02<br>Mult=5.11e-03<br>Acc=4.25e-02<br>Extract=2.94e-02<br>Encode=2.26e-02 | Total=0.113<br>Decode=2.68e-02<br>Mult=2.08e-02<br>Acc=3.03e-02<br>Extract=1.47e-02<br>Encode=1.33e-02 |
-| Latency(cycle) | 24 | 21 | 24 | 21 |
-| Area(um^2) | Total=1784.1024<br>Decode=256.3328<br>Mult=104.1216<br>Acc=563.9104<br>Extract=543.2384<br>Encode=279.6160 | Total=1527.6608<br>Decode=185.0688<br>Mult=179.6288<br>Acc=598.9440<br>Extract=309.9712<br>Encode=225.3248 | - | - |
-| Speedup | - |  | - |  |
+| 8W1E | Original Posit MAC (s1) | New Posit MAC ver.1(s1) | New Posit MAC ver.2(s1) | Original Posit MAC (s2) | New Posit MAC ver.1(s2) |New Posit MAC ver.2(s2) |
+|---------|-------------------------------|--------------------------|--------------------------|------------------------------|--------------------------|--------------------------|
+| WNS(ns) | 5.831  | 6.317 | 6.777 | 7.436 | 7.709 | 7.971 |
+| Power(mW) | Total=9.56e-02<br>Decode=2.02e-02<br>Mult=2.19e-03<br>Acc=2.82e-02<br>Extract=2.22e-02<br>Encode=1.67e-02 | Total=7.79e-02<br>Decode=1.97e-02<br>Mult=1.04e-02<br>Acc=2.31e-02<br>Extract=1.02e-02<br>Encode=1.00e-02 | Total=7.33e-02<br>Decode=1.91e-02<br>Mult=1.03e-02<br>Acc=2.94e-02<br>Extract=3.83e-03<br>Encode=6.13e-03 | Total=0.138<br>Decode=2.89e-02<br>Mult=5.11e-03<br>Acc=4.25e-02<br>Extract=2.94e-02<br>Encode=2.26e-02 | Total=0.113<br>Decode=2.68e-02<br>Mult=2.08e-02<br>Acc=3.03e-02<br>Extract=1.47e-02<br>Encode=1.33e-02 | Total=9.92e-02<br>Decode=2.65e-02<br>Mult=1.98e-02<br>Acc=3.64e-02<br>Extract=2.64e-03<br>Encode=7.14e-03 |
+| Latency(cycle) | 24 | 21 | 21 | 24 | 21 | 21 |
+| Area(um^2) | Total=1784.1024<br>Decode=256.3328<br>Mult=104.1216<br>Acc=563.9104<br>Extract=543.2384<br>Encode=279.6160 | Total=1527.6608<br>Decode=185.0688<br>Mult=179.6288<br>Acc=598.9440<br>Extract=309.9712<br>Encode=225.3248 | Total=1636.1344<br>Decode=186.4832<br>Mult=180.9344<br>Acc=711.9872<br>Extract=316.6080<br>Encode=211.0720 | - | - |
+| Speedup | - | 1.2936 | 1.4783 | - | 1.1191 | 1.2636 |
 
 
 ## 3. Original Posit MAC Report
@@ -105,7 +107,7 @@ Undergraduate-Thesis/
 | 8W2E | T=10ns<br>WNS=0.410ns<br>P=0.082W<br>L=24 | log10(16^12)=14.449 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 950/511 |
 | 8W1E | T=10ns<br>WNS=0.410ns<br>P=0.079W<br>L=24 | log10(4^12)=7.224 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 647/371 |
 
-| NEW Posit | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs/#FFs |
+| NEW Posit ver.2 | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs/#FFs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
-| 8W2E | T=10ns<br>WNS=0.066ns<br>P=0.090W<br>L=21 | log10(16^12)=14.449 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 1060/396 |
-| 8W1E | T=10ns<br>WNS=0.388ns<br>P=0.086W<br>L=21 | log10(4^12)=7.224 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 746/296 |
+| 8W2E | T=10ns<br>WNS=0.225ns<br>P=0.091W<br>L=21 | log10(16^12)=14.449 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 908/396 |
+| 8W1E | T=10ns<br>WNS=0.628ns<br>P=0.088W<br>L=21 | log10(4^12)=7.224 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 667/296 |
