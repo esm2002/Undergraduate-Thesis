@@ -40,9 +40,9 @@ reg [ACC:0] acc_100;
 
 reg [WK:0] counter;
 
-LZD #(.in_s(WIDTH-2)) u_acc_lzd(.in(acc_lzd), .out(bias_zc)); //, .out_s(WZC+1)
+//LZD #(.in_s(WIDTH-2)) u_acc_lzd(.in(acc_lzd), .out(bias_zc)); //, .out_s(WZC+1)
 // Instance of DW_lzd
-//DW_lzd #(WIDTH-2) U_LZD2 ( .a(acc_lzd), .dec(acc_lzd_oh), .enc(bias_zc) );
+DW_lzd #(WIDTH-2) U_LZD2 ( .a(acc_lzd), .dec(acc_lzd_oh), .enc(bias_zc) );
 
 assign acc_bias = (acc_num[2] | &acc_num[1:0]) 
     ? (acc_lzd == 0 ? bias_exp : ({ ($unsigned(WIDTH)-2 - bias_zc), {$unsigned(EXP){1'b0}} } + bias_exp)) 
@@ -84,7 +84,6 @@ always @(*) begin
     endcase
     shift_o_left = shift_sel[1] ? (mts_ms << shift_amt_l) 
                                 : $signed({mts_ms << shift_amt_l, {($unsigned(ACC)-2*$unsigned(MTS)-3){1'b0}}});
-    //shift_o_right = mts_ms >>> shift_amt_r;
     shift_o_right = shift_sel[1] ? $signed({1'b0, {(ACC){mts_ms[2*(MTS+1)]}}})
                                  : (mts_ms >>> shift_amt_r);
 end
@@ -122,6 +121,20 @@ end
 wire [2:0] cond_case;
 assign cond_case = shift_sel[0] + acc_num;
 
+reg [ACC_HEAD-1:0] acc_000_tmp;
+reg [ACC:0] acc_001_tmp;
+reg [ACC:0] acc_010_tmp;
+reg [ACC:0] acc_011_tmp;
+reg [ACC:0] acc_100_tmp;
+	
+always @(*) begin
+        acc_100_tmp = acc_100;
+		acc_011_tmp = acc_011 + acc_100_tmp[ACC];
+		acc_010_tmp = acc_010 + acc_011_tmp[ACC];
+		acc_001_tmp = acc_001 + acc_010_tmp[ACC];
+		acc_000_tmp = acc_000 + acc_001_tmp[ACC];
+end
+
 always @(posedge clk_i or negedge rstn) begin
     if (~rstn) begin
         acc_000 <= 0;
@@ -136,80 +149,44 @@ always @(posedge clk_i or negedge rstn) begin
         acc_011 <= 0;
         acc_100 <= 0;
     end else if (vld_d[2]) begin
-            acc_000 <= acc_000_c;
-            acc_001 <= acc_001_c;
-            acc_010 <= acc_010_c;
-            acc_011 <= acc_011_c;
-            acc_100 <= acc_100_c;
+            acc_000 <= acc_000_tmp;
+            acc_001 <= acc_001_tmp[ACC-1:0];
+            acc_010 <= acc_010_tmp[ACC-1:0];
+            acc_011 <= acc_011_tmp[ACC-1:0];
+            acc_100 <= acc_100_tmp[ACC-1:0];
             
             case (cond_case)
                 3'b000: begin
                             if (shift_sel[1]==0) begin
-                                acc_000 <= acc_000_c + shift_right[0+:ACC_HEAD];
-                                acc_001 <= acc_001_c + shift_left;
+                                acc_000 <= acc_000_tmp + shift_right[0+:ACC_HEAD];
+                                acc_001 <= acc_001_tmp[ACC-1:0] + shift_left;
                             end
                         end
                 3'b001: begin
-                            acc_000 <= acc_000_c + shift_right[0+:ACC_HEAD];
-                            acc_001 <= acc_001_c + shift_left;
+                            acc_000 <= acc_000_tmp + shift_right[0+:ACC_HEAD];
+                            acc_001 <= acc_001_tmp[ACC-1:0] + shift_left;
                         end
                 3'b010: begin
-                            acc_000 <= acc_000_c + {(ACC_HEAD){mts_ms[2*(MTS+1)]}};
-                            acc_001 <= acc_001_c + shift_right;
-                            acc_010 <= acc_010_c + shift_left;
+                            acc_000 <= acc_000_tmp + {(ACC_HEAD){mts_ms[2*(MTS+1)]}};
+                            acc_001 <= acc_001_tmp[ACC-1:0] + shift_right;
+                            acc_010 <= acc_010_tmp[ACC-1:0] + shift_left;
                         end
                 3'b011: begin
-                            acc_000 <= acc_000_c + {(ACC_HEAD){mts_ms[2*(MTS+1)]}};
-                            acc_001 <= acc_001_c + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
-                            acc_010 <= acc_010_c + shift_right;
-                            acc_011 <= acc_011_c + shift_left;
+                            acc_000 <= acc_000_tmp + {(ACC_HEAD){mts_ms[2*(MTS+1)]}};
+                            acc_001 <= acc_001_tmp[ACC-1:0] + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
+                            acc_010 <= acc_010_tmp[ACC-1:0] + shift_right;
+                            acc_011 <= acc_011_tmp[ACC-1:0] + shift_left;
                         end
                 3'b100: begin
-                            acc_000 <= acc_000_c + {(ACC_HEAD){mts_ms[2*(MTS+1)]}};
-                            acc_001 <= acc_001_c + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
-                            acc_010 <= acc_010_c + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
-                            acc_011 <= acc_011_c + shift_right;
-                            acc_100 <= acc_100_c + shift_left;
+                            acc_000 <= acc_000_tmp + {(ACC_HEAD){mts_ms[2*(MTS+1)]}};
+                            acc_001 <= acc_001_tmp[ACC-1:0] + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
+                            acc_010 <= acc_010_tmp[ACC-1:0] + {1'b0, {(ACC){mts_ms[2*(MTS+1)]}}};
+                            acc_011 <= acc_011_tmp[ACC-1:0] + shift_right;
+                            acc_100 <= acc_100_tmp[ACC-1:0] + shift_left;
                         end  
                 default: ;      
             endcase
     end
-end
-
-//-------------------------------------------------
-// Accumulation (carry)
-//-------------------------------------------------
-
-integer k;
-
-task carry_propagation (input [ACC_HEAD-1:0] acc_000, 
-                        input [ACC:0] acc_001, acc_010, acc_011, acc_100, 
-                        output [ACC_HEAD-1:0] acc_000_c, 
-                        output [ACC-1:0] acc_001_c, acc_010_c, acc_011_c, acc_100_c);
-	 reg [ACC_HEAD-1:0] acc_000_tmp;
-	 reg [ACC:0] acc_001_tmp;
-	 reg [ACC:0] acc_010_tmp;
-	 reg [ACC:0] acc_011_tmp;
-	 reg [ACC:0] acc_100_tmp;
-	begin
-        acc_100_tmp = acc_100;
-		acc_011_tmp = acc_011 + {{(ACC){1'b0}}, acc_100_tmp[ACC]};
-		acc_010_tmp = acc_010 + {{(ACC){1'b0}}, acc_011_tmp[ACC]};
-		acc_001_tmp = acc_001 + {{(ACC){1'b0}}, acc_010_tmp[ACC]};
-		acc_000_tmp = acc_000 + {{(ACC){1'b0}}, acc_001_tmp[ACC]};
-        
-        acc_000_c = acc_000_tmp;
-        acc_001_c = acc_001_tmp[ACC-1:0];
-        acc_010_c = acc_010_tmp[ACC-1:0];
-        acc_011_c = acc_011_tmp[ACC-1:0];
-        acc_100_c = acc_100_tmp[ACC-1:0];
-	end
-endtask
-
-
-always @(*) begin
-    carry_propagation (acc_000, acc_001, acc_010, acc_011, acc_100,
-                       acc_000_c, acc_001_c, acc_010_c, acc_011_c, acc_100_c);
 end
 
 always @(posedge clk_i or negedge rstn) begin
@@ -227,6 +204,11 @@ always @(posedge clk_i or negedge rstn) begin
     end
     else if (counter == K) begin
         acc_rdy <= 1;
+        acc_000_c <= acc_000_tmp;
+        acc_001_c <= acc_001_tmp[ACC-1:0];
+        acc_010_c <= acc_010_tmp[ACC-1:0];
+        acc_011_c <= acc_011_tmp[ACC-1:0];
+        acc_100_c <= acc_100_tmp[ACC-1:0];
     end
     else ;
 end
