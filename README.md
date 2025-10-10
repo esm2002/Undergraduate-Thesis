@@ -81,33 +81,26 @@ Undergraduate-Thesis/
 | Area(um^2) | Total=1784.1024<br>Decode=256.3328<br>Mult=104.1216<br>Acc=563.9104<br>Extract=543.2384<br>Encode=279.6160 | Total=1527.6608<br>Decode=185.0688<br>Mult=179.6288<br>Acc=598.9440<br>Extract=309.9712<br>Encode=225.3248 | Total=1636.1344<br>Decode=186.4832<br>Mult=180.9344<br>Acc=711.9872<br>Extract=316.6080<br>Encode=211.0720 | - | - | - |
 | Speedup | - | 1.2936x | 1.4783x | - | 1.1191x | 1.2636x |
 
-
-## 3. Original Posit MAC Report
-<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/098f2c48-bbc2-4a6b-87f0-2c3002223cc5" />
-
-## 4. New Posit MAC Report
+## 3. New Posit MAC Report
 <div>
-<img width="1117" height="1393" alt="image" src="https://github.com/user-attachments/assets/4d87ae65-d61a-462a-bb86-5ef229f98360" />
-<img width="940" height="849" alt="image" src="https://github.com/user-attachments/assets/61a42421-7dfd-4953-a12f-0afa9f0b8c17" />
+<img width="1122" height="1396" alt="image" src="https://github.com/user-attachments/assets/f390ae33-7711-4e76-8f0a-b8b49f04f1fe" />
 </div>
 
-## 5. Problems to Solve
-
-## 6. Experimental Results (Basys-3 FPGA) (# of multiplication = 9)
+## 4. Experimental Results (Basys-3 FPGA) (# of multiplication = 9)
 
 | Fixed-Point | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs/#FFs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
-| 8W4F | T=10ns<br>WNS=0.ns<br>P=0.W<br>L=14 | log10(127)=2.104 |   (MHz)<br>= *1e8 (Hz) | *1e-16 |  |
+| 8W4F | T=10ns<br>WNS=1.250ns<br>P=0.075W<br>L=14 | log10(127)=2.104 |   (MHz)<br>= *1e8 (Hz) | *1e-16 | 82/32 |
 
 | Floating-Point | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs/#FFs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
-| 8W4E3F | T=10ns<br>WNS=0.410ns<br>P=0.074W<br>L=19 | log10(122880)=5.089 |   (MHz)<br>= *1e8 (Hz) | *1e-16 | 358/177 |
-| 8W5E2F | T=10ns<br>WNS=0.ns<br>P=0.W<br>L=19 | log10(3758096384)=9.574 |   (MHz)<br>= *1e8 (Hz) | *1e-16 |  |
+| 8W4E3F | T=10ns<br>WNS=1.250ns<br>P=0.074W<br>L=19 | log10(122880)=5.089 |   (MHz)<br>= *1e8 (Hz) | *1e-16 | 358/177 |
+| 8W5E2F | T=10ns<br>WNS=1.087ns<br>P=0.077W<br>L=19 | log10(3758096384)=9.574 |   (MHz)<br>= *1e8 (Hz) | *1e-16 | 696/273 |
 
 | Posit | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs/#FFs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
-| 8W2E | T=10ns<br>WNS=0.410ns<br>P=0.082W<br>L=24 | log10(16^12)=14.449 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 950/511 |
-| 8W1E | T=10ns<br>WNS=0.410ns<br>P=0.079W<br>L=24 | log10(4^12)=7.224 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 647/371 |
+| 8W2E | T=10ns<br>WNS=0.799ns<br>P=0.082W<br>L=24 | log10(16^12)=14.449 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 950/511 |
+| 8W1E | T=10ns<br>WNS=1.250ns<br>P=0.079W<br>L=24 | log10(4^12)=7.224 |  (MHz)<br>= *1e8 (Hz) | *1e-16 | 647/371 |
 
 | NEW Posit ver.2 | Values | Dynamic Range | Max. Operating Freq.| Energy-Delay-Product | #LUTs/#FFs |
 |:-----:|:------:|:------:|:------:|:------:|:------:|
